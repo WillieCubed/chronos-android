@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Countdowns.iml" filepath="$PROJECT_DIR$/Countdowns.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../CraftEssentials/library/craft-essentials.iml" filepath="$PROJECT_DIR$/../CraftEssentials/library/craft-essentials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../FirebaseUI-Android Addons/library/firebaseui-android-addons.iml" filepath="$PROJECT_DIR$/../FirebaseUI-Android Addons/library/firebaseui-android-addons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/instantapp/instantapp.iml" filepath="$PROJECT_DIR$/instantapp/instantapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/things/things.iml" filepath="$PROJECT_DIR$/things/things.iml" />
+    </modules>
+  </component>
+</project>

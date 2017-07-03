@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="error_uploading_countdown">Error when creating countdown. Try again later.</string>
+
+    <string name="query_dialog_delete_countdown">Delete countdown?</string>
+    <string name="query_dialog_delete_countdown_details">Are you sure you want to delete this countdown?</string>
+
+</resources>

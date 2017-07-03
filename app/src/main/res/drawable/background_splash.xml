@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <color android:color="@android:color/background_light" />
+    </item>
+
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/ic_launcher" />
+    </item>
+
+    <!-- TODO: Add Countdowns app name to splash screen -->
+    <!--<item>-->
+    <!--<bitmap android:src="@drawable/background_splash_text"-->
+    <!--android:tint="@android:color/white"-->
+    <!--android:gravity="center_horizontal"/>-->
+    <!--</item>-->
+
+</layer-list>

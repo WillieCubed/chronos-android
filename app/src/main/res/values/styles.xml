@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Splash" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
+    <style name="AppTheme.Translucent" parent="AppTheme.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="CountdownCreation.InputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="hintTextAppearance">@style/CountdownCreation.InputLayout.Hint</item>
+        <item name="errorTextAppearance">@style/CountdownCreation.InputLayout.Error</item>
+    </style>
+
+    <style name="CountdownCreation.InputLayout.Hint" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="CountdownCreation.InputLayout.Error" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+</resources>

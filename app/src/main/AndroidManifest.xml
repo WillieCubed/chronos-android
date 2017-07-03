@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.craft.apps.countdowns">
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:resizeableActivity="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:targetApi="n">
+
+        <!-- For FCM -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_timelapse_red_500_24dp" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel"
+            android:value="@string/channel_app_updates_id" />
+
+        <activity
+            android:name=".OnboardingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="com.craft.apps.countdowns.action.ONBOARD" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:label="@string/app_name"
+            android:name=".StartActivity"
+            android:theme="@style/AppTheme.Splash">
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:label="@string/title_activity_main"
+            android:name=".CountdownListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="craft-countdown.firebaseapp.com"
+                    android:scheme="https" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.craft.apps.countdowns.action.FEATURE_DISCOVERY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:label="@string/title_activity_countdown_creation"
+            android:name=".CountdownCreationActivity"
+            android:parentActivityName=".CountdownListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.craft.apps.countdowns.CountdownListActivity" />
+
+            <intent-filter android:order="2">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="craft-countdown.firebaseapp.com"
+                    android:pathPattern="/create"
+                    android:scheme="https" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:label="@string/title_activity_configure_countdown_widget"
+            android:name=".widget.SingleCountdownWidgetConfigureActivity">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:label="@string/title_activity_settings"
+            android:name=".SettingsActivity"
+            android:parentActivityName=".CountdownListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.craft.apps.countdowns.CountdownListActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" />
+            </intent-filter>
+
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="com.craft.apps.countdowns.action.ACTION_RESET_APP" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:label="@string/title_activity_countdown_deep_link"
+            android:launchMode="singleTop"
+            android:name=".CountdownDeepLinkActivity"
+            android:theme="@style/AppTheme.Translucent">
+
+            <intent-filter
+                android:autoVerify="true"
+                android:order="100">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="craft-countdown.firebaseapp.com"
+                    android:mimeType="text/plain"
+                    android:pathPrefix="/countdown"
+                    android:scheme="https" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="countdown"
+                    android:scheme="countdowns" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- Overriding Craft Essentials library; necessary for function -->
+        <activity
+            android:label="@string/essentials_title_activity_help"
+            android:name="com.craft.essentials.activity.HelpActivity"
+            android:parentActivityName=".CountdownListActivity"
+            android:theme="@style/AppTheme"
+            tools:replace="android:theme" />
+
+        <!-- Overriding Craft Essentials library; necessary for function -->
+        <activity
+            android:label="@string/essentials_title_activity_feedback"
+            android:name="com.craft.essentials.activity.FeedbackActivity"
+            android:parentActivityName=".CountdownListActivity"
+            android:theme="@style/AppTheme"
+            tools:replace="android:theme" />
+
+        <receiver android:name=".widget.SingleCountdownWidget">
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/countdown_individual_widget_info" />
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+        </receiver>
+
+        <!--<receiver android:name=".widget.CountdownListWidget">-->
+
+        <!--<meta-data-->
+        <!--android:name="android.appwidget.provider"-->
+        <!--android:resource="@xml/countdown_list_widget_info" />-->
+
+        <!--<intent-filter>-->
+        <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+        <!--</intent-filter>-->
+
+        <!--</receiver>-->
+
+        <service
+            android:exported="true"
+            android:name=".index.CountdownIndexingService"
+            android:permission="com.google.android.gms.permission.APPINDEXING">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.appindexing.UPDATE_INDEX" />
+            </intent-filter>
+
+        </service>
+
+        <service
+            android:exported="false"
+            android:name=".notification.CountdownNotificationService">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+
+        </service>
+
+        <service
+            android:exported="false"
+            android:name=".notification.CountdownInstanceIdService">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+
+        </service>
+
+        <service
+            android:exported="false"
+            android:name=".widget.CountdownListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+    </application>
+
+</manifest>

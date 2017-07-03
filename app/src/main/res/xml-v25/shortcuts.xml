@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_add_alarm"
+        android:shortcutDisabledMessage="@string/label_shortcut_create_countdown_disabled"
+        android:shortcutId="create_countdown"
+        android:shortcutLongLabel="@string/label_shortcut_create_countdown_long"
+        android:shortcutShortLabel="@string/label_shortcut_create_countdown_short">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.craft.apps.countdowns.CountdownCreationActivity"
+            android:targetPackage="com.craft.apps.countdowns">
+            <extra
+                android:name="from_launcher"
+                android:value="true" />
+
+        </intent>
+
+    </shortcut>
+</shortcuts>
