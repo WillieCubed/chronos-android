@@ -123,7 +123,7 @@ public class CountdownListActivity extends AppCompatActivity implements
         mDrawerManager = new DrawerManager(this, this, toolbar,
                 findViewById(R.id.drawer_layout));
         mDrawerManager.updateNavigationHeader(mUser.getDisplayName(), mUser.getEmail(),
-                mUser.getPhotoUrl().toString());
+                mUser.getPhotoUrl() != null ? mUser.getPhotoUrl().toString() : null);
         mDrawerManager.setAccountButtonListener(view -> Users.showSignOutDialog(this));
 
         initializeDetailFragment();
