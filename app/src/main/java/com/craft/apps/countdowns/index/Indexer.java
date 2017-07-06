@@ -19,17 +19,23 @@ public final class Indexer {
 
     private static final String TAG = Indexer.class.getSimpleName();
 
+    /**
+     * Locally indexes the given countdown on the user's device.
+     *
+     * @param countdownId The database {@link Countdown} ID used to generate the index link
+     * @param user The currently signed in user
+     */
     public static void indexCountdown(Countdown countdown, String countdownId, FirebaseUser user) {
-        Log.d(TAG, "indexCountdown: Indexing countdown " + countdownId + " for user "
-                + user.getUid());
-        DigitalDocumentBuilder builder = Indexables.noteDigitalDocumentBuilder()
-                .setUrl(getCountdownLink(countdownId))
-                .setName(countdown.getTitle())
-                .setText(generateCountdownLabel(countdown))
-                .setDescription(countdown.getDescription())
-                // TODO: 7/2/17 Fetch date using locale
-                .setDateCreated(new Date(countdown.getStartTime()));
         if (user != null) {
+            Log.d(TAG, "indexCountdown: Indexing countdown " + countdownId + " for user "
+                    + user.getUid());
+            DigitalDocumentBuilder builder = Indexables.noteDigitalDocumentBuilder()
+                    .setUrl(getCountdownLink(countdownId))
+                    .setName(countdown.getTitle())
+                    .setText(generateCountdownLabel(countdown))
+                    .setDescription(countdown.getDescription())
+                    // TODO: 7/2/17 Fetch date using locale
+                    .setDateCreated(new Date(countdown.getStartTime()));
             PersonBuilder personBuilder = Indexables.personBuilder()
                     .setIsSelf(true);
             if (user.getDisplayName() != null) {
@@ -39,9 +45,11 @@ public final class Indexer {
                 personBuilder.setImage(user.getPhotoUrl().toString());
             }
             builder.setAuthor(personBuilder);
+            Indexable indexable = builder.build();
+            FirebaseAppIndex.getInstance().update(indexable);
+        } else {
+            Log.w(TAG, "indexCountdown: Firebase user is null, aborting");
         }
-        Indexable indexable = builder.build();
-        FirebaseAppIndex.getInstance().update(indexable);
     }
 
     public static String getCountdownLink(String countdownId) {
