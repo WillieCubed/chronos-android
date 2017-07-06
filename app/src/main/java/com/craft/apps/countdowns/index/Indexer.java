@@ -6,6 +6,7 @@ import com.google.firebase.appindexing.FirebaseAppIndex;
 import com.google.firebase.appindexing.Indexable;
 import com.google.firebase.appindexing.builders.DigitalDocumentBuilder;
 import com.google.firebase.appindexing.builders.Indexables;
+import com.google.firebase.appindexing.builders.PersonBuilder;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.Date;
 
@@ -29,10 +30,15 @@ public final class Indexer {
                 // TODO: 7/2/17 Fetch date using locale
                 .setDateCreated(new Date(countdown.getStartTime()));
         if (user != null) {
-            builder.setAuthor(Indexables.personBuilder()
-                    .setName(user.getDisplayName())
-                    .setImage(user.getPhotoUrl().toString())
-                    .setIsSelf(true));
+            PersonBuilder personBuilder = Indexables.personBuilder()
+                    .setIsSelf(true);
+            if (user.getDisplayName() != null) {
+                personBuilder.setName(user.getDisplayName());
+            }
+            if (user.getPhotoUrl() != null) {
+                personBuilder.setImage(user.getPhotoUrl().toString());
+            }
+            builder.setAuthor(personBuilder);
         }
         Indexable indexable = builder.build();
         FirebaseAppIndex.getInstance().update(indexable);
