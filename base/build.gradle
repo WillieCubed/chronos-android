@@ -42,8 +42,10 @@ dependencies {
     api "com.android.support:preference-v14:$support_library_version"
     api "com.android.support:design:$support_library_version"
     api "com.google.firebase:firebase-core:$play_services_version"
+    api "com.google.firebase:firebase-database:$play_services_version"
+    api "com.google.firebase:firebase-firestore:$play_services_version"
     api "com.google.firebase:firebase-messaging:$play_services_version"
-    api 'com.firebaseui:firebase-ui-database:2.2.0'
+    api 'com.firebaseui:firebase-ui-database:3.1.0'
     implementation 'joda-time:joda-time:2.9.9'
     testImplementation 'junit:junit:4.12'
 }

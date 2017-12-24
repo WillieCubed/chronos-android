@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Countdowns</string>
     <!-- TODO: Update when appropriate -->
-    <string name="app_version">v1.0.0</string>
+    <string name="app_version">v1.1.0</string>
 
     <string name="title_activity_main">Countdowns</string>
     <string name="title_activity_countdown_creation">Create a Countdown</string>

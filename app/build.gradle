@@ -36,8 +36,6 @@ android {
 dependencies {
     // Module with base functionality
     implementation project(':base')
-    // Local libraries
-    implementation project(':firebaseui-android-addons')
 
     implementation 'android.arch.lifecycle:runtime:1.0.3'
     implementation 'android.arch.lifecycle:extensions:1.0.0'

@@ -14,7 +14,6 @@
             <option value="$PROJECT_DIR$/craft-essentials/library" />
             <option value="$PROJECT_DIR$/instantapp" />
             <option value="$PROJECT_DIR$/things" />
-            <option value="$PROJECT_DIR$/../FirebaseUI-Android Addons/library" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
