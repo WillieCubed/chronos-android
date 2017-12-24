@@ -1,3 +1,3 @@
-include ':app', ':craft-essentials', ':instantapp', ':craft-essentials', ':firebaseui-android-addons', ':things', ':base'
-project(':craft-essentials').projectDir = new File(settingsDir, '../CraftEssentials/library')
+include ':app', ':base', ':instantapp', ':things', ':craft-essentials', ':firebaseui-android-addons'
+project(':craft-essentials').projectDir = new File(settingsDir, 'craft-essentials/library')
 project(':firebaseui-android-addons').projectDir = new File(settingsDir, '../FirebaseUI-Android Addons/library')
