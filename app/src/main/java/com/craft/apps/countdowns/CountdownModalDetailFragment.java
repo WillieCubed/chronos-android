@@ -1,7 +1,6 @@
 package com.craft.apps.countdowns;
 
-import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
-
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -11,9 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.display.CountdownDeletionDialog.CountdownDeletionListener;
 import com.craft.apps.countdowns.common.util.CountdownPreconditions;
+
+import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
 
 /**
  * A {@link Fragment} that displays {@link com.craft.apps.countdowns.common.model.Countdown} details
@@ -82,7 +84,7 @@ public class CountdownModalDetailFragment extends BottomSheetDialogFragment impl
     @Override
     public void collapseDisplay() {
         Log.v(TAG, "collapseDisplay: Dismissing bottom sheet");
-        dismiss();
+        dismissDisplay();
     }
 
     @Override
@@ -112,5 +114,11 @@ public class CountdownModalDetailFragment extends BottomSheetDialogFragment impl
         CountdownAnalytics.getInstance(getContext())
                 .logDeletion(countdownId);
         dismissDisplay();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        getActivity().finish();
     }
 }

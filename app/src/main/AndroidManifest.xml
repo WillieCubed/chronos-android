@@ -5,9 +5,7 @@
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
@@ -19,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="android:theme"
         tools:targetApi="n">
 
         <!-- For FCM -->
@@ -43,8 +42,8 @@
         </activity>
 
         <activity
-            android:label="@string/app_name"
             android:name=".StartActivity"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.Splash">
             <meta-data
                 android:name="android.app.shortcuts"
@@ -58,8 +57,9 @@
         </activity>
 
         <activity
-            android:label="@string/title_activity_main"
             android:name=".CountdownListActivity"
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter android:autoVerify="true">
@@ -81,8 +81,8 @@
         </activity>
 
         <activity
-            android:label="@string/title_activity_countdown_creation"
             android:name=".CountdownCreationActivity"
+            android:label="@string/title_activity_countdown_creation"
             android:parentActivityName=".CountdownListActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -105,8 +105,8 @@
         </activity>
 
         <activity
-            android:label="@string/title_activity_configure_countdown_widget"
-            android:name=".widget.SingleCountdownWidgetConfigureActivity">
+            android:name=".widget.SingleCountdownWidgetConfigureActivity"
+            android:label="@string/title_activity_configure_countdown_widget">
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -115,8 +115,8 @@
         </activity>
 
         <activity
-            android:label="@string/title_activity_settings"
             android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
             android:parentActivityName=".CountdownListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -135,9 +135,9 @@
         </activity>
 
         <activity
-            android:label="@string/title_activity_countdown_deep_link"
-            android:launchMode="singleTop"
             android:name=".CountdownDeepLinkActivity"
+            android:label="@string/title_activity_countdown_deep_link"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.Translucent">
 
             <intent-filter
@@ -163,6 +163,8 @@
 
                 <data
                     android:host="countdown"
+                    android:mimeType="text/plain"
+                    android:pathPattern="/*"
                     android:scheme="countdowns" />
             </intent-filter>
 
@@ -170,16 +172,16 @@
 
         <!-- Overriding Craft Essentials library; necessary for function -->
         <activity
+            android:name="com.craft.essentials.userhelp.activity.HelpActivity"
             android:label="@string/essentials_title_activity_help"
-            android:name="com.craft.essentials.activity.HelpActivity"
             android:parentActivityName=".CountdownListActivity"
             android:theme="@style/AppTheme"
             tools:replace="android:theme" />
 
         <!-- Overriding Craft Essentials library; necessary for function -->
         <activity
+            android:name="com.craft.essentials.userhelp.activity.FeedbackActivity"
             android:label="@string/essentials_title_activity_feedback"
-            android:name="com.craft.essentials.activity.FeedbackActivity"
             android:parentActivityName=".CountdownListActivity"
             android:theme="@style/AppTheme"
             tools:replace="android:theme" />
@@ -209,8 +211,8 @@
         <!--</receiver>-->
 
         <service
-            android:exported="true"
             android:name=".index.CountdownIndexingService"
+            android:exported="true"
             android:permission="com.google.android.gms.permission.APPINDEXING">
 
             <intent-filter>
@@ -220,8 +222,8 @@
         </service>
 
         <service
-            android:exported="false"
-            android:name=".notification.CountdownNotificationService">
+            android:name=".notification.CountdownNotificationService"
+            android:exported="false">
 
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -230,8 +232,8 @@
         </service>
 
         <service
-            android:exported="false"
-            android:name=".notification.CountdownInstanceIdService">
+            android:name=".notification.CountdownInstanceIdService"
+            android:exported="false">
 
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -240,8 +242,8 @@
         </service>
 
         <service
-            android:exported="false"
             android:name=".widget.CountdownListWidgetService"
+            android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>

@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.appinvite.FirebaseAppInvite;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 /**
  * @author willie
- * @version 1.0.0
+ * @version 1.1.0
  * @since v1.1.0 (7/1/17)
  */
 public class CountdownAppInvites {
@@ -18,8 +21,10 @@ public class CountdownAppInvites {
 
     /**
      * Determines if the given {@link Intent} was launched from a Firebase App Invites link
+     * @deprecated Use {@link #handleAppInvite(Intent)}
      */
     // TODO: 7/1/17 Implement me
+    @Deprecated
     public static void handleInvite(Activity activity, Intent intent) {
         FirebaseDynamicLinks.getInstance().getDynamicLink(intent)
                 .addOnSuccessListener(activity, data -> {
@@ -36,12 +41,13 @@ public class CountdownAppInvites {
                     if (invite != null) {
                         String invitationId = invite.getInvitationId();
                     }
-
-                    // Handle the deep link
-                    // ...
                 })
                 .addOnFailureListener(activity, e -> {
                     Log.w(TAG, "handleInvite: Error when fetching app invite data", e);
                 });
+    }
+
+    public static Task<PendingDynamicLinkData> handleAppInvite(Intent intent) {
+        return FirebaseDynamicLinks.getInstance().getDynamicLink(intent);
     }
 }
