@@ -1,11 +1,9 @@
 package com.craft.apps.countdowns;
 
-import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_FEATURE_DISCOVERY;
-import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS;
-
 import android.app.assist.AssistContent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -21,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+
 import com.craft.apps.countdowns.SortOptionDialog.SelectionListener;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.CountdownSelectionListener;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
@@ -46,8 +45,12 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.appinvite.FirebaseAppInvite;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Query;
+
+import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_FEATURE_DISCOVERY;
+import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS;
 
 /**
  * An {@link android.app.Activity} that lists {@link Countdown}s using a {@link
@@ -57,7 +60,7 @@ import com.google.firebase.database.Query;
  * {@link SettingsActivity} from here.
  *
  * @author willie
- * @version 1.0.0
+ * @version 1.0.1
  * @see CountdownListFragment
  * @see CountdownCreationActivity
  * @see SettingsActivity
@@ -126,24 +129,38 @@ public class CountdownListActivity extends AppCompatActivity implements
                 mUser.getPhotoUrl() != null ? mUser.getPhotoUrl().toString() : null);
         mDrawerManager.setAccountButtonListener(view -> Users.showSignOutDialog(this));
 
-        initializeDetailFragment();
         initializeListFragment();
+        initializeDetailFragment();
         UserPrivileges.fetchFor(UserPrivileges.DISABLED_ADS, hasPrivilege -> {
             if (!hasPrivilege) {
                 setupBannerAd();
             }
         }, mUser.getUid());
 
-        Log.v(TAG, "onCreate: Intent extras: " + getIntent().getExtras());
-        CountdownAppInvites.handleInvite(this, getIntent());
+        CountdownAppInvites.handleAppInvite(getIntent()).addOnSuccessListener(this, data -> {
+            if (data == null) {
+                Log.d(TAG, "getInvitation: no data");
+                return;
+            }
 
-        String countdownId = getIntent().getStringExtra(IntentUtils.ARG_COUNTDOWN_ID);
-        if (ACTION_VIEW_COUNTDOWN_DETAILS.equals(getIntent().getAction())
-                && (countdownId != null)) {
-            showCountdownDetails(countdownId);
-        } else if (ACTION_FEATURE_DISCOVERY.equals(getIntent().getAction())) {
-            startFeatureDiscovery();
-        }
+            // Get the deep link
+            Uri deepLink = data.getLink();
+
+            // Extract invite
+            FirebaseAppInvite invite = FirebaseAppInvite.getInvitation(data);
+            if (invite != null) {
+                String invitationId = invite.getInvitationId();
+            }
+        }).addOnFailureListener(this, e -> {
+            Log.w(TAG, "handleInvite: Error when fetching app invite data", e);
+        });
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
     }
 
     @Override
@@ -291,6 +308,31 @@ public class CountdownListActivity extends AppCompatActivity implements
         // Let fragment handle this
     }
 
+    private void handleIntent(Intent intent) {
+        String action = intent.getAction();
+        String data = intent.getDataString();
+        Log.d(TAG, "handleIntent: Intent action is " + action);
+        Log.d(TAG, "handleIntent: Intent data is " + data);
+        if (action == null) {
+            return;
+        }
+        switch (action) {
+            case Intent.ACTION_VIEW:
+                if (data != null) {
+                    String countdownId = data.substring(data.lastIndexOf("/") + 1);
+                    showCountdownDetails(countdownId);
+                }
+                break;
+            case ACTION_VIEW_COUNTDOWN_DETAILS:
+                String countdownId = intent.getStringExtra(IntentUtils.ARG_COUNTDOWN_ID);
+                showCountdownDetails(countdownId);
+                break;
+            case ACTION_FEATURE_DISCOVERY:
+                startFeatureDiscovery();
+                break;
+        }
+    }
+
     private void initializeListFragment() {
         Fragment fragment = CountdownListFragment.newInstance(mUser.getUid());
         getSupportFragmentManager().beginTransaction()
@@ -299,6 +341,11 @@ public class CountdownListActivity extends AppCompatActivity implements
     }
 
     private void initializeDetailFragment() {
+        if (findViewById(R.id.coordinator_root_details) != null) {
+            // TODO: 7/6/17 Show tablet placeholder view
+            Log.d(TAG, "initializeDetailFragment: Setting up wide-screen detail view");
+            return;
+        }
         Fragment fragment = CountdownPersistentDetailFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container_countdown_details, fragment,
