@@ -1,23 +1,23 @@
 package com.craft.apps.countdowns;
 
-import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;
+
+import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
 
 /**
  * An {@link android.app.Activity} that displays {@link Countdown} details from sources outside the
  * app.
  *
- * @author willie
  * @version 1.0.0
  * @see CountdownModalDetailFragment
- * @since 6/24/17
+ * @since 1.0.0
  */
 public class CountdownDeepLinkActivity extends AppCompatActivity {
 

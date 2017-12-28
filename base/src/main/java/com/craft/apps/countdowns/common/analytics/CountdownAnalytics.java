@@ -3,6 +3,7 @@ package com.craft.apps.countdowns.common.analytics;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -11,11 +12,10 @@ import com.google.firebase.analytics.FirebaseAnalytics;
  *
  * This uses Google Analytics for Firebase as the backend.
  *
- * @author willie
  * @version 1.0.0
  * @see Event
  * @see Param
- * @since v1.0.0 (5/29/17)
+ * @since 1.0.0
  */
 public class CountdownAnalytics {
 

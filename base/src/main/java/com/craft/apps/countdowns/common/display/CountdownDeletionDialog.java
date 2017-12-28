@@ -7,16 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog.Builder;
+
 import com.craft.apps.countdowns.common.R;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.util.CountdownPreconditions;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (6/30/17)
+ * @since 1.0.0
  */
-
 public class CountdownDeletionDialog extends DialogFragment {
 
     private static final String TAG = CountdownDeletionDialog.class.getSimpleName();

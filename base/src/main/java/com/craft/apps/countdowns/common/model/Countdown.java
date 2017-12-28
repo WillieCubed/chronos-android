@@ -1,14 +1,14 @@
 package com.craft.apps.countdowns.common.model;
 
 import com.google.firebase.database.Exclude;
+
 import org.joda.time.DateTime;
 
 /**
- * A POJO used for serializing and deserializing basic countdown information (but not state)
+ * A POJO used for serializing and deserializing basic countdown information (but not state).
  *
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (3/18/17)
+ * @since 1.0.0
  */
 @SuppressWarnings("JavaDoc")
 public class Countdown {

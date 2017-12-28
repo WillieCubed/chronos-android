@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
@@ -22,14 +23,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.Locale;
 
 /**
- * A UI controller class that monitors and displays data
+ * A UI controller class that monitors and displays data.
  *
- * @author willie
  * @version 1.0.0
- * @since 6/25/17
+ * @since 1.0.0
  */
 public class DetailSheetController implements ValueEventListener, OnClickListener,
         OnMenuItemClickListener {

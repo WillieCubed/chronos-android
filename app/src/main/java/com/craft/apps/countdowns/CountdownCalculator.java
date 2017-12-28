@@ -6,9 +6,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (1/14/17)
+ * @since 1.0.0
  */
 public class CountdownCalculator {
 

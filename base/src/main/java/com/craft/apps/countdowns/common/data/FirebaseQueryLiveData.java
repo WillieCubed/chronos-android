@@ -12,9 +12,8 @@ import com.google.firebase.database.ValueEventListener;
 
 /**
  * @version 1.0.0
- * @since v1.0.0 (12/23/2017)
+ * @since 1.0.3
  */
-
 public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
 
     private static final String TAG = FirebaseQueryLiveData.class.getSimpleName();

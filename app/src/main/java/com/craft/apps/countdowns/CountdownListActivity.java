@@ -31,10 +31,10 @@ import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.common.util.IntentUtils;
 import com.craft.apps.countdowns.invites.CountdownAppInvites;
 import com.craft.apps.countdowns.util.Users;
-import com.craft.essentials.activity.FeedbackActivity;
-import com.craft.essentials.activity.HelpActivity;
-import com.craft.essentials.model.HelpConfig;
 import com.craft.essentials.ui.DrawerManager;
+import com.craft.essentials.userhelp.activity.FeedbackActivity;
+import com.craft.essentials.userhelp.activity.HelpActivity;
+import com.craft.essentials.userhelp.model.HelpConfig;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.getkeepsafe.taptargetview.TapTargetView.Listener;
@@ -59,12 +59,11 @@ import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUN
  * for interaction. Users can view countdown information, create new countdowns, and navigate to the
  * {@link SettingsActivity} from here.
  *
- * @author willie
  * @version 1.0.1
  * @see CountdownListFragment
  * @see CountdownCreationActivity
  * @see SettingsActivity
- * @since 3/18/17
+ * @since 1.0.0
  */
 public class CountdownListActivity extends AppCompatActivity implements
         OnClickListener,

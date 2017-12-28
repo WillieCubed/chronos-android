@@ -6,14 +6,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.craft.apps.countdowns.common.util.CountdownPreconditions;
 
 // TODO: 6/30/17 Find proper use for this
 
 /**
- * @author willie
  * @version 1.0.0
- * @since 6/25/17
+ * @since 1.0.0
  */
 public class CountdownDetailFragment extends Fragment {
 

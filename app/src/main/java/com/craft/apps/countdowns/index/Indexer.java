@@ -1,6 +1,7 @@
 package com.craft.apps.countdowns.index;
 
 import android.util.Log;
+
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.google.firebase.appindexing.FirebaseAppIndex;
 import com.google.firebase.appindexing.Indexable;
@@ -8,12 +9,12 @@ import com.google.firebase.appindexing.builders.DigitalDocumentBuilder;
 import com.google.firebase.appindexing.builders.Indexables;
 import com.google.firebase.appindexing.builders.PersonBuilder;
 import com.google.firebase.auth.FirebaseUser;
+
 import java.util.Date;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (7/2/17)
+ * @since 1.0.0
  */
 public final class Indexer {
 

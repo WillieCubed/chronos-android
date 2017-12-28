@@ -1,6 +1,7 @@
 package com.craft.apps.countdowns.notification;
 
 import android.util.Log;
+
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.util.Users;
 import com.google.firebase.auth.FirebaseUser;
@@ -8,16 +9,15 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since 5/29/17
+ * @since 1.0.0
  */
 public class CountdownInstanceIdService extends FirebaseInstanceIdService {
 
     private static final String TAG = CountdownInstanceIdService.class.getSimpleName();
 
     /**
-     * Persists an updated instance ID token to the signed in user's Firebase OldDatabase reference
+     * Persists an updated instance ID token to the signed in user's Firebase OldDatabase reference.
      *
      * @param token A new token to persist
      */

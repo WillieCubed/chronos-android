@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.CountdownSelectionListener;
 import com.craft.apps.countdowns.common.database.OldDatabase;
@@ -26,10 +27,9 @@ import com.google.firebase.database.Query;
  * {@link android.app.Activity} hosting this fragment must implement {@link
  * CountdownSelectionListener} to handle {@link CountdownRecyclerAdapter} selection and load events.
  *
- * @author willie
  * @version 1.0.0
  * @see CountdownSelectionListener
- * @since 6/24/17
+ * @since 1.0.0
  */
 public class CountdownListFragment extends Fragment implements CountdownSelectionListener {
 
@@ -87,7 +87,7 @@ public class CountdownListFragment extends Fragment implements CountdownSelectio
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_countdown_list, container, false);
     }
 

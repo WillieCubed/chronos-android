@@ -1,7 +1,5 @@
 package com.craft.apps.countdowns;
 
-import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,14 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.util.CountdownPreconditions;
 import com.craft.apps.countdowns.common.util.Preconditions;
 
+import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
+
 /**
- * @author willie
  * @version 1.0.0
- * @since 6/24/17
+ * @since 1.0.0
  */
 public class CountdownPersistentDetailFragment extends Fragment implements
         CountdownDetailDisplay {
