@@ -1,13 +1,14 @@
 package com.craft.apps.countdowns;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;
+
+import java.util.Objects;
 
 import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
 
@@ -29,10 +30,6 @@ public class CountdownDeepLinkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_countdown_deep_link);
 
         handleIntent(getIntent());
-        // ATTENTION: This was auto-generated to handle app links.
-        Intent appLinkIntent = getIntent();
-        String appLinkAction = appLinkIntent.getAction();
-        Uri appLinkData = appLinkIntent.getData();
     }
 
     @Override
@@ -42,21 +39,12 @@ public class CountdownDeepLinkActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        ((CountdownDetailDisplay) getSupportFragmentManager()
-//                .findFragmentByTag("CountdownDetailFragment"))
-//                .dismissDisplay();
-//        finish();
-//    }
-
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "handleIntent: Intent action is " + action);
         String data = intent.getDataString();
         Log.d(TAG, "handleIntent: Intent data is " + data);
-        Bundle args = intent.getExtras();
+        Bundle args = Objects.requireNonNull(intent.getExtras());
 
         String countdownId;
         if (args.containsKey(ARG_COUNTDOWN_ID)) {
@@ -75,7 +63,7 @@ public class CountdownDeepLinkActivity extends AppCompatActivity {
 
     private void showCountdownFragment(String countdownId) {
         CountdownAnalytics.getInstance(this).logSingleWidgetEngagement();
-        CountdownDetailDisplay display = CountdownModalDetailFragment.newInstance(countdownId);
-        display.showDisplay(getSupportFragmentManager());
+        ModalCountdownBottomSheet.newInstance(countdownId)
+                .show(getSupportFragmentManager(), "CountdownFragment");
     }
 }
