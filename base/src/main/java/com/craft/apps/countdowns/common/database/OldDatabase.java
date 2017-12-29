@@ -15,8 +15,10 @@ import com.google.firebase.database.FirebaseDatabase;
  *
  * @version 1.0.0
  * @since 1.0.0
+ * @deprecated
  */
 @SuppressWarnings("WeakerAccess")
+@Deprecated
 public class OldDatabase {
 
     /**
