@@ -31,7 +31,9 @@ import java.util.Locale;
  *
  * @version 1.0.0
  * @since 1.0.0
+ * @deprecated Use {@link ModalCountdownBottomSheet} or {@link CountdownDetailFragment} instead
  */
+@Deprecated
 public class DetailSheetController implements ValueEventListener, OnClickListener,
         OnMenuItemClickListener {
 
@@ -188,18 +190,17 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
         mDetailToolbar.inflateMenu(R.menu.countdown_detail);
         mDetailToolbar.setOnClickListener(this);
         mDetailToolbar.setOnMenuItemClickListener(this);
-
     }
 
     /**
-     * Begins observing {@linkplain OldDatabase} events
+     * Begins observing {@linkplain OldDatabase} events.
      */
     public void startObserving() {
         mSelectedCountdownReference.addValueEventListener(this);
     }
 
     /**
-     * Notifies the controller to update the data
+     * Notifies the controller to update the data.
      *
      * @param countdownId The database key for a {@link Countdown}
      */

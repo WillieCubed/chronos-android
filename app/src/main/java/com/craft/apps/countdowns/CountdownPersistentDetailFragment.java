@@ -23,7 +23,9 @@ import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID
 /**
  * @version 1.0.0
  * @since 1.0.0
+ * @deprecated Use CountdownDetailFragment instead
  */
+@Deprecated
 public class CountdownPersistentDetailFragment extends Fragment implements
         CountdownDetailDisplay {
 
