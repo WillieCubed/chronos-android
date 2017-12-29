@@ -1,6 +1,7 @@
 package com.craft.apps.countdowns.common.database;
 
 import android.util.Log;
+
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.DatabaseReference.CompletionListener;
@@ -10,11 +11,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A utility class that abstracts the Firebase OldDatabase backend to semantically sound
- * helper methods
+ * helper methods.
  *
- * @author Willie Chalmers III
  * @version 1.0.0
- * @since v1.0.0 (3/17/17)
+ * @since 1.0.0
  */
 @SuppressWarnings("WeakerAccess")
 public class OldDatabase {

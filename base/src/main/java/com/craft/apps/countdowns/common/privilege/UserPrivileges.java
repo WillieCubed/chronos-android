@@ -2,20 +2,21 @@ package com.craft.apps.countdowns.common.privilege;
 
 import android.support.annotation.StringDef;
 import android.util.Log;
+
 import com.craft.apps.countdowns.common.BuildConfig;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * An abstract method of accessing states of service-level feature privileges for users
+ * An abstract method of accessing states of service-level feature privileges for users.
  *
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (7/1/17)
+ * @since 1.0.0
  */
 // TODO: 7/2/17 Ensure absolute consistency
 public class UserPrivileges {
@@ -36,7 +37,7 @@ public class UserPrivileges {
      * @param userId The ID of a user that exists in the database
      */
     public static void fetchFor(@Privilege String privilege, PrivilegeCallback callback,
-            String userId) {
+                                String userId) {
         // For testing/marketing, automatically grants any privilege if this is demo user
         if (BuildConfig.DEBUG) {
             callback.onResult(true);
@@ -67,7 +68,7 @@ public class UserPrivileges {
      * @param userId The ID of a user that exists in the database
      */
     public static void enableFor(@Privilege String privilege, String userId,
-            PrivilegeCallback callback) {
+                                 PrivilegeCallback callback) {
         OldDatabase.getUserReference(userId).child(PRIVILEGES_KEY).child(privilege)
                 .setValue(true).addOnSuccessListener(aVoid -> {
             Log.i(TAG, "enableFor: Privilege successfully set for " + userId);
@@ -82,7 +83,7 @@ public class UserPrivileges {
      * @param userId The ID of a user that exists in the database
      */
     public static void disableFor(@Privilege String privilege, String userId,
-            PrivilegeCallback callback) {
+                                  PrivilegeCallback callback) {
         OldDatabase.getUserReference(userId).child(PRIVILEGES_KEY).child(privilege)
                 .setValue(false).addOnSuccessListener(aVoid -> {
             Log.i(TAG, "disableFor: Privilege successfully set for " + userId);

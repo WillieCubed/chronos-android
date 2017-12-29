@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.craft.apps.countdowns.common.CountdownCreator;
 import com.craft.apps.countdowns.common.database.CountdownManager;
 import com.craft.apps.countdowns.common.format.SimpleDateFormatter;
@@ -31,15 +32,14 @@ import com.google.firebase.auth.FirebaseUser;
 // TODO: 7/1/17 Delegate to a fragment
 
 /**
- * A screen that allows users to create a {@link Countdown}
+ * A screen that allows users to create a {@link Countdown}.
  * <p>
  * This lets a user choose a title, description, time, date, timezone, and color for countdown
  * creation.
  *
- * @author willie
  * @version 1.0.0
  * @see Countdown
- * @since v1.0.0 (3/18/17)
+ * @since 1.0.0
  */
 public class CountdownCreationActivity extends AppCompatActivity implements
         OnClickListener {

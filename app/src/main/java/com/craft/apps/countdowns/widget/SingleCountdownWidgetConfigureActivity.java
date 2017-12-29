@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.craft.apps.countdowns.CountdownCreationActivity;
 import com.craft.apps.countdowns.CountdownListFragment;
 import com.craft.apps.countdowns.R;
@@ -18,9 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * The configuration screen for a {@link SingleCountdownWidget}.
  *
- * @author willie
  * @version 1.0.0
- * @since 3/18/17
+ * @since 1.0.0
  */
 public class SingleCountdownWidgetConfigureActivity extends AppCompatActivity implements
         View.OnClickListener,

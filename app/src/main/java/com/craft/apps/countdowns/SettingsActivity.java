@@ -19,21 +19,22 @@ import android.support.v7.preference.Preference.OnPreferenceChangeListener;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.craft.apps.countdowns.common.database.CountdownManager;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.index.Indexer;
 import com.craft.apps.countdowns.purchase.Biller;
 import com.craft.apps.countdowns.util.Users;
 import com.google.firebase.auth.FirebaseUser;
+
 import java.util.Objects;
 
 /**
  * An {@link AppCompatActivity} that allows the user to manipulate local settings that will be
  * persisted to disk with the {@link PreferenceManager} using a {@link Preferences}
  *
- * @author willie
  * @version 1.0.0
- * @since 3/14/17
+ * @since 1.0.0
  */
 public class SettingsActivity extends AppCompatActivity implements
         OnPreferenceChangeListener {

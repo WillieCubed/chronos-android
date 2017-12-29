@@ -12,7 +12,7 @@
       <option name="TOP_LEVEL_CLASS_OPTIONS">
         <value>
           <option name="ACCESS_JAVADOC_REQUIRED_FOR" value="public" />
-          <option name="REQUIRED_TAGS" value="@since@param@version@author" />
+          <option name="REQUIRED_TAGS" value="@since@param@version" />
         </value>
       </option>
       <option name="INNER_CLASS_OPTIONS">

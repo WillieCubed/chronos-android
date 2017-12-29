@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.util.Users;
@@ -13,9 +14,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since 3/14/17
+ * @since 1.0.0
  */
 public class CountdownIndexingService extends IntentService {
 

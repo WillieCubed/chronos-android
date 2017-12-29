@@ -4,15 +4,15 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.craft.apps.countdowns.common.R;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.google.android.gms.tasks.Task;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (6/29/17)
+ * @since 1.0.0
  */
 public class CountdownManager extends OldDatabase {
 

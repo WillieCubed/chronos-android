@@ -5,25 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
 import com.craft.apps.countdowns.R;
-import com.craft.apps.countdowns.common.database.OldDatabase;
+import com.craft.apps.countdowns.adapter.FirebaseRemoteViewsAdapter;
+import com.craft.apps.countdowns.common.database.CountdownManager;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
-import com.craft.apps.countdowns.util.Users;
-import com.craft.libraries.firebaseuiaddon.FirebaseIndexRemoteViewsAdapter;
-import com.firebase.ui.database.ChangeEventListener;
-import com.google.firebase.database.DataSnapshot;
+import com.craft.apps.countdowns.common.util.Preconditions;
+import com.google.firebase.database.Query;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  *
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (6/28/17)
+ * @since 1.0.0
  */
 public class CountdownListWidgetService extends RemoteViewsService {
 
+    /**
+     * A parameter for a user's UID.
+     */
     public static final String EXTRA_USER_ID = "com.craft.apps.countdowns.extra.USER_ID";
 
     private static final String TAG = CountdownListWidgetService.class.getSimpleName();
@@ -35,16 +37,25 @@ public class CountdownListWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new CountdownListRemoteViewsFactory(getApplicationContext(), intent);
+        Preconditions.checkNotNull(intent.getStringExtra(EXTRA_USER_ID));
+        return new CountdownListRemoteViewsFactory(getApplicationContext(),
+                intent.getStringExtra(EXTRA_USER_ID));
     }
 
-    private class CountdownListRemoteViewsFactory extends
-            FirebaseIndexRemoteViewsAdapter<Countdown> {
+    private static class CountdownListRemoteViewsFactory extends
+            FirebaseRemoteViewsAdapter<Countdown> {
 
-        public CountdownListRemoteViewsFactory(Context context, Intent intent) {
-            super(context, intent, Countdown.class,
-                    OldDatabase.getUserCountdownsReference(Users.getCurentUser().getUid()),
-                    OldDatabase.getCountdownsDataReference());
+        /**
+         * Creates a new CountdownListRemoteViewsFactory.
+         *
+         * @param userId The user to fetch {@link Countdown} data
+         */
+        public CountdownListRemoteViewsFactory(Context context, String userId) {
+            super(context, getQuery(userId), Countdown.class);
+        }
+
+        private static Query getQuery(String userId) {
+            return CountdownManager.getUserCountdownsReference(userId);
         }
 
         @Override
@@ -59,28 +70,6 @@ public class CountdownListWidgetService extends RemoteViewsService {
             remoteViews.setTextViewText(R.id.countdown_counter, pluralText);
             remoteViews.setTextViewText(R.id.countdown_title, getItem(position).getTitle());
             return remoteViews;
-        }
-
-        @Override
-        public RemoteViews getLoadingView() {
-            return null;
-        }
-
-        @Override
-        public void onChildChanged(ChangeEventListener.EventType type, DataSnapshot snapshot,
-                int index, int oldIndex) {
-            switch (type) {
-                case ADDED:
-                    break;
-                case CHANGED:
-                    break;
-                case REMOVED:
-                    break;
-                case MOVED:
-                    break;
-                default:
-                    throw new IllegalStateException("Incomplete case statement");
-            }
         }
     }
 }

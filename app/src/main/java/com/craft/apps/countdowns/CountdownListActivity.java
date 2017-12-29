@@ -1,6 +1,7 @@
 package com.craft.apps.countdowns;
 
 import android.app.assist.AssistContent;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,12 +30,13 @@ import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
 import com.craft.apps.countdowns.common.privilege.UserPrivileges;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.common.util.IntentUtils;
+import com.craft.apps.countdowns.common.viewmodel.SelectedCountdownViewModel;
 import com.craft.apps.countdowns.invites.CountdownAppInvites;
 import com.craft.apps.countdowns.util.Users;
-import com.craft.essentials.activity.FeedbackActivity;
-import com.craft.essentials.activity.HelpActivity;
-import com.craft.essentials.model.HelpConfig;
 import com.craft.essentials.ui.DrawerManager;
+import com.craft.essentials.userhelp.activity.FeedbackActivity;
+import com.craft.essentials.userhelp.activity.HelpActivity;
+import com.craft.essentials.userhelp.model.HelpConfig;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.getkeepsafe.taptargetview.TapTargetView.Listener;
@@ -59,12 +61,11 @@ import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUN
  * for interaction. Users can view countdown information, create new countdowns, and navigate to the
  * {@link SettingsActivity} from here.
  *
- * @author willie
  * @version 1.0.1
  * @see CountdownListFragment
  * @see CountdownCreationActivity
  * @see SettingsActivity
- * @since 3/18/17
+ * @since 1.0.0
  */
 public class CountdownListActivity extends AppCompatActivity implements
         OnClickListener,
@@ -155,6 +156,11 @@ public class CountdownListActivity extends AppCompatActivity implements
             Log.w(TAG, "handleInvite: Error when fetching app invite data", e);
         });
         handleIntent(getIntent());
+
+        SelectedCountdownViewModel viewModel = ViewModelProviders.of(this)
+                .get(SelectedCountdownViewModel.class);
+        viewModel.getSelectedCountdown()
+                .observe(this, this::showCountdownDetails);
     }
 
     @Override
@@ -275,27 +281,13 @@ public class CountdownListActivity extends AppCompatActivity implements
     @Override
     public void onCountdownSelected(String countdownId) {
         Log.d(TAG, "onCountdownSelected: Selected countdown ID is " + countdownId);
-        CountdownAnalytics.getInstance(this).logSelection(countdownId);
-        showCountdownDetails(countdownId);
+        selectCountdown(countdownId);
     }
 
     @Override
     public void onCountdownLongSelected(String countdownId) {
         Log.v(TAG, "onCountdownLongSelected: " + countdownId);
         // TODO: 3/19/17 select item in adapter
-//        if (!mSelectedItemIds.contains(countdownId)) {
-//            mSelectedItemIds.add(countdownId);
-//        } else {
-//            mSelectedItemIds.remove(countdownId);
-//        }
-//        if (mActionMode != null) {
-//            return;
-//        } else {
-//            mActionMode = startSupportActionMode(this);
-//        }
-//        if (mSelectedItemIds.size() == 0) {
-//            mActionMode.finish();
-//        }
     }
 
     @Override
@@ -320,12 +312,12 @@ public class CountdownListActivity extends AppCompatActivity implements
             case Intent.ACTION_VIEW:
                 if (data != null) {
                     String countdownId = data.substring(data.lastIndexOf("/") + 1);
-                    showCountdownDetails(countdownId);
+                    selectCountdown(countdownId);
                 }
                 break;
             case ACTION_VIEW_COUNTDOWN_DETAILS:
                 String countdownId = intent.getStringExtra(IntentUtils.ARG_COUNTDOWN_ID);
-                showCountdownDetails(countdownId);
+                selectCountdown(countdownId);
                 break;
             case ACTION_FEATURE_DISCOVERY:
                 startFeatureDiscovery();
@@ -346,19 +338,13 @@ public class CountdownListActivity extends AppCompatActivity implements
             Log.d(TAG, "initializeDetailFragment: Setting up wide-screen detail view");
             return;
         }
-        Fragment fragment = CountdownPersistentDetailFragment.newInstance();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_countdown_details, fragment,
-                        "CountdownDetailFragment")
-                .commit();
+        // TODO: 12/28/2017 Fix tablet functionality
     }
 
     private void showCountdownDetails(String countdownId) {
-        // TODO: 6/24/17 Find more OOP way to do this
-        CountdownDetailDisplay display = (CountdownDetailDisplay) getSupportFragmentManager()
-                .findFragmentByTag("CountdownDetailFragment");
-        display.setCountdownId(countdownId);
-        display.showDisplay(getSupportFragmentManager());
+        CountdownAnalytics.getInstance(this).logSelection(countdownId);
+        CountdownDetailFragment fragment = CountdownDetailFragment.newInstance(countdownId);
+        fragment.show();
     }
 
     private void startFeatureDiscovery() {
@@ -416,5 +402,11 @@ public class CountdownListActivity extends AppCompatActivity implements
             }
         });
         mBannerAd.loadAd(request);
+    }
+
+    private void selectCountdown(String countdownId) {
+        SelectedCountdownViewModel viewModel = ViewModelProviders.of(CountdownListActivity.this)
+                .get(SelectedCountdownViewModel.class);
+        viewModel.setSelectedCountdown(countdownId);
     }
 }

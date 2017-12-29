@@ -3,6 +3,7 @@ package com.craft.apps.countdowns.notification;
 import android.app.IntentService;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -12,12 +13,10 @@ import com.google.firebase.messaging.RemoteMessage;
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  *
- * @author willie
  * @version 1.0.0
- * @since 6/23/17
+ * @since 1.0.0
  */
 public class CountdownNotificationService extends FirebaseMessagingService {
-
 
     /**
      * Required public empty constructor

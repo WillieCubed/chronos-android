@@ -8,12 +8,12 @@ import android.content.pm.PackageManager;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
 import com.craft.apps.countdowns.common.model.Countdown;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since 5/14/17
+ * @since 1.0.0
  */
 public class CalendarManager {
 
