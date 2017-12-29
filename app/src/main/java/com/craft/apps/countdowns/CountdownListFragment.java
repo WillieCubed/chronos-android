@@ -1,9 +1,9 @@
 package com.craft.apps.countdowns;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -101,14 +101,9 @@ public class CountdownListFragment extends Fragment implements CountdownSelectio
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString(mUserId, ARG_USER_ID);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
