@@ -3,6 +3,7 @@ package com.craft.apps.countdowns.index;
 import android.util.Log;
 
 import com.craft.apps.countdowns.common.model.Countdown;
+import com.craft.apps.countdowns.common.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.appindexing.FirebaseAppIndex;
 import com.google.firebase.appindexing.Indexable;
@@ -14,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Date;
 
 /**
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public final class Indexer {
@@ -26,7 +27,9 @@ public final class Indexer {
      *
      * @param countdownId The database {@link Countdown} ID used to generate the index link
      * @param user The currently signed in user
+     * @deprecated Use {@link #indexCountdown(Countdown, User)} instead
      */
+    @Deprecated
     public static void indexCountdown(Countdown countdown, String countdownId, FirebaseUser user) {
         if (user != null) {
             Log.d(TAG, "indexCountdown: Indexing countdown " + countdownId + " for user "
@@ -46,6 +49,39 @@ public final class Indexer {
             if (user.getPhotoUrl() != null) {
                 personBuilder.setImage(user.getPhotoUrl().toString());
             }
+            builder.setAuthor(personBuilder);
+            Indexable indexable = builder.build();
+            FirebaseAppIndex.getInstance().update(indexable);
+        } else {
+            Log.w(TAG, "indexCountdown: Firebase user is null, aborting");
+        }
+    }
+
+    /**
+     * Locally indexes the given countdown on the user's device.
+     *
+     * @param user The currently signed in user
+     */
+    public static void indexCountdown(Countdown countdown, User user) {
+        String countdownId = countdown.getUid();
+        if (user != null) {
+            Log.d(TAG, "indexCountdown: Indexing countdown " + countdownId + " for user "
+                    + user.getUid());
+            DigitalDocumentBuilder builder = Indexables.noteDigitalDocumentBuilder()
+                    .setUrl(getCountdownLink(countdownId))
+                    .setName(countdown.getTitle())
+                    .setText(generateCountdownLabel(countdown))
+                    .setDescription(countdown.getDescription())
+                    .setDateCreated(new Date(countdown.getStartTime()));
+            PersonBuilder personBuilder = Indexables.personBuilder()
+                    .setIsSelf(true);
+            if (user.getName() != null) {
+                personBuilder.setName(user.getName());
+            }
+            // TODO: 12/31/2017 Re-enable image for creator
+//            if (user.getPhotoUrl() != null) {
+//                personBuilder.setImage(user.getPhotoUrl().toString());
+//            }
             builder.setAuthor(personBuilder);
             Indexable indexable = builder.build();
             FirebaseAppIndex.getInstance().update(indexable);
