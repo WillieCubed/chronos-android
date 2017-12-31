@@ -88,6 +88,16 @@ public class UserRepository {
         return getUsersCollection().document(userId).set(updates, SetOptions.merge());
     }
 
+    /**
+     * Adds the given FCM token to the given user's messaging tokens.
+     */
+    @NonNull
+    public static Task<Void> addFcmToken(User user, String token) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(token, true);
+        return getUsersCollection().document(user.getUid()).set(updates, SetOptions.merge());
+    }
+
     @NonNull
     private static CollectionReference getUsersCollection() {
         return FirebaseFirestore.getInstance().collection(KEY_USERS);

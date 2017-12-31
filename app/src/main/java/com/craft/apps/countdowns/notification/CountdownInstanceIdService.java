@@ -2,14 +2,14 @@ package com.craft.apps.countdowns.notification;
 
 import android.util.Log;
 
-import com.craft.apps.countdowns.common.database.OldDatabase;
-import com.craft.apps.countdowns.util.Users;
-import com.google.firebase.auth.FirebaseUser;
+import com.craft.apps.countdowns.auth.UserManager;
+import com.craft.apps.countdowns.common.database.UserRepository;
+import com.craft.apps.countdowns.common.model.User;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 /**
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 public class CountdownInstanceIdService extends FirebaseInstanceIdService {
@@ -22,17 +22,15 @@ public class CountdownInstanceIdService extends FirebaseInstanceIdService {
      * @param token A new token to persist
      */
     private static void sendRegistrationToServer(String token) {
-        FirebaseUser user = Users.getCurentUser();
+        User user = UserManager.getCurrentUser();
         if (user != null) {
-            OldDatabase.getUserReference(user.getUid()).child(OldDatabase.PATH_FCM_TOKENS)
-                    .child(token).setValue(true, (databaseError, databaseReference) -> {
-                if (databaseError != null) {
-                    Log.e(TAG, "onComplete: Couldn't update user FCM token; " +
-                            databaseError.getDetails(), databaseError.toException());
-                } else {
-                    Log.i(TAG, "onComplete: Successfully updated user FCM token.");
-                }
-            });
+            UserRepository.addFcmToken(user, token)
+                    .addOnSuccessListener(success -> {
+                        Log.i(TAG, "Successfully updated user FCM token");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Couldn't update user FCM Token", e);
+                    });
         }
     }
 
