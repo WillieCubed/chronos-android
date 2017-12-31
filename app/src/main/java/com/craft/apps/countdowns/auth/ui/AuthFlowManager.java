@@ -59,8 +59,8 @@ public final class AuthFlowManager {
      */
     public static void showSwitchAccountDialog(final FragmentActivity activity) {
         AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setTitle("Switch account?")
-                .setMessage("Would you like to switch accounts?")
+                .setTitle(R.string.query_auth_switch_account_short)
+                .setMessage(R.string.query_auth_switch_accounts_long)
                 .setNegativeButton(android.R.string.no, (dialog1, which) -> dialog1.cancel())
                 .setPositiveButton(android.R.string.yes, (dialog2, which) -> {
                     dialog2.dismiss();
