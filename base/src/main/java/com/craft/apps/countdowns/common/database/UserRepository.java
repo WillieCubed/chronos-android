@@ -17,7 +17,7 @@ import java.util.Map;
  * A source of data for {@link User} objects.
  *
  * @version 1.0.0
- * @since 1.0.0
+ * @since 2.0.0
  */
 public class UserRepository {
 
@@ -55,6 +55,27 @@ public class UserRepository {
     @NonNull
     public static Task<Void> updateUser(String uid, User user) {
         return getUsersCollection().document(uid).set(user);
+    }
+
+    /**
+     * Removes all the given user's data from the database.
+     *
+     * @param user The user to clear data
+     * @see #clearUserData(String)
+     */
+    @NonNull
+    public static Task<Void> clearUserData(User user) {
+        return getUsersCollection().document(user.getUid()).set(new Object());
+    }
+
+    /**
+     * Removes all the given user's data from the database.
+     *
+     * @param uid The database UID of the user to clear data
+     */
+    @NonNull
+    public static Task<Void> clearUserData(String uid) {
+        return getUsersCollection().document(uid).set(new Object());
     }
 
     /**
