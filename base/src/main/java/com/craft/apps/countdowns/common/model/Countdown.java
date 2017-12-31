@@ -7,11 +7,16 @@ import org.joda.time.DateTime;
 /**
  * A POJO used for serializing and deserializing basic countdown information (but not state).
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 @SuppressWarnings("JavaDoc")
 public class Countdown {
+
+    /**
+     * NOTE: Only set during to database/deserialization.
+     */
+    private String uid;
 
     private String title;
 
@@ -90,6 +95,14 @@ public class Countdown {
 
     public void setTimezone(String timezone) {
         this.timezone = timezone;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     @Exclude
