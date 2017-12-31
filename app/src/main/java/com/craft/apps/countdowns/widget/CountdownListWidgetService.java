@@ -1,24 +1,28 @@
 package com.craft.apps.countdowns.widget;
 
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.craft.apps.countdowns.R;
-import com.craft.apps.countdowns.adapter.FirebaseRemoteViewsAdapter;
-import com.craft.apps.countdowns.common.database.CountdownManager;
+import com.craft.apps.countdowns.common.database.UserRepository;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
+import com.craft.apps.countdowns.common.model.User;
 import com.craft.apps.countdowns.common.util.Preconditions;
-import com.google.firebase.database.Query;
+import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
+ * An {@link RemoteViewsService} for handling asynchronous {@link CountdownListWidget} data
+ * requests.
  *
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0
  */
 public class CountdownListWidgetService extends RemoteViewsService {
@@ -31,11 +35,6 @@ public class CountdownListWidgetService extends RemoteViewsService {
     private static final String TAG = CountdownListWidgetService.class.getSimpleName();
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
-    @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         Preconditions.checkNotNull(intent.getStringExtra(EXTRA_USER_ID));
         return new CountdownListRemoteViewsFactory(getApplicationContext(),
@@ -43,19 +42,25 @@ public class CountdownListWidgetService extends RemoteViewsService {
     }
 
     private static class CountdownListRemoteViewsFactory extends
-            FirebaseRemoteViewsAdapter<Countdown> {
+            FirestoreListRemoteViewsFactory<Countdown> {
 
         /**
          * Creates a new CountdownListRemoteViewsFactory.
          *
-         * @param userId The user to fetch {@link Countdown} data
+         * @param userId The user for which to fetch {@link Countdown} data
          */
         public CountdownListRemoteViewsFactory(Context context, String userId) {
-            super(context, getQuery(userId), Countdown.class);
+            super(getQuery(userId), context, Countdown.class);
         }
 
+        // TODO: 12/31/2017 Decouple this
         private static Query getQuery(String userId) {
-            return CountdownManager.getUserCountdownsReference(userId);
+            User user = UserRepository.fetchUser(userId);
+            List<String> list = new ArrayList<>();
+            list.addAll(user.getCountdowns().keySet());
+            String[] userCountdowns = list.toArray(new String[list.size()]);
+            return FirebaseFirestore.getInstance().collection("countdowns")
+                    .whereEqualTo("uid", FieldPath.of(userCountdowns));
         }
 
         @Override
@@ -70,6 +75,11 @@ public class CountdownListWidgetService extends RemoteViewsService {
             remoteViews.setTextViewText(R.id.countdown_counter, pluralText);
             remoteViews.setTextViewText(R.id.countdown_title, getItem(position).getTitle());
             return remoteViews;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 1;
         }
     }
 }
