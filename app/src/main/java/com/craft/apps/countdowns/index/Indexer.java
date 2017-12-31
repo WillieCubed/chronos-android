@@ -3,6 +3,7 @@ package com.craft.apps.countdowns.index;
 import android.util.Log;
 
 import com.craft.apps.countdowns.common.model.Countdown;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.appindexing.FirebaseAppIndex;
 import com.google.firebase.appindexing.Indexable;
 import com.google.firebase.appindexing.builders.DigitalDocumentBuilder;
@@ -66,8 +67,8 @@ public final class Indexer {
      * Should be called when the user signs out
      * TODO: Automatically call this upon abstracted Users.signOut()
      */
-    public static void removeIndexes() {
-        FirebaseAppIndex.getInstance().removeAll();
+    public static Task<Void> removeIndexes() {
+        return FirebaseAppIndex.getInstance().removeAll();
     }
 
     private static String generateCountdownLabel(Countdown countdown) {

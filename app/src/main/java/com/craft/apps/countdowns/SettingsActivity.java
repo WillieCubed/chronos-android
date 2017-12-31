@@ -20,12 +20,12 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.craft.apps.countdowns.common.database.CountdownManager;
+import com.craft.apps.countdowns.auth.UserManager;
+import com.craft.apps.countdowns.common.database.UserRepository;
+import com.craft.apps.countdowns.common.model.User;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.index.Indexer;
 import com.craft.apps.countdowns.purchase.Biller;
-import com.craft.apps.countdowns.util.Users;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -40,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity implements
         OnPreferenceChangeListener {
 
     public static final String ACTION_RESET_APP = "com.craft.apps.countdowns.action.ACTION_RESET_APP";
+
     private static final String TAG = SettingsActivity.class.getSimpleName();
 
     private static final int RC_PERMISSION_WRITE_CALENDAR = 2001;
@@ -105,16 +106,16 @@ public class SettingsActivity extends AppCompatActivity implements
                     Log.d(TAG, "onClick: Resetting app state.");
                     dialog1.dismiss();
                     Preferences.getInstance(this).resetPreferences();
-                    FirebaseUser user = Users.getCurentUser();
-                    Users.signOut(this)
+                    User user = UserManager.getCurrentUser();
+                    UserManager.signOut(this)
                             .addOnSuccessListener(this, aVoid -> {
-                                // TODO: 7/2/17 Fix finish()
                                 // TODO: 7/2/17 Add more granular controls
-                                CountdownManager.getUserCountdownsReference(user.getUid())
-                                        .setValue(null);
-                                Indexer.removeIndexes();
-                                StartActivity.start(SettingsActivity.this);
-                                finish();
+                                UserRepository.clearUserData(user)
+                                        .continueWith(bVoid -> Indexer.removeIndexes())
+                                        .addOnCompleteListener(cVoid -> {
+                                            StartActivity.start(SettingsActivity.this);
+                                            finish();
+                                        });
                             })
                             .addOnFailureListener(e -> {
                                 Log.w(TAG, "onFailure: Error resetting app", e);
@@ -141,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity implements
                     permission.WRITE_CALENDAR)) {
 
             } else {
-                ActivityCompat.requestPermissions(this, new String[] {permission.WRITE_CALENDAR},
+                ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_CALENDAR},
                         RC_PERMISSION_WRITE_CALENDAR);
             }
         }
@@ -149,7 +150,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case RC_PERMISSION_WRITE_CALENDAR:
@@ -165,8 +166,10 @@ public class SettingsActivity extends AppCompatActivity implements
     private void disableAds() {
         Log.d(TAG, "Disabling ads");
         Biller biller = new Biller(this);
-        FirebaseUser user = Users.getCurentUser();
-        biller.disableAds(user.getUid());
+        User user = UserManager.getCurrentUser();
+        if (user != null) {
+            biller.disableAds(user.getUid());
+        }
     }
 
     /**
