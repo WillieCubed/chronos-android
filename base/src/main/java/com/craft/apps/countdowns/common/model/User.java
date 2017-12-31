@@ -1,6 +1,5 @@
 package com.craft.apps.countdowns.common.model;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -17,7 +16,9 @@ public class User {
 
     private String preferredEmail;
 
-    private Map<String, Object> countdowns = new HashMap<>();
+    private Map<String, Object> countdowns;
+
+    private Map<String, Object> fcmTokens;
 
     /**
      * Empty public constructor for Firebase.
@@ -26,12 +27,13 @@ public class User {
     }
 
     public User(String uid, String name, long joinDate, String preferredEmail,
-                Map<String, Object> countdowns) {
+                Map<String, Object> countdowns, Map<String, Object> fcmTokens) {
         this.uid = uid;
         this.name = name;
         this.joinDate = joinDate;
         this.preferredEmail = preferredEmail;
         this.countdowns = countdowns;
+        this.fcmTokens = fcmTokens;
     }
 
     public String getUid() {
@@ -72,5 +74,13 @@ public class User {
 
     public void setCountdowns(Map<String, Object> countdowns) {
         this.countdowns = countdowns;
+    }
+
+    public Map<String, Object> getFcmTokens() {
+        return fcmTokens;
+    }
+
+    public void setFcmTokens(Map<String, Object> fcmTokens) {
+        this.fcmTokens = fcmTokens;
     }
 }
