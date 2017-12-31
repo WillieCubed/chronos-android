@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.craft.apps.countdowns.BuildConfig;
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.StartActivity;
+import com.craft.apps.countdowns.auth.UserManager;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.AuthUI.IdpConfig;
@@ -33,8 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: 7/1/17 Big pile of cleanup
-
 /**
  * @author willie
  * @version 0.1.0
@@ -44,6 +43,7 @@ import java.util.Map;
 @Deprecated
 public class Users {
 
+    @Deprecated
     public static final int RC_SIGN_IN = 1;
 
     private static final String TAG = Users.class.getSimpleName();
