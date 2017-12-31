@@ -28,7 +28,7 @@ public class CountdownRepository {
     /**
      * Fetches a {@link Countdown} in an easily monitor-able way.
      *
-     * @param id
+     * @param id The UID of the {@link Countdown} to fetch
      * @return A {@link MutableLiveData} that will update when countdown data changes.
      */
     @NonNull
@@ -49,10 +49,18 @@ public class CountdownRepository {
     /**
      * Persists the given {@link Countdown} to the database and associates it with the given
      * user's UID.
+     *
+     * @param countdown A {@link Countdown} that will have its UID updated when the operation is
+     * successful
      */
     @NonNull
-    public static Task<Void> uploadCountdown(Countdown countdown) {
-        return getCountdownsCollection().document().set(countdown);
+    public static Task<Countdown> uploadCountdown(Countdown countdown) {
+        String docId = getCountdownsCollection().document().getId();
+        return getCountdownsCollection().document().set(countdown)
+                .continueWith(task -> {
+                    countdown.setUid(docId);
+                    return countdown;
+                });
     }
 
     /**
