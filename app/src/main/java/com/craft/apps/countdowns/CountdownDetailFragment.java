@@ -27,6 +27,8 @@ public class CountdownDetailFragment extends Fragment {
 
     private BottomSheetBehavior mBehavior;
 
+    private CountdownViewModel mViewModel;
+
     public static CountdownDetailFragment newInstance(String countdownId) {
         CountdownDetailFragment fragment = new CountdownDetailFragment();
         Bundle args = new Bundle();
@@ -53,12 +55,17 @@ public class CountdownDetailFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this)
+                .get(CountdownViewModel.class);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mBehavior = BottomSheetBehavior.from(view);
         CountdownDetailClickHandler handler = new CountdownDetailClickHandler(view, mCountdownId);
-        CountdownViewModel viewModel = ViewModelProviders.of(this)
-                .get(CountdownViewModel.class);
-        viewModel.getCountdown().observe(this, handler);
+        mViewModel.getCountdown().observe(this, handler);
     }
 
     @Override
