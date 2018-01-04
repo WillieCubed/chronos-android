@@ -1,6 +1,7 @@
 package com.craft.apps.countdowns.adapter;
 
 import android.animation.ValueAnimator;
+import android.arch.lifecycle.LifecycleOwner;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -12,16 +13,15 @@ import android.widget.TextView;
 
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.ViewHolder;
-import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.model.SortOptions;
 import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
 import com.craft.apps.countdowns.common.settings.Preferences;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +31,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static com.craft.apps.countdowns.common.model.SortOptions.DATE_CREATED;
 
 /**
- * @version 2.0.0
+ * @version 3.0.0
  * @since 1.0.0
  */
-public class CountdownRecyclerAdapter extends FirebaseRecyclerAdapter<Countdown, ViewHolder> {
+public class CountdownRecyclerAdapter extends FirestoreRecyclerAdapter<Countdown, ViewHolder> {
 
     private static final String TAG = CountdownRecyclerAdapter.class.getSimpleName();
 
-    private static final Class<Countdown> MODEL_CLASS = Countdown.class;
     private static final int MODEL_LAYOUT = R.layout.viewholder_countdown_list_item;
-    private static final DatabaseReference DATA_REFERENCE =
-            OldDatabase.getCountdownsDataReference();
 
     private CountdownSelectionListener mSelectionListener;
 
@@ -55,11 +52,17 @@ public class CountdownRecyclerAdapter extends FirebaseRecyclerAdapter<Countdown,
      *
      * @see FirebaseRecyclerOptions
      */
-    public CountdownRecyclerAdapter(CountdownSelectionListener listener, Query keyRef) {
-        super(new FirebaseRecyclerOptions.Builder<Countdown>()
-                .setIndexedQuery(keyRef, DATA_REFERENCE, MODEL_CLASS)
-                .build());
+    public CountdownRecyclerAdapter(CountdownSelectionListener listener, LifecycleOwner owner,
+                                    Query query) {
+        super(getOptions(owner, query));
         mSelectionListener = listener;
+    }
+
+    private static FirestoreRecyclerOptions<Countdown> getOptions(LifecycleOwner owner, Query keyQuery) {
+        return new FirestoreRecyclerOptions.Builder<Countdown>()
+                .setLifecycleOwner(owner)
+                .setQuery(keyQuery, Countdown.class)
+                .build();
     }
 
     /**
@@ -69,29 +72,11 @@ public class CountdownRecyclerAdapter extends FirebaseRecyclerAdapter<Countdown,
      * @param listener A callback to pass to a new CountdownRecyclerAdapter
      * @param option The startExtraSettingsIntent to sort the list
      * @see SortOptions
+     * @deprecated Sorting isn't supported anymore
      */
+    @Deprecated
     public static void sortList(RecyclerView list, @NonNull CountdownSelectionListener listener,
                                 Query keyRef, @SortOption int option) {
-//        Query dataRef;
-//        switch (option) {
-//            default:
-//            case DATE_CREATED:
-//                // TODO: 5/27/17 Review option of sorting by "startTime" key
-//                dataRef = DATA_REFERENCE.orderByChild("startTime");
-//                break;
-//            case TIME_LEFT:
-//                dataRef = DATA_REFERENCE.orderByChild(OldDatabase.PATH_FINISH_TIME);
-//                break;
-//            case COUNTDOWN_LENGTH:
-//                dataRef = DATA_REFERENCE.orderByPriority();
-//                break;
-//        }
-        list.setAdapter(new CountdownRecyclerAdapter(listener, keyRef));
-    }
-
-    public static void filterList(RecyclerView list, CountdownSelectionListener listener,
-                                  Query keyRef) {
-        list.setAdapter(new CountdownRecyclerAdapter(listener, keyRef));
     }
 
     @Override
@@ -103,7 +88,7 @@ public class CountdownRecyclerAdapter extends FirebaseRecyclerAdapter<Countdown,
     @Override
     protected void onBindViewHolder(ViewHolder holder, int position, Countdown countdown) {
         holder.setOnClickListener(
-                v -> mSelectionListener.onCountdownSelected(getRef(position).getKey()));
+                v -> mSelectionListener.onCountdownSelected(getItem(position).getUid()));
 //        holder.setOnLongClickListener(v -> {
         // TODO: 5/31/17 Re-enable when appropriate
         // TODO: 5/31/17 Refactor into something manageable
