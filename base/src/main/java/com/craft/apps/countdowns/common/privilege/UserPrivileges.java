@@ -4,22 +4,23 @@ import android.support.annotation.StringDef;
 import android.util.Log;
 
 import com.craft.apps.countdowns.common.BuildConfig;
-import com.craft.apps.countdowns.common.database.OldDatabase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.craft.apps.countdowns.common.database.QuerySource;
+import com.craft.apps.countdowns.common.database.UserRepository;
+import com.craft.apps.countdowns.common.model.User;
+import com.google.firebase.firestore.SetOptions;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An abstract method of accessing states of service-level feature privileges for users.
  *
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
-// TODO: 7/2/17 Ensure absolute consistency
-public class UserPrivileges {
+public final class UserPrivileges {
 
     /**
      * A constant denoting whether the service should <em>not</em> present ads to the user
@@ -27,7 +28,6 @@ public class UserPrivileges {
     public static final String DISABLED_ADS = "disableAds";
 
     private static final String TAG = UserPrivileges.class.getSimpleName();
-    private static final String PRIVILEGES_KEY = "privileges";
 
     /**
      * Fetches service privileges for the given privilege and returns the value in the given
@@ -43,24 +43,15 @@ public class UserPrivileges {
             callback.onResult(true);
             return;
         }
-        // Real magic happens here
-        OldDatabase.getUserReference(userId).child(PRIVILEGES_KEY).child(privilege)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Boolean hasPrivilege = dataSnapshot.getValue(Boolean.class);
-                        Log.d(TAG, "onDataChange: User privilege " + privilege + " is "
-                                + hasPrivilege);
-                        callback.onResult(hasPrivilege != null ? hasPrivilege : false);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w(TAG, "onCancelled: Error when fetching user privilege " + privilege,
-                                databaseError.toException());
-                        callback.onResult(false);
-                    }
-                });
+        Map<String, Object> privileges = UserRepository.fetchUser(userId).getPrivileges();
+        if (privileges != null) {
+            boolean hasPrivilege = privileges.containsKey(privilege);
+            Log.d(TAG, "User privilege " + privilege + "is " + hasPrivilege);
+            callback.onResult(hasPrivilege);
+        } else {
+            Log.w(TAG, "Error when fetching privileges");
+            callback.onResult(false);
+        }
     }
 
     /**
@@ -69,13 +60,19 @@ public class UserPrivileges {
      */
     public static void enableFor(@Privilege String privilege, String userId,
                                  PrivilegeCallback callback) {
-        OldDatabase.getUserReference(userId).child(PRIVILEGES_KEY).child(privilege)
-                .setValue(true).addOnSuccessListener(aVoid -> {
-            Log.i(TAG, "enableFor: Privilege successfully set for " + userId);
-            callback.onResult(true);
-        }).addOnFailureListener(e -> {
-            Log.w(TAG, "enableFor: Error when setting privilege for " + userId, e);
-        });
+        User user = UserRepository.fetchUser(userId);
+        if (user.getPrivileges() != null) {
+            user.getPrivileges().put(privilege, true);
+            UserRepository.updateUser(userId, user)
+                    .addOnSuccessListener(success -> {
+                        Log.i(TAG, "Privilege set for " + userId);
+                        callback.onResult(true);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.w(TAG, "Error setting privilege for " + userId, e);
+                        callback.onResult(false);
+                    });
+        }
     }
 
     /**
@@ -84,13 +81,17 @@ public class UserPrivileges {
      */
     public static void disableFor(@Privilege String privilege, String userId,
                                   PrivilegeCallback callback) {
-        OldDatabase.getUserReference(userId).child(PRIVILEGES_KEY).child(privilege)
-                .setValue(false).addOnSuccessListener(aVoid -> {
-            Log.i(TAG, "disableFor: Privilege successfully set for " + userId);
-            callback.onResult(false);
-        }).addOnFailureListener(e -> {
-            Log.w(TAG, "disableFor: Error when setting privilege for " + userId, e);
-        });
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(privilege, false);
+        QuerySource.getUserRef(userId).set(updates, SetOptions.merge())
+                .addOnSuccessListener(success -> {
+                    Log.i(TAG, "Disabled privilege " + privilege + " for " + userId);
+                    callback.onResult(false);
+                })
+                .addOnFailureListener(e -> {
+                    Log.i(TAG, "Error disabling privilege " + privilege + " for " + userId);
+                    callback.onResult(true);
+                });
     }
 
     /**
