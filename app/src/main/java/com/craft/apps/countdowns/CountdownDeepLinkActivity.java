@@ -17,7 +17,7 @@ import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID
  * app.
  *
  * @version 1.0.0
- * @see CountdownModalDetailFragment
+ * @see ModalCountdownBottomSheet
  * @since 1.0.0
  */
 public class CountdownDeepLinkActivity extends AppCompatActivity {

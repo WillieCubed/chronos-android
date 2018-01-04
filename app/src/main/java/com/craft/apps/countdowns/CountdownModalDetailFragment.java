@@ -25,7 +25,9 @@ import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID
  *
  * @version 1.0.0
  * @since 1.0.0
+ * @deprecated Use {@link ModalCountdownBottomSheet}
  */
+@Deprecated
 public class CountdownModalDetailFragment extends BottomSheetDialogFragment implements
         CountdownDetailDisplay, CountdownDeletionListener {
 

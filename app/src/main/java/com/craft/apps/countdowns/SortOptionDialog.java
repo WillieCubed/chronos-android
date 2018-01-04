@@ -19,8 +19,9 @@ import java.util.Objects;
  *
  * @version 1.0.0
  * @since 1.0.0
+ * @deprecated No longer supported in 2.0.0
  */
-// TODO: 5/27/17 Persist this to SharedPreferences
+@Deprecated
 public class SortOptionDialog extends AppCompatDialogFragment implements
         DialogInterface.OnClickListener {
 
@@ -119,7 +120,9 @@ public class SortOptionDialog extends AppCompatDialogFragment implements
      * A callback that's called when a selection is chosen.
      *
      * @see SortOptionDialog
+     * @deprecated Not supported in 2.0.0
      */
+    @Deprecated
     public interface SelectionListener {
 
         /**
