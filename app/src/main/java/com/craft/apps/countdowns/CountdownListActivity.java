@@ -24,7 +24,6 @@ import android.view.View.OnClickListener;
 import com.craft.apps.countdowns.SortOptionDialog.SelectionListener;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.CountdownSelectionListener;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
-import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
 import com.craft.apps.countdowns.common.privilege.UserPrivileges;
@@ -49,7 +48,6 @@ import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.appinvite.FirebaseAppInvite;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.Query;
 
 import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_FEATURE_DISCOVERY;
 import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS;
@@ -362,13 +360,6 @@ public class CountdownListActivity extends AppCompatActivity implements
                         CountdownCreationActivity.start(CountdownListActivity.this);
                     }
                 });
-    }
-
-    @SuppressWarnings("unused")
-    private void sortList(@SortOption int option) {
-        // TODO: 7/2/17 Implement list sorting
-        Query keyQuery = OldDatabase.getUserCountdownsReference(mUser.getUid());
-//        CountdownRecyclerAdapter.sortList(mCountdownList, this, keyQuery, option);
     }
 
     @SuppressWarnings("unused")
