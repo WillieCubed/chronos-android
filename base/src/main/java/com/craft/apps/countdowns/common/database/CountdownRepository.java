@@ -7,10 +7,9 @@ import android.util.Log;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.model.User;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.List;
+import static com.craft.apps.countdowns.common.database.QuerySource.COUNTDOWNS;
+import static com.craft.apps.countdowns.common.database.QuerySource.getCountdownRef;
 
 /**
  * A database handler that persists, modifies, and fetches {@link Countdown}s to and from the
@@ -23,8 +22,6 @@ public class CountdownRepository {
 
     private static final String TAG = CountdownRepository.class.getSimpleName();
 
-    private static final String KEY_COUNTDOWNS = "countdowns";
-
     /**
      * Fetches a {@link Countdown} in an easily monitor-able way.
      *
@@ -34,7 +31,7 @@ public class CountdownRepository {
     @NonNull
     public static MutableLiveData<Countdown> getCountdown(String id) {
         MutableLiveData<Countdown> data = new MutableLiveData<>();
-        getCountdownsCollection().document(id).addSnapshotListener((snapshot, e) -> {
+        getCountdownRef(id).addSnapshotListener((snapshot, e) -> {
             if (e != null) {
                 Log.w(TAG, "Error when fetching countdown", e);
                 return;
@@ -55,8 +52,8 @@ public class CountdownRepository {
      */
     @NonNull
     public static Task<Countdown> uploadCountdown(Countdown countdown) {
-        String docId = getCountdownsCollection().document().getId();
-        return getCountdownsCollection().document().set(countdown)
+        String docId = COUNTDOWNS.document().getId();
+        return COUNTDOWNS.document().set(countdown)
                 .continueWith(task -> {
                     countdown.setUid(docId);
                     return countdown;
@@ -71,12 +68,7 @@ public class CountdownRepository {
      */
     @NonNull
     public static Task<Void> updateCountdown(String id, Countdown countdown) {
-        return getCountdownsCollection().document(id).set(countdown);
-    }
-
-    @NonNull
-    private static CollectionReference getCountdownsCollection() {
-        return FirebaseFirestore.getInstance().collection(KEY_COUNTDOWNS);
+        return getCountdownRef(id).set(countdown);
     }
 
     /**
@@ -86,7 +78,7 @@ public class CountdownRepository {
      */
     @NonNull
     public Task<Countdown> fetchCountdown(String id) {
-        return getCountdownsCollection().document(id).get()
+        return getCountdownRef(id).get()
                 .continueWith(new CountdownDocumentDeserializer());
     }
 
@@ -98,7 +90,7 @@ public class CountdownRepository {
     @NonNull
     public Task<Void> deleteCountdown(String countdownId) {
         // TODO: 12/31/2017 Update backend to remove it from user records
-        return getCountdownsCollection().document(countdownId).delete();
+        return getCountdownRef(countdownId).delete();
     }
 
 //    /**
@@ -132,16 +124,5 @@ public class CountdownRepository {
         User user = UserRepository.fetchUser(userId);
         user.getCountdowns().remove(countdownId);
         return UserRepository.updateUser(userId, user);
-    }
-
-    /**
-     * Returns the given number of {@link Countdown}s created most recently.
-     *
-     * @param n The number of Countdowns to fetch
-     */
-    @NonNull
-    public Task<List<Countdown>> fetchLastNCountdowns(int n) {
-        return getCountdownsCollection().limit(n).get()
-                .continueWith(new CountdownListDocumentDeserializer());
     }
 }

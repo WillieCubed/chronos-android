@@ -6,12 +6,12 @@ import android.support.annotation.NonNull;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.model.User;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.craft.apps.countdowns.common.database.QuerySource.getUserRef;
 
 /**
  * A source of data for {@link User} objects.
@@ -20,8 +20,6 @@ import java.util.Map;
  * @since 2.0.0
  */
 public class UserRepository {
-
-    private static final String KEY_USERS = "users";
 
     /**
      * Returns a {@link android.arch.lifecycle.LiveData} that is notified on {@link User}
@@ -32,7 +30,7 @@ public class UserRepository {
     @NonNull
     public static MutableLiveData<User> getUser(String uid) {
         MutableLiveData<User> data = new MutableLiveData<>();
-        User user = getUsersCollection().document(uid).get()
+        User user = getUserRef(uid).get()
                 .continueWith(new UserDocumentDeserializer()).getResult();
         data.setValue(user);
         return data;
@@ -43,7 +41,7 @@ public class UserRepository {
      */
     @NonNull
     public static User fetchUser(String uid) {
-        return getUsersCollection().document(uid).get()
+        return getUserRef(uid).get()
                 .continueWith(new UserDocumentDeserializer()).getResult();
     }
 
@@ -54,7 +52,7 @@ public class UserRepository {
      */
     @NonNull
     public static Task<Void> updateUser(String uid, User user) {
-        return getUsersCollection().document(uid).set(user);
+        return getUserRef(uid).set(user);
     }
 
     /**
@@ -65,7 +63,7 @@ public class UserRepository {
      */
     @NonNull
     public static Task<Void> clearUserData(User user) {
-        return getUsersCollection().document(user.getUid()).set(new Object());
+        return getUserRef(user.getUid()).set(new Object());
     }
 
     /**
@@ -75,7 +73,7 @@ public class UserRepository {
      */
     @NonNull
     public static Task<Void> clearUserData(String uid) {
-        return getUsersCollection().document(uid).set(new Object());
+        return getUserRef(uid).set(new Object());
     }
 
     /**
@@ -85,7 +83,7 @@ public class UserRepository {
     public static Task<Void> linkCountdownToUser(String userId, Countdown countdown) {
         Map<String, Object> updates = new HashMap<>();
         updates.put(countdown.getUid(), true);
-        return getUsersCollection().document(userId).set(updates, SetOptions.merge());
+        return getUserRef(userId).set(updates, SetOptions.merge());
     }
 
     /**
@@ -95,11 +93,6 @@ public class UserRepository {
     public static Task<Void> addFcmToken(User user, String token) {
         Map<String, Object> updates = new HashMap<>();
         updates.put(token, true);
-        return getUsersCollection().document(user.getUid()).set(updates, SetOptions.merge());
-    }
-
-    @NonNull
-    private static CollectionReference getUsersCollection() {
-        return FirebaseFirestore.getInstance().collection(KEY_USERS);
+        return getUserRef(user.getUid()).set(updates, SetOptions.merge());
     }
 }
