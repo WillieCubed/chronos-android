@@ -1,6 +1,7 @@
 package com.craft.apps.countdowns.common.display;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog.Builder;
 
 import com.craft.apps.countdowns.common.R;
-import com.craft.apps.countdowns.common.database.OldDatabase;
+import com.craft.apps.countdowns.common.database.CountdownRepository;
 import com.craft.apps.countdowns.common.util.CountdownPreconditions;
 
 /**
@@ -27,14 +28,19 @@ public class CountdownDeletionDialog extends DialogFragment {
     private CountdownDeletionListener mCallback;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         Fragment parent = getParentFragment();
         if (isCallbackInstance(parent)) {
             mCallback = (CountdownDeletionListener) parent;
         } else {
             throw new RuntimeException("Context must be instance of CountdownDeletionListener");
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         mCountdownId = CountdownPreconditions.checkValidArgs(getArguments());
         if (getArguments().getString("user_id") != null) {
@@ -51,14 +57,8 @@ public class CountdownDeletionDialog extends DialogFragment {
                 .setTitle(R.string.query_dialog_delete_countdown)
                 .setMessage(R.string.query_dialog_delete_countdown_details)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    // TODO: 6/30/17 Fix this shit
-//                    CountdownManager.deleteCountdown(getContext(), user.getUid(), countdownId);
-                    OldDatabase.deleteUserCountdown(mCountdownId, mUserId,
-                            (databaseError, databaseReference) -> {
-                                if (databaseError != null) {
-                                    mCallback.onDeletion(databaseReference.getKey());
-                                }
-                            });
+                    CountdownRepository.deleteCountdownFromUser(mCountdownId, mUserId)
+                            .addOnSuccessListener(success -> mCallback.onDeletion(mCountdownId));
                     dialog.dismiss();
                 })
                 .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.cancel())

@@ -2,8 +2,8 @@ package com.craft.apps.countdowns.common.database;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.craft.apps.countdowns.common.data.FirestoreQueryLiveData;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.model.User;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +22,9 @@ public class CountdownRepository {
 
     private static final String TAG = CountdownRepository.class.getSimpleName();
 
+    private CountdownRepository() {
+    }
+
     /**
      * Fetches a {@link Countdown} in an easily monitor-able way.
      *
@@ -30,15 +33,8 @@ public class CountdownRepository {
      */
     @NonNull
     public static MutableLiveData<Countdown> getCountdown(String id) {
-        MutableLiveData<Countdown> data = new MutableLiveData<>();
-        getCountdownRef(id).addSnapshotListener((snapshot, e) -> {
-            if (e != null) {
-                Log.w(TAG, "Error when fetching countdown", e);
-                return;
-            }
-            data.postValue(snapshot.toObject(Countdown.class));
-        });
-        return data;
+        return new FirestoreQueryLiveData<>(
+                QuerySource.COUNTDOWNS.whereEqualTo("uid", id), Countdown.class);
     }
 
     // TODO: 12/30/2017 Move to AppDatabase
@@ -72,25 +68,27 @@ public class CountdownRepository {
     }
 
     /**
-     * Returns a {@link Task<Countdown>} containing the countdown with the given UID.
-     *
-     * @param id The UID of the {@link Countdown} to fetch
-     */
-    @NonNull
-    public Task<Countdown> fetchCountdown(String id) {
-        return getCountdownRef(id).get()
-                .continueWith(new CountdownDocumentDeserializer());
-    }
-
-    /**
      * Removes the given countdown the database.
      *
      * @param countdownId The countdown to delete
      */
     @NonNull
-    public Task<Void> deleteCountdown(String countdownId) {
+    public static Task<Void> deleteCountdown(String countdownId) {
         // TODO: 12/31/2017 Update backend to remove it from user records
         return getCountdownRef(countdownId).delete();
+    }
+
+    /**
+     * Removes the {@link Countdown} with the given record from the database.
+     * TODO: 12/31/2017 Move to AppDatabase
+     *
+     * @see #deleteCountdown(String)
+     */
+    @NonNull
+    public static Task<Void> deleteCountdownFromUser(String countdownId, String userId) {
+        User user = UserRepository.fetchUser(userId);
+        user.getCountdowns().remove(countdownId);
+        return UserRepository.updateUser(userId, user);
     }
 
 //    /**
@@ -114,15 +112,13 @@ public class CountdownRepository {
 //    }
 
     /**
-     * Removes the {@link Countdown} with the given record from the database.
-     * TODO: 12/31/2017 Move to AppDatabase
+     * Returns a {@link Task<Countdown>} containing the countdown with the given UID.
      *
-     * @see #deleteCountdown(String)
+     * @param id The UID of the {@link Countdown} to fetch
      */
     @NonNull
-    public Task<Void> deleteCountdownFromUser(String countdownId, String userId) {
-        User user = UserRepository.fetchUser(userId);
-        user.getCountdowns().remove(countdownId);
-        return UserRepository.updateUser(userId, user);
+    public Task<Countdown> fetchCountdown(String id) {
+        return getCountdownRef(id).get()
+                .continueWith(new CountdownDocumentDeserializer());
     }
 }

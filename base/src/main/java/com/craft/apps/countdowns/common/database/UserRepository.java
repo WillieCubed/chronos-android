@@ -62,7 +62,7 @@ public class UserRepository {
      */
     @NonNull
     public static Task<Void> clearUserData(User user) {
-        return getUserRef(user.getUid()).set(new Object());
+        return getUserRef(user.getUid()).delete();
     }
 
     /**

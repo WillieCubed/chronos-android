@@ -1,5 +1,7 @@
 package com.craft.apps.countdowns.common.model;
 
+import android.support.annotation.Nullable;
+
 import java.util.Map;
 
 /**
@@ -15,6 +17,10 @@ public class User {
     private long joinDate;
 
     private String preferredEmail;
+
+    private String imageUrl;
+
+    private Map<String, Object> privileges;
 
     private Map<String, Object> countdowns;
 
@@ -68,6 +74,24 @@ public class User {
         this.preferredEmail = preferredEmail;
     }
 
+    @Nullable
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    @Nullable
+    public Map<String, Object> getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(Map<String, Object> privileges) {
+        this.privileges = privileges;
+    }
+
     public Map<String, Object> getCountdowns() {
         return countdowns;
     }
@@ -76,6 +100,7 @@ public class User {
         this.countdowns = countdowns;
     }
 
+    @Nullable
     public Map<String, Object> getFcmTokens() {
         return fcmTokens;
     }

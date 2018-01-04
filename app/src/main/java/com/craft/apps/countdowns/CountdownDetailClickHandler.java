@@ -166,7 +166,7 @@ public class CountdownDetailClickHandler implements
         builder.setTitle(R.string.query_dialog_delete_countdown)
                 .setMessage(R.string.query_dialog_delete_countdown_details)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    new CountdownRepository().deleteCountdownFromUser(mCountdownId, user.getUid())
+                    CountdownRepository.deleteCountdownFromUser(mCountdownId, user.getUid())
                             .addOnSuccessListener(aVoid -> {
                                 Log.d(TAG, "Countdown " + mCountdownId + " deleted");
                                 CountdownAnalytics.getInstance(mContext)

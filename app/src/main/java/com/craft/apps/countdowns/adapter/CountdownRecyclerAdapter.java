@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.ViewHolder;
+import com.craft.apps.countdowns.common.database.QuerySource;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.model.SortOptions;
 import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
+import com.craft.apps.countdowns.common.model.User;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -49,13 +51,16 @@ public class CountdownRecyclerAdapter extends FirestoreRecyclerAdapter<Countdown
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
-     *
-     * @see FirebaseRecyclerOptions
      */
     public CountdownRecyclerAdapter(CountdownSelectionListener listener, LifecycleOwner owner,
                                     Query query) {
         super(getOptions(owner, query));
         mSelectionListener = listener;
+    }
+
+    public CountdownRecyclerAdapter(CountdownSelectionListener listener, LifecycleOwner owner,
+                                    @NonNull User user) {
+        this(listener, owner, QuerySource.countdownsForUser(user));
     }
 
     private static FirestoreRecyclerOptions<Countdown> getOptions(LifecycleOwner owner, Query keyQuery) {
@@ -89,13 +94,6 @@ public class CountdownRecyclerAdapter extends FirestoreRecyclerAdapter<Countdown
     protected void onBindViewHolder(ViewHolder holder, int position, Countdown countdown) {
         holder.setOnClickListener(
                 v -> mSelectionListener.onCountdownSelected(getItem(position).getUid()));
-//        holder.setOnLongClickListener(v -> {
-        // TODO: 5/31/17 Re-enable when appropriate
-        // TODO: 5/31/17 Refactor into something manageable
-//                mSelectionListener.onCountdownLongSelected(getRef(position).getKey());
-//                holder.setIsSelected(!holder.getIsActivated());
-//            return true;
-//        });
         holder.updateCountdown(countdown.getStartTime(), countdown.getFinishTime());
         holder.updateCountdownSupportingText(countdown.getTitle(), countdown.getDescription());
     }

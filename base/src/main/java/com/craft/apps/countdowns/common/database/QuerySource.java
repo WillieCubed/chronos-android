@@ -22,12 +22,11 @@ import java.util.Set;
 public class QuerySource {
 
     private static final String KEY_USERS = "users";
-
     /**
      * The collection of all the app's {@link User}s.
      */
     public static final CollectionReference USERS = getFirestore().collection(KEY_USERS);
-
+    private static final String KEY_PRIVILEGES = "privileges";
     private static final String KEY_COUNTDOWNS = "countdowns";
     /**
      * The collection of all the app's {@link Countdown}s.
