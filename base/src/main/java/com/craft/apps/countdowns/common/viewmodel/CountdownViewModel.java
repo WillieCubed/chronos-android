@@ -1,13 +1,11 @@
 package com.craft.apps.countdowns.common.viewmodel;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
-import com.craft.apps.countdowns.common.data.FirebaseQueryLiveData;
-import com.craft.apps.countdowns.common.data.SingleCountdownDeserializer;
-import com.craft.apps.countdowns.common.database.OldDatabase;
+import com.craft.apps.countdowns.common.data.FirestoreQueryLiveData;
+import com.craft.apps.countdowns.common.database.QuerySource;
 import com.craft.apps.countdowns.common.model.Countdown;
 
 /**
@@ -19,9 +17,8 @@ public class CountdownViewModel extends ViewModel {
     private LiveData<Countdown> mLiveData;
 
     public void setCountdownSource(String countdownId) {
-        mLiveData = Transformations.map(
-                new FirebaseQueryLiveData(OldDatabase.getCountdownReference(countdownId)),
-                new SingleCountdownDeserializer());
+        mLiveData = new FirestoreQueryLiveData<>(
+                QuerySource.COUNTDOWNS.whereEqualTo("uid", countdownId), Countdown.class);
     }
 
     @NonNull
