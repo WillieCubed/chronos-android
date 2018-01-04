@@ -39,7 +39,6 @@ public class UserRepository {
     /**
      * Returns the current information for the given {@link User} ID only once.
      */
-    @NonNull
     public static User fetchUser(String uid) {
         return getUserRef(uid).get()
                 .continueWith(new UserDocumentDeserializer()).getResult();
