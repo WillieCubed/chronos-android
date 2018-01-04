@@ -10,14 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.craft.apps.countdowns.auth.UserManager;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
-import com.craft.apps.countdowns.common.database.OldDatabase;
+import com.craft.apps.countdowns.common.database.CountdownRepository;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
+import com.craft.apps.countdowns.common.model.User;
 import com.craft.apps.countdowns.index.Indexer;
-import com.craft.apps.countdowns.util.Users;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
 
@@ -157,7 +158,7 @@ public class CountdownDetailClickHandler implements
     }
 
     private void showDeletionDialog() {
-        FirebaseUser user = Users.getCurentUser();
+        User user = UserManager.getCurrentUser();
         if (user == null) {
             return;
         }
@@ -165,15 +166,16 @@ public class CountdownDetailClickHandler implements
         builder.setTitle(R.string.query_dialog_delete_countdown)
                 .setMessage(R.string.query_dialog_delete_countdown_details)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-//                    CountdownManager.deleteCountdown(getContext(), user.getUid(), countdownId);
-                    OldDatabase.deleteUserCountdown(mCountdownId, user.getUid(),
-                            (databaseError, databaseReference) -> {
-                                if (databaseError != null) {
-                                    Log.d(TAG, "onComplete: Countdown " + mCountdownId + " deleted");
-                                    CountdownAnalytics.getInstance(mContext)
-                                            .logDeletion(mCountdownId);
-                                    Indexer.removeCountdownIndex(mCountdownId);
-                                }
+                    new CountdownRepository().deleteCountdownFromUser(mCountdownId, user.getUid())
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, "Countdown " + mCountdownId + " deleted");
+                                CountdownAnalytics.getInstance(mContext)
+                                        .logCreation(mCountdownId);
+                                Indexer.removeCountdownIndex(mCountdownId);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.w(TAG, "Countdown " + mCountdownId + " wasn't deleted", e);
+                                Toast.makeText(mContext, "Couldn't delete countdown. Try again later", Toast.LENGTH_SHORT).show();
                             });
                     dialog.dismiss();
                 })

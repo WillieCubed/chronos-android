@@ -21,17 +21,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import com.craft.apps.countdowns.SortOptionDialog.SelectionListener;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.CountdownSelectionListener;
+import com.craft.apps.countdowns.auth.UserManager;
+import com.craft.apps.countdowns.auth.ui.AuthFlowManager;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;
-import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
+import com.craft.apps.countdowns.common.model.User;
 import com.craft.apps.countdowns.common.privilege.UserPrivileges;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.common.util.IntentUtils;
 import com.craft.apps.countdowns.common.viewmodel.SelectedCountdownViewModel;
 import com.craft.apps.countdowns.invites.CountdownAppInvites;
-import com.craft.apps.countdowns.util.Users;
 import com.craft.essentials.ui.DrawerManager;
 import com.craft.essentials.userhelp.activity.FeedbackActivity;
 import com.craft.essentials.userhelp.activity.HelpActivity;
@@ -47,7 +47,6 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.appinvite.FirebaseAppInvite;
-import com.google.firebase.auth.FirebaseUser;
 
 import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_FEATURE_DISCOVERY;
 import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS;
@@ -69,8 +68,7 @@ public class CountdownListActivity extends AppCompatActivity implements
         OnClickListener,
         CountdownSelectionListener,
         OnNavigationItemSelectedListener,
-        ActionMode.Callback,
-        SelectionListener {
+        ActionMode.Callback {
 
     private static final String TAG = CountdownListActivity.class.getSimpleName();
 
@@ -78,7 +76,7 @@ public class CountdownListActivity extends AppCompatActivity implements
 
     private ActionMode mActionMode;
 
-    private FirebaseUser mUser;
+    private User mUser;
 
     private DrawerManager mDrawerManager;
 
@@ -112,7 +110,7 @@ public class CountdownListActivity extends AppCompatActivity implements
             return;
         }
 
-        mUser = Users.getCurentUser();
+        mUser = UserManager.getCurrentUser();
         if (mUser == null) {
             StartActivity.start(this);
             finish();
@@ -124,9 +122,9 @@ public class CountdownListActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         mDrawerManager = new DrawerManager(this, this, toolbar,
                 findViewById(R.id.drawer_layout));
-        mDrawerManager.updateNavigationHeader(mUser.getDisplayName(), mUser.getEmail(),
-                mUser.getPhotoUrl() != null ? mUser.getPhotoUrl().toString() : null);
-        mDrawerManager.setAccountButtonListener(view -> Users.showSignOutDialog(this));
+        mDrawerManager.updateNavigationHeader(mUser.getName(), mUser.getPreferredEmail(),
+                mUser.getImageUrl());
+        mDrawerManager.setAccountButtonListener(view -> AuthFlowManager.showSignOutDialog(this));
 
         initializeListFragment();
         initializeDetailFragment();
@@ -286,11 +284,6 @@ public class CountdownListActivity extends AppCompatActivity implements
     public void onCountdownLongSelected(String countdownId) {
         Log.v(TAG, "onCountdownLongSelected: " + countdownId);
         // TODO: 3/19/17 select item in adapter
-    }
-
-    @Override
-    public void onSortSelection(@SortOption int option) {
-        sortList(option);
     }
 
     @Override
