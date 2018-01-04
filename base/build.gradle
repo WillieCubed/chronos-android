@@ -28,8 +28,6 @@ android {
 }
 
 dependencies {
-    api project(':craft-essentials')
-
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -48,6 +46,7 @@ dependencies {
     api "com.google.firebase:firebase-messaging:$play_services_version"
     api 'com.firebaseui:firebase-ui-database:3.1.0'
     api 'com.firebaseui:firebase-ui-firestore:3.1.0'
+    api 'com.craft.libraries:esentials:1.0.0'
     implementation 'joda-time:joda-time:2.9.9'
     testImplementation 'junit:junit:4.12'
 }
