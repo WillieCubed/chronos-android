@@ -1,23 +1,23 @@
 package com.craft.apps.countdowns;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.CountdownSelectionListener;
-import com.craft.apps.countdowns.common.database.OldDatabase;
+import com.craft.apps.countdowns.common.database.UserRepository;
 import com.craft.apps.countdowns.common.model.Countdown;
+import com.craft.apps.countdowns.common.model.User;
 import com.craft.apps.countdowns.widget.SingleCountdownWidget;
-import com.google.firebase.database.Query;
 
 /**
  * A {@link Fragment} subclass that displays a list of {@link Countdown}s
@@ -26,10 +26,9 @@ import com.google.firebase.database.Query;
  * {@link android.app.Activity} hosting this fragment must implement {@link
  * CountdownSelectionListener} to handle {@link CountdownRecyclerAdapter} selection and load events.
  *
- * @author willie
  * @version 1.0.0
  * @see CountdownSelectionListener
- * @since 6/24/17
+ * @since 1.0.0
  */
 public class CountdownListFragment extends Fragment implements CountdownSelectionListener {
 
@@ -86,29 +85,30 @@ public class CountdownListFragment extends Fragment implements CountdownSelectio
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_countdown_list, container, false);
     }
 
     @Override
     @CallSuper
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mProgressBar = view.findViewById(R.id.progress_bar);
         mCountdownList = view.findViewById(R.id.list_countdowns);
-
-        setupList(OldDatabase.getUserCountdownsReference(mUserId));
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        User user = UserRepository.fetchUser(mUserId);
+        mCountdownList.setAdapter(new CountdownRecyclerAdapter(mListener, this, user));
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString(mUserId, ARG_USER_ID);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -125,12 +125,6 @@ public class CountdownListFragment extends Fragment implements CountdownSelectio
     @Override
     public void onCountdownLongSelected(String countdownId) {
         mListener.onCountdownLongSelected(countdownId);
-    }
-
-    private void setupList(Query keyQuery) {
-        Log.d(TAG, "setupList: Setting up list with query " + keyQuery.toString());
-        mCountdownList.setAdapter(new CountdownRecyclerAdapter(this, keyQuery));
-
     }
 
     private void hideProgressBar() {

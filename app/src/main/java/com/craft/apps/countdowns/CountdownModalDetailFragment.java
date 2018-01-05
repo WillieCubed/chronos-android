@@ -23,10 +23,11 @@ import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID
  * It's recommended Use the {@link CountdownModalDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (3/18/17)
+ * @since 1.0.0
+ * @deprecated Use {@link ModalCountdownBottomSheet}
  */
+@Deprecated
 public class CountdownModalDetailFragment extends BottomSheetDialogFragment implements
         CountdownDetailDisplay, CountdownDeletionListener {
 

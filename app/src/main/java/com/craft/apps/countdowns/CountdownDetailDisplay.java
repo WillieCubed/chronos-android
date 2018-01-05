@@ -3,9 +3,8 @@ package com.craft.apps.countdowns;
 import android.support.v4.app.FragmentManager;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since 6/25/17
+ * @since 1.0.0
  */
 public interface CountdownDetailDisplay {
 

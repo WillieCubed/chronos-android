@@ -1,7 +1,5 @@
 package com.craft.apps.countdowns;
 
-import static com.craft.apps.countdowns.util.Users.RC_SIGN_IN;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build.VERSION;
@@ -10,12 +8,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.craft.apps.countdowns.auth.UserManager;
+import com.craft.apps.countdowns.auth.ui.AuthFlowManager;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.notification.NotificationSender;
-import com.craft.apps.countdowns.util.Users;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 
+import static com.craft.apps.countdowns.auth.ui.AuthFlowManager.RC_SIGN_IN;
+
+/**
+ * @version 1.0.1
+ * @since 1.0.0
+ */
 public class StartActivity extends AppCompatActivity {
 
     private static final String TAG = StartActivity.class.getSimpleName();
@@ -31,16 +37,15 @@ public class StartActivity extends AppCompatActivity {
         if (VERSION.SDK_INT >= VERSION_CODES.O) {
             NotificationSender.initializeChannels(this);
         }
-        if (Users.getCurentUser() != null) {
+        if (UserManager.getCurrentUser() != null) {
             if (!Preferences.getInstance(this).isOnboarded()) {
-//                OnboardingActivity.startObserving(this);
                 CountdownListActivity.start(this);
             } else {
                 CountdownListActivity.start(this);
             }
         } else {
             Log.d(TAG, "onCreate: Launching sign in");
-            Users.launchSignIn(this);
+            AuthFlowManager.launchSignIn(this);
         }
         finish();
     }
@@ -51,7 +56,7 @@ public class StartActivity extends AppCompatActivity {
         switch (requestCode) {
             case RC_SIGN_IN:
                 if (data != null) {
-                    // TODO: 3/18/17 Refactor into Users.java
+                    // TODO: 3/18/17 Refactor into AuthFlowManager
                     IdpResponse response = IdpResponse.fromResultIntent(data);
 
                     if (resultCode == RESULT_OK) {

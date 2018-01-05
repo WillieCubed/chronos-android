@@ -13,11 +13,10 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.craft.apps.countdowns.common.R;
 import com.craft.apps.countdowns.common.model.Countdown;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.Locale;
+
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Duration;
@@ -31,8 +30,12 @@ import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.Locale;
+
 /**
- * A utility class that formats data from a {@link Countdown} into a proper display format
+ * A utility class that formats data from a {@link Countdown} into a proper display format.
  */
 public class UnitsFormatter {
 

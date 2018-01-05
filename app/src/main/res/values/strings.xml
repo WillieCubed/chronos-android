@@ -70,9 +70,14 @@
     <string name="appwidget_countdown_label_remove">(You can remove this widget)</string>
     <string name="appwidget_countdown_label_fulfillment">Countdown complete!</string>
 
-    <string name="query_sign_out_long">Would you like to sign out of Countdowns?</string>
     <string name="query_sign_out_short">Sign out?</string>
+    <string name="query_sign_out_long">Would you like to sign out of Countdowns?</string>
+    <string name="query_auth_switch_account_short">Switch account?</string>
+    <string name="query_auth_switch_accounts_long">Would you like to switch accounts?</string>
     <string name="query_reset_app">Reset app?</string>
+    <string name="query_reset_app_details">This will delete all preferences you\'ve set and sign you out of the app.</string>
+
+    <string name="sign_in">Please sign in the app.</string>
 
     <string name="content_countdown_detail_amount">%1$s %2$s</string>
     <string name="content_countdown_detail_name">%s</string>
@@ -178,9 +183,4 @@
     <string name="channel_countdown_updates_id" translatable="false">channel_countdown_updates</string>
     <string name="channel_countdown_updates_name">Countdown notifications</string>
     <string name="channel_countdown_updates_description">Reminders for upcoming countdowns</string>
-
-
-    <string name="query_reset_app_details">This will delete all preferences you\'ve set and sign you out of the app.</string>
-    <string name="sign_in">Please sign in the app.</string>
-
 </resources>

@@ -8,18 +8,20 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.app.AppCompatDialogFragment;
+
 import com.craft.apps.countdowns.common.model.SortOptions;
 import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
+
 import java.util.Objects;
 
 /**
  * A dialog that allows the selection of a {@link SortOptions}.
  *
- * @author willie
  * @version 1.0.0
- * @since 5/26/17
+ * @since 1.0.0
+ * @deprecated No longer supported in 2.0.0
  */
-// TODO: 5/27/17 Persist this to SharedPreferences
+@Deprecated
 public class SortOptionDialog extends AppCompatDialogFragment implements
         DialogInterface.OnClickListener {
 
@@ -118,7 +120,9 @@ public class SortOptionDialog extends AppCompatDialogFragment implements
      * A callback that's called when a selection is chosen.
      *
      * @see SortOptionDialog
+     * @deprecated Not supported in 2.0.0
      */
+    @Deprecated
     public interface SelectionListener {
 
         /**

@@ -5,9 +5,8 @@ import android.content.SharedPreferences;
 import android.support.v7.preference.PreferenceManager;
 
 /**
- * @author willie
  * @version 1.0.0
- * @since v1.0.0 (1/29/17)
+ * @since 1.0.0
  */
 
 public class UserPrivilegeValidator {
