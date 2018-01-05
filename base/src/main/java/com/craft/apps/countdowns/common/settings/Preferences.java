@@ -3,16 +3,16 @@ package com.craft.apps.countdowns.common.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.preference.PreferenceManager;
-
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.SortOptions;
 import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
 
 /**
- * A proxy class to manage {@link android.content.SharedPreferences} easily.
+ * A proxy class to manage {@link android.content.SharedPreferences} easily
  *
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 3/18/17
  */
 @SuppressWarnings("JavaDoc")
 public class Preferences {

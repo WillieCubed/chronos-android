@@ -1,19 +1,18 @@
 package com.craft.apps.countdowns.common;
 
 import com.craft.apps.countdowns.common.model.Countdown;
-
-import org.joda.time.DateTime;
-
 import java.util.TimeZone;
+import org.joda.time.DateTime;
 
 // TODO: 6/29/17 Use Java 8 time APIs
 
 /**
  * A factory class for temporarily storing values relevant for {@link Countdown} creation.
  *
+ * @author willie
  * @version 1.0.0
  * @see Countdown
- * @since 1.0.0
+ * @since 1.0.0 (6/29/17)
  */
 public class CountdownCreator {
 

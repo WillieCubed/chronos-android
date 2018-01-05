@@ -2,7 +2,6 @@ package com.craft.apps.countdowns.purchase;
 
 import android.app.Activity;
 import android.util.Log;
-
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.BillingResponse;
 import com.android.billingclient.api.BillingClient.SkuType;
@@ -13,13 +12,13 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.craft.apps.countdowns.common.privilege.UserPrivileges;
 import com.craft.apps.countdowns.common.privilege.UserPrivileges.Privilege;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since v1.0.0 (7/2/17)
  */
 public class Biller implements PurchasesUpdatedListener {
 

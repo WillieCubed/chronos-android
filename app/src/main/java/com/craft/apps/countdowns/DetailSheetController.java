@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
@@ -23,17 +22,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.Locale;
 
 /**
- * A UI controller class that monitors and displays data.
+ * A UI controller class that monitors and displays data
  *
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
- * @deprecated Use {@link ModalCountdownBottomSheet} or {@link CountdownDetailFragment} instead
+ * @since 6/25/17
  */
-@Deprecated
 public class DetailSheetController implements ValueEventListener, OnClickListener,
         OnMenuItemClickListener {
 
@@ -70,7 +67,6 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
      * data. You must use {@link #updateCountdown(String)} before {@link #startObserving()} is
      * called.
      */
-    @Deprecated
     public DetailSheetController(Context context, CountdownDetailDisplay display) {
         this(context, display, null);
     }
@@ -80,9 +76,8 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
      *
      * @param countdownId A valid {@linkplain Countdown} database ID
      */
-    @Deprecated
     public DetailSheetController(Context context, CountdownDetailDisplay display,
-                                 String countdownId) {
+            String countdownId) {
         mContext = context;
         mDisplay = display;
         if (countdownId != null) {
@@ -178,9 +173,9 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
     }
 
     /**
+     *
      * @param view
      */
-    @Deprecated
     public void init(View view) {
         mDetailToolbar = view.findViewById(R.id.toolbar_countdown_detail_header);
         mProgressBar = view.findViewById(R.id.progress_bar);
@@ -192,22 +187,21 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
         mDetailToolbar.inflateMenu(R.menu.countdown_detail);
         mDetailToolbar.setOnClickListener(this);
         mDetailToolbar.setOnMenuItemClickListener(this);
+
     }
 
     /**
-     * Begins observing {@linkplain OldDatabase} events.
+     * Begins observing {@linkplain OldDatabase} events
      */
-    @Deprecated
     public void startObserving() {
         mSelectedCountdownReference.addValueEventListener(this);
     }
 
     /**
-     * Notifies the controller to update the data.
+     * Notifies the controller to update the data
      *
      * @param countdownId The database key for a {@link Countdown}
      */
-    @Deprecated
     public void updateCountdown(String countdownId) {
         if (mSelectedCountdownReference != null) {
             mSelectedCountdownReference.removeEventListener(this);
@@ -230,7 +224,7 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     final String countdownId = getCountdownReference().getKey();
                     // TODO: 6/30/17 Fix this shite with a custom callback
-//                    CountdownRepository.deleteCountdown(getContext(), user.getUid(), countdownId);
+//                    CountdownManager.deleteCountdown(getContext(), user.getUid(), countdownId);
                     OldDatabase.deleteUserCountdown(countdownId, user.getUid(),
                             (databaseError, databaseReference) -> {
                                 if (databaseError != null) {
@@ -250,13 +244,11 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
                 .show();
     }
 
-    @Deprecated
     public void showMenuItems() {
         MenuItem deleteButton = mDetailToolbar.getMenu().findItem(R.id.action_delete);
         deleteButton.setVisible(true);
     }
 
-    @Deprecated
     public void hideMenuItems() {
         MenuItem deleteButton = mDetailToolbar.getMenu().findItem(R.id.action_delete);
         deleteButton.setVisible(false);
@@ -293,7 +285,6 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @Deprecated
     protected DatabaseReference getCountdownReference() {
         return mSelectedCountdownReference;
     }

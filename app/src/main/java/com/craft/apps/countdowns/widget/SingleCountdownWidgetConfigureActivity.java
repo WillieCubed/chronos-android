@@ -8,19 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.craft.apps.countdowns.CountdownCreationActivity;
 import com.craft.apps.countdowns.CountdownListFragment;
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.CountdownSelectionListener;
-import com.craft.apps.countdowns.auth.UserManager;
-import com.craft.apps.countdowns.common.model.User;
+import com.craft.apps.countdowns.util.Users;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * The configuration screen for a {@link SingleCountdownWidget}.
  *
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 3/18/17
  */
 public class SingleCountdownWidgetConfigureActivity extends AppCompatActivity implements
         View.OnClickListener,
@@ -39,7 +39,7 @@ public class SingleCountdownWidgetConfigureActivity extends AppCompatActivity im
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_configure_countdown_widget);
-        User user = UserManager.getCurrentUser();
+        FirebaseUser user = Users.getCurentUser();
         if (user == null) {
             finish();
             Toast.makeText(this, R.string.sign_in, Toast.LENGTH_SHORT).show();

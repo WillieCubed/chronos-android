@@ -1,1 +1,2 @@
-include ':app', ':base', ':instantapp', ':things'
+include ':app', ':base', ':instantapp', ':things', ':craft-essentials'
+project(':craft-essentials').projectDir = new File(settingsDir, 'craft-essentials/library')

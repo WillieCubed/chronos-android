@@ -1,7 +1,6 @@
 package com.craft.apps.countdowns.common.model;
 
 import android.support.annotation.IntDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -10,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 5/27/17
  */
 public class SortOptions {
 
