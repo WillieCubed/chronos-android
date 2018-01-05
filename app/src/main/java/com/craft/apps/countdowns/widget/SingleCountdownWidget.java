@@ -1,5 +1,10 @@
 package com.craft.apps.countdowns.widget;
 
+import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS;
+import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
+import static com.craft.apps.countdowns.widget.WidgetManager.deleteCountdownIdPreference;
+import static com.craft.apps.countdowns.widget.WidgetManager.loadCountdownIdPreference;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -10,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-
 import com.craft.apps.countdowns.CountdownDeepLinkActivity;
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
@@ -21,17 +25,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS;
-import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
-import static com.craft.apps.countdowns.widget.WidgetManager.deleteCountdownIdPreference;
-import static com.craft.apps.countdowns.widget.WidgetManager.loadCountdownIdPreference;
-
 /**
  * An app widget that displays the number of days until the completion of a {@link Countdown}
  * This app widget is configurable in the {@link SingleCountdownWidgetConfigureActivity}.
  *
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since v1.0.0 (3/18/17)
  */
 public class SingleCountdownWidget extends AppWidgetProvider {
 
@@ -46,7 +46,7 @@ public class SingleCountdownWidget extends AppWidgetProvider {
      * A mapping of row and column counts to properly formatted layout resource
      * Starts with row 1, column 2
      */
-    private static final int[][] WIDGET_LAYOUTS = new int[][]{
+    private static final int[][] WIDGET_LAYOUTS = new int[][] {
             {
                     R.layout.widget_individual_countdown_two_column_one_row,
                     R.layout.widget_individual_countdown_two_column_two_row,
@@ -79,7 +79,7 @@ public class SingleCountdownWidget extends AppWidgetProvider {
     };
 
     static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager,
-                                final int appWidgetId) {
+            final int appWidgetId) {
 
         DatabaseReference countdownReference = loadCountdownIdPreference(context, appWidgetId);
         // Construct the RemoteViews object
@@ -113,7 +113,7 @@ public class SingleCountdownWidget extends AppWidgetProvider {
     }
 
     private static void updateWidgetView(Context context, AppWidgetManager widgetManager,
-                                         int appWidgetId, RemoteViews remoteViews, DataSnapshot snapshot) {
+            int appWidgetId, RemoteViews remoteViews, DataSnapshot snapshot) {
         if (snapshot == null) {
             Log.i(TAG, "updateWidgetView: Countdown has been deleted; displaying fallback");
             remoteViews.setTextViewText(R.id.appwidget_countdown_title,
@@ -199,7 +199,7 @@ public class SingleCountdownWidget extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
-                                          int appWidgetId, Bundle newOptions) {
+            int appWidgetId, Bundle newOptions) {
         Log.v(TAG, "Dimensions changed; reconfiguring layout with bundle: " + newOptions);
 
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);

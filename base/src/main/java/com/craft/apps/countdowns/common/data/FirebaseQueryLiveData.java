@@ -12,10 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 
 /**
  * @version 1.0.0
- * @since 1.0.3
- * @deprecated Use {@link FirestoreQueryLiveData} instead
+ * @since v1.0.0 (12/23/2017)
  */
-@Deprecated
+
 public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
 
     private static final String TAG = FirebaseQueryLiveData.class.getSimpleName();
@@ -31,12 +30,10 @@ public class FirebaseQueryLiveData extends LiveData<DataSnapshot> {
         }
     };
 
-    @Deprecated
     public FirebaseQueryLiveData(Query query) {
         this.query = query;
     }
 
-    @Deprecated
     public FirebaseQueryLiveData(DatabaseReference ref) {
         this.query = ref;
     }

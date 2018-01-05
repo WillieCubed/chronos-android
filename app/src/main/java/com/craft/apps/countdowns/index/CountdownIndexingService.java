@@ -4,18 +4,18 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.craft.apps.countdowns.auth.UserManager;
-import com.craft.apps.countdowns.common.data.CountdownListDeserializer;
-import com.craft.apps.countdowns.common.database.QuerySource;
+import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.model.Countdown;
-import com.craft.apps.countdowns.common.model.User;
+import com.craft.apps.countdowns.util.Users;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 /**
- *
- * TODO: Update to new Firebase Indexing BroadcastService
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 3/14/17
  */
 public class CountdownIndexingService extends IntentService {
 
@@ -30,17 +30,25 @@ public class CountdownIndexingService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        User user = UserManager.getCurrentUser();
+        final FirebaseUser user = Users.getCurentUser();
         if (user != null) {
-            QuerySource.countdownsForUser(user).get()
-                    .continueWith(new CountdownListDeserializer())
-                    .addOnSuccessListener(countdowns -> {
-                        for (Countdown countdown : countdowns) {
-                            Indexer.indexCountdown(countdown, user);
+            String userId = user.getUid();
+            OldDatabase.getUserCountdownsReference(userId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Log.d(TAG, "onDataChange: Indexing countdown " + snapshot.getKey());
+                                Indexer.indexCountdown(snapshot.getValue(Countdown.class),
+                                        snapshot.getKey(), user);
+                            }
                         }
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.w(TAG, "Error while indexing countdowns", e);
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG, "Indexing error while getting user countdown keys",
+                                    databaseError.toException());
+                        }
                     });
         }
     }

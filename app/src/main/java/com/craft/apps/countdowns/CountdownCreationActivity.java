@@ -17,35 +17,36 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.craft.apps.countdowns.auth.UserManager;
 import com.craft.apps.countdowns.common.CountdownCreator;
-import com.craft.apps.countdowns.common.database.CountdownRepository;
+import com.craft.apps.countdowns.common.database.CountdownManager;
 import com.craft.apps.countdowns.common.format.SimpleDateFormatter;
 import com.craft.apps.countdowns.common.format.SimpleTimeFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
-import com.craft.apps.countdowns.common.model.User;
 import com.craft.apps.countdowns.common.util.DateUtility;
 import com.craft.apps.countdowns.index.Indexer;
+import com.craft.apps.countdowns.util.Users;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseUser;
 
 // TODO: 7/1/17 Delegate to a fragment
 
 /**
- * A screen that allows users to create a {@link Countdown}.
+ * A screen that allows users to create a {@link Countdown}
  * <p>
  * This lets a user choose a title, description, time, date, timezone, and color for countdown
  * creation.
  *
- * @version 1.0.1
+ * @author willie
+ * @version 1.0.0
  * @see Countdown
- * @since 1.0.0
+ * @since v1.0.0 (3/18/17)
  */
 public class CountdownCreationActivity extends AppCompatActivity implements
         OnClickListener {
 
     private static final String TAG = CountdownCreationActivity.class.getSimpleName();
 
-    private User mUser;
+    private FirebaseUser mUser;
 
     private CountdownCreator mCountdownCreator;
 
@@ -72,7 +73,7 @@ public class CountdownCreationActivity extends AppCompatActivity implements
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mUser = UserManager.getCurrentUser();
+        mUser = Users.getCurentUser();
         if (mUser == null) {
             // TODO: 6/30/17 Find more thorough solution
             StartActivity.start(this);
@@ -192,16 +193,21 @@ public class CountdownCreationActivity extends AppCompatActivity implements
     }
 
     private void uploadCountdown(Countdown countdown) {
-        CountdownRepository.uploadCountdown(countdown)
-                .addOnSuccessListener(newCountdown -> {
-                    Indexer.indexCountdown(newCountdown, mUser);
+        // TODO: 7/2/17 use updateChildren in Countdown Manager
+        String countdownId = CountdownManager.getNewCountdownId();
+        Tasks.whenAll(CountdownManager.uploadCountdown(countdown, countdownId),
+                CountdownManager.addCountdownToUser(countdownId, mUser.getUid()))
+                .addOnSuccessListener(this, void1 -> {
+                    Log.d(TAG, "uploadCountdown: Countdown successfully uploaded");
+                    Indexer.indexCountdown(countdown, countdownId, mUser);
                     finish();
                 })
-                .addOnFailureListener(e -> {
-                    Log.w(TAG, "Failed to upload countdown", e);
-                    Toast.makeText(this, R.string.error_uploading_countdown, Toast.LENGTH_SHORT)
-                            .show();
+                .addOnFailureListener(this, exception -> {
+                    Log.w(TAG, "uploadCountdown: Error when uploading countdown", exception);
+                    Toast.makeText(CountdownCreationActivity.this, "Error when uploading countdown",
+                            Toast.LENGTH_SHORT).show();
                     finish();
                 });
+
     }
 }

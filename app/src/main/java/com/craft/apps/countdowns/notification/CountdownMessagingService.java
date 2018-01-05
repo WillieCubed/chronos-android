@@ -7,21 +7,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.NotificationCompat;
+import android.support.v7.app.NotificationCompat.Builder;
 import android.util.Log;
-
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.common.util.IntentUtils;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 import java.util.Map;
 
 // TODO: 7/2/17 Refactor and kill
 
 /**
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 5/29/17
  */
 public class CountdownMessagingService extends FirebaseMessagingService {
 
@@ -56,8 +57,7 @@ public class CountdownMessagingService extends FirebaseMessagingService {
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent countdownIntent = PendingIntent.getActivity(this,
                 RC_SHOW_COUNTDOWN_DETAILS, intent, PendingIntent.FLAG_ONE_SHOT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
-                getString(R.string.channel_countdown_updates_id));
+        NotificationCompat.Builder builder = new Builder(this);
         builder.setContentIntent(countdownIntent)
                 .setSmallIcon(R.drawable.app_icon_large);
         if (data.size() > 0) {
@@ -76,10 +76,11 @@ public class CountdownMessagingService extends FirebaseMessagingService {
 
         if (VERSION.SDK_INT >= VERSION_CODES.O) {
             String defaultChannelId = getString(R.string.channel_countdown_updates_id);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManagerCompat.IMPORTANCE_DEFAULT;
             NotificationChannel defaultChannel = new NotificationChannel(defaultChannelId,
                     getString(R.string.channel_countdown_updates_name), importance);
             manager.createNotificationChannel(defaultChannel);
+            builder.setChannel(defaultChannelId);
         }
         int notifyId = 1;
         manager.notify(notifyId, builder.build());

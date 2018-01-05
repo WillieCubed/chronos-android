@@ -11,8 +11,9 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 /**
+ * @author willie
  * @version 1.1.0
- * @since 1.1.0
+ * @since v1.1.0 (7/1/17)
  */
 public class CountdownAppInvites {
 

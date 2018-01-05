@@ -1,18 +1,17 @@
 package com.craft.apps.countdowns.common.format;
 
 import android.content.Context;
-
+import java.util.Locale;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.Locale;
-
 /**
- * A utility class that provides an abstracted way of fetching localized date strings.
+ * A utility class that provides an abstracted way of fetching localized date strings
  *
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since v1.0.0 (6/29/17)
  */
 public class SimpleDateFormatter {
 

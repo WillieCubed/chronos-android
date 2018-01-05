@@ -9,16 +9,15 @@ import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
-
+import android.support.v7.app.NotificationCompat.Builder;
 import com.craft.apps.countdowns.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 6/23/17
  */
 public class NotificationSender {
 
@@ -68,10 +67,11 @@ public class NotificationSender {
     }
 
     public Notification createNotification(String title, String content, String channelId) {
-        return new NotificationCompat.Builder(mContext, channelId)
+        return new Builder(mContext)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_timelapse_red_500_24dp)
+                .setChannel(channelId)
                 .build();
     }
 
