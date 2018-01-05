@@ -1,22 +1,17 @@
 package com.craft.apps.countdowns.common.model;
 
 import com.google.firebase.database.Exclude;
-
 import org.joda.time.DateTime;
 
 /**
- * A POJO used for serializing and deserializing basic countdown information (but not state).
+ * A POJO used for serializing and deserializing basic countdown information (but not state)
  *
- * @version 1.1.0
- * @since 1.0.0
+ * @author willie
+ * @version 1.0.0
+ * @since v1.0.0 (3/18/17)
  */
 @SuppressWarnings("JavaDoc")
 public class Countdown {
-
-    /**
-     * NOTE: Only set during to database/deserialization.
-     */
-    private String uid;
 
     private String title;
 
@@ -95,14 +90,6 @@ public class Countdown {
 
     public void setTimezone(String timezone) {
         this.timezone = timezone;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 
     @Exclude

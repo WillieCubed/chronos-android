@@ -3,8 +3,9 @@ package com.craft.apps.countdowns.util;
 import com.craft.apps.countdowns.common.model.Countdown;
 
 /**
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 6/24/17
  */
 public class CountdownNotFoundException extends IllegalArgumentException {
 

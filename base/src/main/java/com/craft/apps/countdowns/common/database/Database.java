@@ -3,11 +3,10 @@ package com.craft.apps.countdowns.common.database;
 import com.google.android.gms.tasks.Task;
 
 /**
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
- * @deprecated Use {@link CountdownRepository}
+ * @since v1.0.0 (6/30/17)
  */
-@Deprecated
 public interface Database<T> {
 
     Task upload(T object);

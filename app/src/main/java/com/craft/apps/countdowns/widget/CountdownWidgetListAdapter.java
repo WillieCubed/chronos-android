@@ -1,39 +1,35 @@
 package com.craft.apps.countdowns.widget;
 
-import android.arch.lifecycle.LifecycleOwner;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.craft.apps.countdowns.R;
+import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.firebase.ui.database.FirebaseListOptions;
+import com.firebase.ui.database.FirebaseIndexListAdapter;
 import com.google.firebase.database.Query;
 
 /**
- * A {@link android.widget.ListAdapter} that displays {@link Countdown}s.
+ * A {@link android.widget.ListAdapter} that displays {@link Countdown}s
  *
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since 4/18/17
  */
-public class CountdownWidgetListAdapter extends FirebaseListAdapter<Countdown> {
+public class CountdownWidgetListAdapter extends FirebaseIndexListAdapter<Countdown> {
 
-    public CountdownWidgetListAdapter(LifecycleOwner owner, Query keyRef) {
-        super(new FirebaseListOptions.Builder<Countdown>()
-                .setLayout(R.layout.viewholder_widget_countdown_list_item)
-                .setLifecycleOwner(owner)
-                .setQuery(keyRef, Countdown.class)
-                .build());
+    public CountdownWidgetListAdapter(Activity context, Query keyRef) {
+        super(context, Countdown.class, R.layout.viewholder_countdown_list_item, keyRef,
+                OldDatabase.getCountdownsDataReference());
     }
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         if (view == null) {
-            view = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(mLayout, viewGroup, false);
+            view = LayoutInflater.from(mActivity).inflate(mLayout, viewGroup, false);
             view.setTag(new ViewHolder(view));
         }
 
@@ -55,7 +51,7 @@ public class CountdownWidgetListAdapter extends FirebaseListAdapter<Countdown> {
     }
 
     /**
-     * A class that helps avoid costly {@link View#findViewById(int)} lookups.
+     * A class that helps avoid costly {@link View#findViewById(int)} lookups
      */
     static class ViewHolder {
 
@@ -64,7 +60,7 @@ public class CountdownWidgetListAdapter extends FirebaseListAdapter<Countdown> {
         TextView mTitleView;
 
         /**
-         * Constructs a new ViewHolder
+         * Constructs a view holder
          */
         public ViewHolder(View itemView) {
             mCountView = itemView.findViewById(R.id.countdown_counter);

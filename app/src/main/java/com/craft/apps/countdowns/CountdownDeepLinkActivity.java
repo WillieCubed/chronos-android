@@ -1,24 +1,23 @@
 package com.craft.apps.countdowns;
 
+import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;
-
-import java.util.Objects;
-
-import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID;
 
 /**
  * An {@link android.app.Activity} that displays {@link Countdown} details from sources outside the
  * app.
  *
+ * @author willie
  * @version 1.0.0
- * @see ModalCountdownBottomSheet
- * @since 1.0.0
+ * @see CountdownModalDetailFragment
+ * @since 6/24/17
  */
 public class CountdownDeepLinkActivity extends AppCompatActivity {
 
@@ -30,6 +29,10 @@ public class CountdownDeepLinkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_countdown_deep_link);
 
         handleIntent(getIntent());
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
     }
 
     @Override
@@ -39,12 +42,21 @@ public class CountdownDeepLinkActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        ((CountdownDetailDisplay) getSupportFragmentManager()
+//                .findFragmentByTag("CountdownDetailFragment"))
+//                .dismissDisplay();
+//        finish();
+//    }
+
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "handleIntent: Intent action is " + action);
         String data = intent.getDataString();
         Log.d(TAG, "handleIntent: Intent data is " + data);
-        Bundle args = Objects.requireNonNull(intent.getExtras());
+        Bundle args = intent.getExtras();
 
         String countdownId;
         if (args.containsKey(ARG_COUNTDOWN_ID)) {
@@ -63,7 +75,7 @@ public class CountdownDeepLinkActivity extends AppCompatActivity {
 
     private void showCountdownFragment(String countdownId) {
         CountdownAnalytics.getInstance(this).logSingleWidgetEngagement();
-        ModalCountdownBottomSheet.newInstance(countdownId)
-                .show(getSupportFragmentManager(), "CountdownFragment");
+        CountdownDetailDisplay display = CountdownModalDetailFragment.newInstance(countdownId);
+        display.showDisplay(getSupportFragmentManager());
     }
 }

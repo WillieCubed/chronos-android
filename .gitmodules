@@ -1,0 +1,3 @@
+[submodule "craft-essentials"]
+	path = craft-essentials
+	url = https://github.com/CraftCompany/craft-essentials.git

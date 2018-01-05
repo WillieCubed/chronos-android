@@ -6,15 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
-
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.common.model.Countdown;
 
 /**
  * Lists {@link Countdown}s in an app widget format on the home screen
  *
+ * @author willie
  * @version 1.0.0
- * @since 1.0.0
+ * @since v1.0.0 (6/25/17)
  */
 public class CountdownListWidget extends AppWidgetProvider {
 

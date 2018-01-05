@@ -8,11 +8,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.craft.apps.countdowns.BuildConfig;
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.StartActivity;
-import com.craft.apps.countdowns.auth.UserManager;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.AuthUI.IdpConfig;
@@ -28,22 +26,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: 7/1/17 Big pile of cleanup
+
 /**
  * @author willie
  * @version 0.1.0
  * @since v1.0.0 (3/18/17)
- * @deprecated Use {@link UserManager instead}.
  */
-@Deprecated
 public class Users {
 
-    @Deprecated
     public static final int RC_SIGN_IN = 1;
 
     private static final String TAG = Users.class.getSimpleName();
@@ -62,7 +58,6 @@ public class Users {
      * }
      * }
      */
-    @Deprecated
     public static void launchSignIn(Activity activity) {
         List<IdpConfig> providers = Arrays.asList(
                 new IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
@@ -75,12 +70,10 @@ public class Users {
         activity.startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    @Deprecated
     public static Task<Void> signOut(FragmentActivity activity) {
         return AuthUI.getInstance().signOut(activity);
     }
 
-    @Deprecated
     public static void linkAccount(final Activity activity, AuthCredential credential) {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -89,7 +82,6 @@ public class Users {
         }
     }
 
-    @Deprecated
     public static void showSwitchAccountDialog(final FragmentActivity activity) {
         AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setTitle("Switch account?")
@@ -109,7 +101,6 @@ public class Users {
     /**
      * Shows an {@link AlertDialog} allowing a user to
      */
-    @Deprecated
     public static void showSignOutDialog(final FragmentActivity activity) {
         AlertDialog dialog = new Builder(activity)
                 .setTitle(R.string.query_sign_out_short)
@@ -132,19 +123,24 @@ public class Users {
 
     /**
      * @return The currently signed in {@link FirebaseUser}
-     * @deprecated Use {@link UserManager#getCurrentUser()} instead
      */
-    @Deprecated
     public static FirebaseUser getCurentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    @Deprecated
     public static String fetchTokenFromResponse(IdpResponse response) {
         return response.getIdpToken();
     }
 
-    @Deprecated
+    public static void handleSignIn(Intent data, SignInCallback callback) {
+
+    }
+
+    public interface SignInCallback {
+
+        void onSignIn();
+    }
+
     public static class LinkAccountCompletionListener implements OnCompleteListener<AuthResult> {
 
         private final FirebaseUser mUser;
