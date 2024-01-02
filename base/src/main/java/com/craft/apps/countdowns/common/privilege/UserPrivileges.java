@@ -1,8 +1,8 @@
 package com.craft.apps.countdowns.common.privilege;
 
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 import android.util.Log;
-import com.craft.apps.countdowns.common.BuildConfig;
+import com.craft.apps.countdowns.BuildConfig;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

@@ -3,8 +3,8 @@ package com.craft.apps.countdowns.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -68,11 +68,9 @@ public class SingleCountdownWidgetConfigureActivity extends AppCompatActivity im
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.button_create_countdown:
-                Intent intent = new Intent(this, CountdownCreationActivity.class);
-                startActivityForResult(intent, WidgetManager.RC_WIDGET_ADD);
-                break;
+        if (view.getId() == R.id.button_create_countdown) {
+            Intent intent = new Intent(this, CountdownCreationActivity.class);
+            startActivityForResult(intent, WidgetManager.RC_WIDGET_ADD);
         }
     }
 

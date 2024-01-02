@@ -2,7 +2,7 @@ package com.craft.apps.countdowns.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 /**
  * @author willie

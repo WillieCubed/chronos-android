@@ -2,10 +2,10 @@ package com.craft.apps.countdowns.util;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog.Builder;
 import android.util.Log;
 import android.widget.Toast;
 import com.craft.apps.countdowns.BuildConfig;
@@ -17,9 +17,9 @@ import com.firebase.ui.auth.AuthUI.IdpConfig;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.appindexing.FirebaseAppIndex;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -60,8 +60,8 @@ public class Users {
      */
     public static void launchSignIn(Activity activity) {
         List<IdpConfig> providers = Arrays.asList(
-                new IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                new IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build());
+                new IdpConfig.EmailBuilder().build(),
+                new IdpConfig.GoogleBuilder().build());
         Intent signInIntent = AuthUI.getInstance().createSignInIntentBuilder()
                 .setIsSmartLockEnabled(!BuildConfig.DEBUG)
                 .setLogo(R.drawable.app_icon_large)
@@ -112,7 +112,7 @@ public class Users {
                             .addOnFailureListener(e -> Log.w(TAG, "Error when signing out", e))
                             .addOnSuccessListener(activity, aVoid -> {
                                 Log.i(TAG, "Sign out successful");
-                                FirebaseAppIndex.getInstance().removeAll();
+//                                FirebaseAppIndex.getInstance().removeAll();
                                 StartActivity.start(activity);
                                 activity.finish();
                             });

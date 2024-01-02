@@ -73,6 +73,8 @@
     <string name="query_sign_out_long">Would you like to sign out of Countdowns?</string>
     <string name="query_sign_out_short">Sign out?</string>
     <string name="query_reset_app">Reset app?</string>
+    <string name="query_dialog_delete_countdown">Sign out?</string>
+    <string name="query_dialog_delete_countdown_details">Signing out will remove all your data from this device.</string>
 
     <string name="content_countdown_detail_amount">%1$s %2$s</string>
     <string name="content_countdown_detail_name">%s</string>

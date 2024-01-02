@@ -1,10 +1,10 @@
 package com.craft.apps.countdowns.common.database;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
-import com.craft.apps.countdowns.common.R;
+import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.google.android.gms.tasks.Task;

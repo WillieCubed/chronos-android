@@ -5,9 +5,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,7 +23,6 @@ import com.craft.apps.countdowns.common.format.SimpleDateFormatter;
 import com.craft.apps.countdowns.common.format.SimpleTimeFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.util.DateUtility;
-import com.craft.apps.countdowns.index.Indexer;
 import com.craft.apps.countdowns.util.Users;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseUser;
@@ -151,30 +150,27 @@ public class CountdownCreationActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_finish:
-                if (hasValidInputs()) {
-                    mCountdownCreator.updateStart();
-                    uploadCountdown(mCountdownCreator.build());
-                } else {
-                    validateInputs();
-                }
-                return true;
+        if (item.getItemId() == R.id.action_finish) {
+            if (hasValidInputs()) {
+                mCountdownCreator.updateStart();
+                uploadCountdown(mCountdownCreator.build());
+            } else {
+                validateInputs();
+            }
+            return true;
         }
         return false;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.input_countdown_date:
-                Log.v(TAG, "onClick: Date selected");
-                mDateDialog.show();
-                break;
-            case R.id.input_countdown_time:
-                Log.v(TAG, "onClick: Time selected");
-                mTimeDialog.show();
-                break;
+        int id = v.getId();
+        if (id == R.id.input_countdown_date) {
+            Log.v(TAG, "onClick: Date selected");
+            mDateDialog.show();
+        } else if (id == R.id.input_countdown_time) {
+            Log.v(TAG, "onClick: Time selected");
+            mTimeDialog.show();
         }
     }
 
@@ -199,7 +195,7 @@ public class CountdownCreationActivity extends AppCompatActivity implements
                 CountdownManager.addCountdownToUser(countdownId, mUser.getUid()))
                 .addOnSuccessListener(this, void1 -> {
                     Log.d(TAG, "uploadCountdown: Countdown successfully uploaded");
-                    Indexer.indexCountdown(countdown, countdownId, mUser);
+//                    Indexer.indexCountdown(countdown, countdownId, mUser);
                     finish();
                 })
                 .addOnFailureListener(this, exception -> {

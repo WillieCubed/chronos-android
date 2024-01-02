@@ -2,11 +2,15 @@ package com.craft.apps.countdowns.purchase;
 
 import android.app.Activity;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClient.BillingResponse;
 import com.android.billingclient.api.BillingClient.SkuType;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
@@ -29,61 +33,66 @@ public class Biller implements PurchasesUpdatedListener {
     private Activity mActivity;
 
     public Biller(Activity activity) {
-        mBillingClient = new BillingClient.Builder(activity).setListener(this).build();
+//        mBillingClient = new BillingClient.Builder.bu.setListener(this).build();
         mActivity = activity;
     }
 
     public void disableAds(String userId) {
         mBillingClient.startConnection(new BillingClientStateListener() {
-            @Override
+//            @Override
             public void onBillingSetupFinished(int resultCode) {
-                if (resultCode == BillingResponse.OK) {
-                    Log.d(TAG, "onBillingSetupFinished: result ok");
-                    List<String> skuList = new ArrayList<>();
-                    skuList.add(UserPrivileges.DISABLED_ADS);
-                    mBillingClient.querySkuDetailsAsync(SkuType.INAPP, skuList, result -> {
-                        Log.d(TAG, "onBillingSetupFinished: Fetching SKUs");
-                        if (result.getResponseCode() == BillingResponse.OK) {
-                            for (SkuDetails details : result.getSkuDetailsList()) {
-                                Log.d(TAG, "onBillingSetupFinished: SKU details: " + details);
-                                if (FEATURE_DISABLE_ADS.equals(details.getSku())) {
-                                    // Process the result.
-                                    purchaseDisableAds(mActivity, UserPrivileges.DISABLED_ADS,
-                                            userId);
-
-                                }
-                            }
-                            Log.d(TAG, "onBillingSetupFinished: Done fetching SKUs");
-                        } else {
-                            Log.d(TAG, "onBillingSetupFinished: Failed fetching SKU details");
-                        }
-                    });
-                } else {
-                    Log.w(TAG, "onBillingSetupFinished: Result not okay");
-                }
+//                if (resultCode == BillingClient.BillingResponseCode.OK) {
+//                    Log.d(TAG, "onBillingSetupFinished: result ok");
+//                    List<String> skuList = new ArrayList<>();
+//                    skuList.add(UserPrivileges.DISABLED_ADS);
+//                    mBillingClient.querySkuDetailsAsync(SkuType.INAPP, skuList, result -> {
+//                        Log.d(TAG, "onBillingSetupFinished: Fetching SKUs");
+//                        if (result.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+//                            for (SkuDetails details : result.getSkuDetailsList()) {
+//                                Log.d(TAG, "onBillingSetupFinished: SKU details: " + details);
+//                                if (FEATURE_DISABLE_ADS.equals(details.getSku())) {
+//                                    // Process the result.
+//                                    purchaseDisableAds(mActivity, UserPrivileges.DISABLED_ADS,
+//                                            userId);
+//
+//                                }
+//                            }
+//                            Log.d(TAG, "onBillingSetupFinished: Done fetching SKUs");
+//                        } else {
+//                            Log.d(TAG, "onBillingSetupFinished: Failed fetching SKU details");
+//                        }
+//                    });
+//                } else {
+//                    Log.w(TAG, "onBillingSetupFinished: Result not okay");
+//                }
             }
 
             @Override
             public void onBillingServiceDisconnected() {
                 Log.i(TAG, "onBillingServiceDisconnected: ");
             }
+
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+
+            }
         });
     }
 
     private void purchaseDisableAds(Activity activity, @Privilege String sku, String userId) {
         Log.d(TAG, "purchaseDisableAds: Starting purchase");
-        BillingFlowParams.Builder builder = new BillingFlowParams.Builder()
-                .setSku(UserPrivileges.DISABLED_ADS)
-                .setType(SkuType.INAPP);
-        if (mBillingClient.launchBillingFlow(activity, builder.build()) == BillingResponse.OK) {
-            UserPrivileges.enableFor(sku, userId, hasPrivilege -> {
-                Log.d(TAG, "purchaseDisableAds: Enabling privilege");
-            });
-        }
+//        BillingFlowParams.Builder builder = BillingFlowParams.newBuilder()
+//                .setSkuDetails(UserPrivileges.DISABLED_ADS)
+//                .setType(SkuType.INAPP);
+//        if (mBillingClient.launchBillingFlow(activity, builder.build()).getResponseCode() == BillingClient.BillingResponseCode.OK) {
+//            UserPrivileges.enableFor(sku, userId, hasPrivilege -> {
+//                Log.d(TAG, "purchaseDisableAds: Enabling privilege");
+//            });
+//        }
     }
 
     @Override
-    public void onPurchasesUpdated(int responseCode, List<Purchase> purchases) {
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
 
     }
 }

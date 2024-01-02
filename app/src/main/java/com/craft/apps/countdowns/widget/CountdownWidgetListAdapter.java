@@ -1,15 +1,19 @@
 package com.craft.apps.countdowns.widget;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
 import com.craft.apps.countdowns.R;
-import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
-import com.firebase.ui.database.FirebaseIndexListAdapter;
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseListOptions;
 import com.google.firebase.database.Query;
 
 /**
@@ -19,17 +23,21 @@ import com.google.firebase.database.Query;
  * @version 1.0.0
  * @since 4/18/17
  */
-public class CountdownWidgetListAdapter extends FirebaseIndexListAdapter<Countdown> {
+public class CountdownWidgetListAdapter extends FirebaseListAdapter<Countdown> {
+
+    private final Context mContext;
 
     public CountdownWidgetListAdapter(Activity context, Query keyRef) {
-        super(context, Countdown.class, R.layout.viewholder_countdown_list_item, keyRef,
-                OldDatabase.getCountdownsDataReference());
+        super(new FirebaseListOptions.Builder<Countdown>()
+                .setQuery(keyRef, Countdown.class).build());
+        mContext = context;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+    public View getView(int position, View view, @NonNull ViewGroup viewGroup) {
         if (view == null) {
-            view = LayoutInflater.from(mActivity).inflate(mLayout, viewGroup, false);
+            view = LayoutInflater.from(mContext).inflate(mLayout, viewGroup, false);
             view.setTag(new ViewHolder(view));
         }
 
@@ -38,7 +46,7 @@ public class CountdownWidgetListAdapter extends FirebaseIndexListAdapter<Countdo
     }
 
     @Override
-    protected void populateView(View view, Countdown model, int position) {
+    protected void populateView(View view, @NonNull Countdown model, int position) {
         ViewHolder viewHolder;
         if (view.getTag() != null) {
             viewHolder = new ViewHolder(view);

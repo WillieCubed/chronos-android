@@ -2,14 +2,17 @@ package com.craft.apps.countdowns.common.display;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog.Builder;
-import com.craft.apps.countdowns.common.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
+import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.util.CountdownPreconditions;
+
+import java.util.Objects;
 
 /**
  * @author willie
@@ -38,8 +41,8 @@ public class CountdownDeletionDialog extends DialogFragment {
         }
 
         mCountdownId = CountdownPreconditions.checkValidArgs(getArguments());
-        if (getArguments().getString("user_id") != null) {
-            mUserId = getArguments().getString("user_id");
+        if (requireArguments().getString("user_id") != null) {
+            mUserId = requireArguments().getString("user_id");
         } else {
             throw new IllegalArgumentException("Arguments must include user_id argument!");
         }
@@ -48,7 +51,7 @@ public class CountdownDeletionDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Builder(getContext())
+        return new Builder(requireContext())
                 .setTitle(R.string.query_dialog_delete_countdown)
                 .setMessage(R.string.query_dialog_delete_countdown_details)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {

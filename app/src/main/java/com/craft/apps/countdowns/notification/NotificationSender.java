@@ -5,12 +5,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Build.VERSION_CODES;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.NotificationCompat.Builder;
+
 import com.craft.apps.countdowns.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +25,9 @@ public class NotificationSender {
 
     public static final String CHANNEL_COUNTDOWN_UPDATES = "channel_countdown_updates";
 
-    private Context mContext;
+    private final Context mContext;
 
-    private NotificationManager mNotificationManager;
+    private final NotificationManager mNotificationManager;
 
     NotificationSender(Context context) {
         mContext = context;
@@ -37,7 +35,6 @@ public class NotificationSender {
                 Context.NOTIFICATION_SERVICE);
     }
 
-    @RequiresApi(VERSION_CODES.O)
     public static void initializeChannels(Context context) {
         List<NotificationChannel> channels = new ArrayList<>();
 
@@ -67,11 +64,10 @@ public class NotificationSender {
     }
 
     public Notification createNotification(String title, String content, String channelId) {
-        return new Builder(mContext)
+        return new Notification.Builder(mContext, channelId)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_timelapse_red_500_24dp)
-                .setChannel(channelId)
                 .build();
     }
 
@@ -83,12 +79,10 @@ public class NotificationSender {
         // TODO: 6/24/17 Allow multiple channels for user-defined countdown groups
     }
 
-    @RequiresApi(VERSION_CODES.O)
     public boolean hasCreatedChannel(String channelId) {
         return mNotificationManager.getNotificationChannel(channelId) != null;
     }
 
-    @RequiresApi(VERSION_CODES.O)
     public void createNotificationChannel() {
         String name = mContext.getString(R.string.channel_app_updates_name);
         String description = mContext.getString(R.string.channel_app_updates_description);
@@ -101,12 +95,10 @@ public class NotificationSender {
     }
 
     public void startExtraSettingsIntent() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+        Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
 //            intent.putExtra(Settings.EXTRA_CHANNEL_ID, mChannel.getId());
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, mContext.getPackageName());
-            mContext.startActivity(intent);
-        }
+        intent.putExtra(Settings.EXTRA_APP_PACKAGE, mContext.getPackageName());
+        mContext.startActivity(intent);
 
     }
 }

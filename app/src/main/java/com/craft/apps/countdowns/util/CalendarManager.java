@@ -6,7 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.provider.CalendarContract.Events;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.util.Log;
 import com.craft.apps.countdowns.common.model.Countdown;
 

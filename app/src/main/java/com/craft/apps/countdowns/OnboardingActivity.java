@@ -3,7 +3,7 @@ package com.craft.apps.countdowns;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.github.paolorotolo.appintro.AppIntro;
 

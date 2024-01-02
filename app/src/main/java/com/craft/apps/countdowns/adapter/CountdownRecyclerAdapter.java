@@ -5,10 +5,13 @@ import static com.craft.apps.countdowns.common.model.SortOptions.DATE_CREATED;
 import static com.craft.apps.countdowns.common.model.SortOptions.TIME_LEFT;
 
 import android.animation.ValueAnimator;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.craft.apps.countdowns.R;
@@ -19,7 +22,8 @@ import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.model.SortOptions;
 import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
 import com.craft.apps.countdowns.common.settings.Preferences;
-import com.firebase.ui.database.FirebaseIndexRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -31,7 +35,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 3/18/17
  */
-public class CountdownRecyclerAdapter extends FirebaseIndexRecyclerAdapter<Countdown, ViewHolder> {
+public class CountdownRecyclerAdapter extends FirebaseRecyclerAdapter<Countdown, ViewHolder> {
 
     private static final String TAG = CountdownRecyclerAdapter.class.getSimpleName();
 
@@ -53,25 +57,14 @@ public class CountdownRecyclerAdapter extends FirebaseIndexRecyclerAdapter<Count
      * @param keyRef
      */
     public CountdownRecyclerAdapter(CountdownSelectionListener listener, Query keyRef) {
-        this(listener, keyRef, DATA_REFERENCE);
-    }
-
-    public CountdownRecyclerAdapter(CountdownSelectionListener listener, Query keyRef,
-            Query dataRef) {
-        super(MODEL_CLASS, MODEL_LAYOUT, VIEWHOLDER_CLASS, keyRef, (DatabaseReference) dataRef);
+        super(new FirebaseRecyclerOptions.Builder<Countdown>().setQuery(keyRef, MODEL_CLASS).build());
         mSelectionListener = listener;
         mSelectedViewHolders = new ArrayList<>();
     }
 
     private CountdownRecyclerAdapter(CountdownSelectionListener listener, Query keyRef,
-            @SortOption int sortOption) {
-        this(listener, keyRef, DATA_REFERENCE, sortOption);
-
-    }
-
-    private CountdownRecyclerAdapter(CountdownSelectionListener listener, Query keyRef,
             Query dataRef, @SortOption int sortOption) {
-        super(MODEL_CLASS, MODEL_LAYOUT, VIEWHOLDER_CLASS, keyRef, (DatabaseReference) dataRef);
+        this(listener, keyRef);
         mSelectionListener = listener;
         mSelectedViewHolders = new ArrayList<>();
         mSortOption = sortOption;
@@ -117,8 +110,7 @@ public class CountdownRecyclerAdapter extends FirebaseIndexRecyclerAdapter<Count
     }
 
     @Override
-    protected void populateViewHolder(final ViewHolder viewHolder, Countdown countdown,
-            final int position) {
+    protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int position, @NonNull Countdown countdown) {
         viewHolder.setOnClickListener(
                 v -> mSelectionListener.onCountdownSelected(getRef(position).getKey()));
 //        viewHolder.setOnLongClickListener(v -> {
@@ -147,6 +139,14 @@ public class CountdownRecyclerAdapter extends FirebaseIndexRecyclerAdapter<Count
 
     public void setSortOption(int option) {
         mSortOption = option;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_countdown_list_item, parent);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     public interface CountdownSelectionListener {
@@ -248,11 +248,9 @@ public class CountdownRecyclerAdapter extends FirebaseIndexRecyclerAdapter<Count
                     ? R.color.countdown_background_not_selected
                     : R.color.countdown_background_selected;
             ValueAnimator valueAnimator = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                valueAnimator = ValueAnimator.ofArgb(
-                        mRootView.getContext().getResources().getColor(backgroundColorStart),
-                        mRootView.getContext().getResources().getColor(backgroundColorEnd));
-            }
+            valueAnimator = ValueAnimator.ofArgb(
+                    mRootView.getContext().getResources().getColor(backgroundColorStart),
+                    mRootView.getContext().getResources().getColor(backgroundColorEnd));
             valueAnimator.addUpdateListener(animation -> {
                 mRootView.setBackgroundColor((Integer) animation.getAnimatedValue());
             });

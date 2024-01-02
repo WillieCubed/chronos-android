@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 import com.craft.apps.countdowns.common.settings.Preferences;
@@ -15,6 +15,8 @@ import com.craft.apps.countdowns.notification.NotificationSender;
 import com.craft.apps.countdowns.util.Users;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+
+import java.util.Objects;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -28,9 +30,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (VERSION.SDK_INT >= VERSION_CODES.O) {
-            NotificationSender.initializeChannels(this);
-        }
+        NotificationSender.initializeChannels(this);
         if (Users.getCurentUser() != null) {
             if (!Preferences.getInstance(this).isOnboarded()) {
 //                OnboardingActivity.startObserving(this);
@@ -62,12 +62,12 @@ public class StartActivity extends AppCompatActivity {
                         }
 
                         // TODO: 5/6/17 Better handling of network outages
-                        if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                        if (Objects.requireNonNull(response.getError()).getErrorCode() == ErrorCodes.NO_NETWORK) {
                             Toast.makeText(this, "Please connect to a network to sign in",
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                        if (Objects.requireNonNull(response.getError()).getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
                             Toast.makeText(this, "An unknown error occurred. Please try again",
                                     Toast.LENGTH_SHORT).show();
                         }

@@ -6,22 +6,21 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.Preference.OnPreferenceChangeListener;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
+import androidx.preference.Preference.OnPreferenceChangeListener;
+import androidx.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.widget.Toast;
 import com.craft.apps.countdowns.common.database.CountdownManager;
 import com.craft.apps.countdowns.common.settings.Preferences;
-import com.craft.apps.countdowns.index.Indexer;
 import com.craft.apps.countdowns.purchase.Biller;
 import com.craft.apps.countdowns.util.Users;
 import com.google.firebase.auth.FirebaseUser;
@@ -111,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity implements
                                 // TODO: 7/2/17 Add more granular controls
                                 CountdownManager.getUserCountdownsReference(user.getUid())
                                         .setValue(null);
-                                Indexer.removeIndexes();
+//                                Indexer.removeIndexes();
                                 StartActivity.start(SettingsActivity.this);
                                 finish();
                             })

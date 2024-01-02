@@ -2,7 +2,7 @@ package com.craft.apps.countdowns.common.analytics;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.google.firebase.analytics.FirebaseAnalytics;
 

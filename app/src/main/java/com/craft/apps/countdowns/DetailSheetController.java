@@ -1,10 +1,10 @@
 package com.craft.apps.countdowns;
 
 import android.content.Context;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v7.app.AlertDialog.Builder;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +15,6 @@ import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
-import com.craft.apps.countdowns.index.Indexer;
 import com.craft.apps.countdowns.util.Users;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -149,25 +148,21 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.toolbar_countdown_detail_header:
-                if (mDisplay instanceof BottomSheetDialogFragment) {
-                    mDisplay.dismissDisplay();
-                } else {
-                    mDisplay.toggleDisplay();
-                }
-                toggleMenuItems();
-                mIsSheetShowing = !mIsSheetShowing;
-                break;
+        if (view.getId() == R.id.toolbar_countdown_detail_header) {
+            if (mDisplay instanceof BottomSheetDialogFragment) {
+                mDisplay.dismissDisplay();
+            } else {
+                mDisplay.toggleDisplay();
+            }
+            toggleMenuItems();
+            mIsSheetShowing = !mIsSheetShowing;
         }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.action_delete:
-                showDeletionDialog(mContext);
-                break;
+        if (menuItem.getItemId() == R.id.action_delete) {
+            showDeletionDialog(mContext);
         }
         return true;
     }
@@ -231,7 +226,7 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
                                     Log.d(TAG, "onComplete: Countdown " + countdownId + " deleted");
                                     CountdownAnalytics.getInstance(context)
                                             .logDeletion(countdownId);
-                                    Indexer.removeCountdownIndex(countdownId);
+//                                    Indexer.removeCountdownIndex(countdownId);
 
                                     mDisplay.collapseDisplay();
                                     hideMenuItems();

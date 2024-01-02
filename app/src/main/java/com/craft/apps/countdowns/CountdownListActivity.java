@@ -3,17 +3,17 @@ package com.craft.apps.countdowns;
 import android.app.assist.AssistContent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+
+import com.craft.apps.countdowns.common.essentials.DrawerManager;
+import com.google.android.gms.ads.RequestConfiguration;
+import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,12 +29,7 @@ import com.craft.apps.countdowns.common.model.SortOptions.SortOption;
 import com.craft.apps.countdowns.common.privilege.UserPrivileges;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.common.util.IntentUtils;
-import com.craft.apps.countdowns.invites.CountdownAppInvites;
 import com.craft.apps.countdowns.util.Users;
-import com.craft.essentials.activity.FeedbackActivity;
-import com.craft.essentials.activity.HelpActivity;
-import com.craft.essentials.model.HelpConfig;
-import com.craft.essentials.ui.DrawerManager;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.getkeepsafe.taptargetview.TapTargetView.Listener;
@@ -43,14 +38,15 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdRequest.Builder;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.appinvite.FirebaseAppInvite;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Query;
 
 import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_FEATURE_DISCOVERY;
 import static com.craft.apps.countdowns.common.util.IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * An {@link android.app.Activity} that lists {@link Countdown}s using a {@link
@@ -137,23 +133,23 @@ public class CountdownListActivity extends AppCompatActivity implements
             }
         }, mUser.getUid());
 
-        CountdownAppInvites.handleAppInvite(getIntent()).addOnSuccessListener(this, data -> {
-            if (data == null) {
-                Log.d(TAG, "getInvitation: no data");
-                return;
-            }
-
-            // Get the deep link
-            Uri deepLink = data.getLink();
-
-            // Extract invite
-            FirebaseAppInvite invite = FirebaseAppInvite.getInvitation(data);
-            if (invite != null) {
-                String invitationId = invite.getInvitationId();
-            }
-        }).addOnFailureListener(this, e -> {
-            Log.w(TAG, "handleInvite: Error when fetching app invite data", e);
-        });
+//        CountdownAppInvites.handleAppInvite(getIntent()).addOnSuccessListener(this, data -> {
+//            if (data == null) {
+//                Log.d(TAG, "getInvitation: no data");
+//                return;
+//            }
+//
+//            // Get the deep link
+//            Uri deepLink = data.getLink();
+//
+//            // Extract invite
+//            FirebaseAppInvite invite = FirebaseAppInvite.getInvitation(data);
+//            if (invite != null) {
+//                String invitationId = invite.getInvitationId();
+//            }
+//        }).addOnFailureListener(this, e -> {
+//            Log.w(TAG, "handleInvite: Error when fetching app invite data", e);
+//        });
         handleIntent(getIntent());
     }
 
@@ -174,10 +170,8 @@ public class CountdownListActivity extends AppCompatActivity implements
     @Override
     public void onProvideAssistContent(AssistContent outContent) {
         super.onProvideAssistContent(outContent);
-        if (VERSION.SDK_INT >= VERSION_CODES.M) {
-            // TODO: 7/3/17 Implement me
+        // TODO: 7/3/17 Implement me
 //            outContent.setStructuredData(AssistantIndex.getStructuredContent());
-        }
     }
 
     @Override
@@ -216,22 +210,18 @@ public class CountdownListActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_sort:
-//                SortOptionDialog sortDialog = SortOptionDialog.newInstance(
+        if (item.getItemId() == R.id.action_sort) {//                SortOptionDialog sortDialog = SortOptionDialog.newInstance(
 //                        ((CountdownRecyclerAdapter) mCountdownList.getAdapter()).getSortOption());
 //                sortDialog.show(getSupportFragmentManager(), "SortOptionDialog");
-                return true;
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share:
-                // TODO: 3/21/17 Implement Firebase App Invites in another app function
-                return true;
+        if (item.getItemId() == R.id.action_share) {// TODO: 3/21/17 Implement Firebase App Invites in another app function
+            return true;
         }
         return false;
     }
@@ -244,31 +234,29 @@ public class CountdownListActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Log.v(TAG, "onNavigationItemSelected: " + item);
-        switch (item.getItemId()) {
-            case R.id.action_main:
-                break;
-            case R.id.action_settings:
-                SettingsActivity.start(this);
-                break;
-            case R.id.action_help:
-                HelpConfig config = new HelpConfig.Builder()
-                        .setEmailAddress("admin@thecraft.company").build();
-                HelpActivity.start(this, config);
-                break;
-            case R.id.action_feedback:
-                FeedbackActivity.start(this);
-                break;
-        }
-        mDrawerManager.closeDrawer();
+//        switch (item.getItemId()) {
+//            case R.id.action_main:
+//                break;
+//            case R.id.action_settings:
+//                SettingsActivity.start(this);
+//                break;
+//            case R.id.action_help:
+//                HelpConfig config = new HelpConfig.Builder()
+//                        .setEmailAddress("admin@thecraft.company").build();
+//                HelpActivity.start(this, config);
+//                break;
+//            case R.id.action_feedback:
+//                FeedbackActivity.start(this);
+//                break;
+//        }
+//        mDrawerManager.closeDrawer();
         return true;
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.fab_create_countdown:
-                CountdownCreationActivity.start(this);
-                break;
+        if (view.getId() == R.id.fab_create_countdown) {
+            CountdownCreationActivity.start(this);
         }
     }
 
@@ -388,11 +376,11 @@ public class CountdownListActivity extends AppCompatActivity implements
     @SuppressWarnings("unused")
     private void launchInvite(Countdown countdown) {
         // TODO: 6/25/17 Implement proper invite system
-        Intent shareIntent = new AppInviteInvitation.IntentBuilder("Hello")
-                .setMessage("Hey, do you remember " + countdown.getTitle() + "?")
-                .setCallToActionText("Countdown now.")
-                .build();
-        startActivityForResult(shareIntent, RC_APP_INVITE);
+//        Intent shareIntent = new AppInviteInvitation.IntentBuilder("Hello")
+//                .setMessage("Hey, do you remember " + countdown.getTitle() + "?")
+//                .setCallToActionText("Countdown now.")
+//                .build();
+//        startActivityForResult(shareIntent, RC_APP_INVITE);
     }
 
     @Override
@@ -402,11 +390,13 @@ public class CountdownListActivity extends AppCompatActivity implements
     }
 
     private void setupBannerAd() {
-        MobileAds.initialize(getApplicationContext(),
-                getString(R.string.ad_unit_home_screen_banner));
+        List<String> testDeviceIds = Arrays.asList(AdRequest.DEVICE_ID_EMULATOR, getString(R.string.test_device_id));
+        RequestConfiguration configuration =
+                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+        MobileAds.setRequestConfiguration(configuration);
+
+        MobileAds.initialize(getApplicationContext());
         AdRequest request = new Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .addTestDevice(getString(R.string.test_device_id))
                 .build();
         mBannerAd = findViewById(R.id.ad_banner_home);
         mBannerAd.setAdListener(new AdListener() {

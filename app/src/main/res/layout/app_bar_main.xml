@@ -8,18 +8,18 @@
     tools:context=".CountdownListActivity">
     <!-- TODO: 7/1/17 Find better way to integrate ads -->
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_root"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -27,7 +27,7 @@
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
             android:id="@+id/fragment_container_countdown_list"
@@ -43,7 +43,7 @@
             app:behavior_peekHeight="?attr/actionBarSize"
             app:layout_behavior="@string/bottom_sheet_behavior" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_create_countdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,9 +51,10 @@
             android:layout_marginEnd="16dp"
             android:layout_gravity="bottom|end"
             android:onClick="onClick"
-            app:srcCompat="@drawable/ic_alarm_add_white_24dp" />
+            app:srcCompat="@drawable/ic_alarm_add_white_24dp"
+            android:contentDescription="@string/label_create_countdown" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <include
         layout="@layout/layout_ad_unit_banner"

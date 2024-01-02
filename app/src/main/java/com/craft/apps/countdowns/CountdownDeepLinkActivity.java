@@ -5,7 +5,7 @@ import static com.craft.apps.countdowns.common.util.IntentUtils.ARG_COUNTDOWN_ID
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;

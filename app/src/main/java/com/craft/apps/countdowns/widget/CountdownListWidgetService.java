@@ -5,14 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.util.Users;
-import com.craft.libraries.firebaseuiaddon.FirebaseIndexRemoteViewsAdapter;
 import com.firebase.ui.database.ChangeEventListener;
 import com.google.firebase.database.DataSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -38,27 +41,52 @@ public class CountdownListWidgetService extends RemoteViewsService {
         return new CountdownListRemoteViewsFactory(getApplicationContext(), intent);
     }
 
-    private class CountdownListRemoteViewsFactory extends
-            FirebaseIndexRemoteViewsAdapter<Countdown> {
+    private static class CountdownListRemoteViewsFactory implements RemoteViewsFactory {
+
+        private List<Countdown> countdownList = new ArrayList<>();
+
+        private final Context context;
 
         public CountdownListRemoteViewsFactory(Context context, Intent intent) {
-            super(context, intent, Countdown.class,
-                    OldDatabase.getUserCountdownsReference(Users.getCurentUser().getUid()),
-                    OldDatabase.getCountdownsDataReference());
+            super();
+            this.context = context;
+        }
+
+        @Override
+        public void onCreate() {
+
+        }
+
+        @Override
+        public void onDataSetChanged() {
+
+        }
+
+        @Override
+        public void onDestroy() {
+
+        }
+
+        @Override
+        public int getCount() {
+            return countdownList.size();
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
-            RemoteViews remoteViews = new RemoteViews(getContext().getPackageName(),
-                    R.layout.viewholder_countdown_list_item);
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.viewholder_countdown_list_item);
             long finishTime = getItem(position).getFinishTime();
             // TODO: 6/28/17 Allow specification of unit type
             int units = UnitsFormatter.getUnitsUntil(finishTime, UnitsFormatter.DAYS);
-            String pluralText = getContext().getResources()
+            String pluralText = context.getResources()
                     .getQuantityString(R.plurals.countdown_unit_days, units, units);
             remoteViews.setTextViewText(R.id.countdown_counter, pluralText);
             remoteViews.setTextViewText(R.id.countdown_title, getItem(position).getTitle());
             return remoteViews;
+        }
+
+        private Countdown getItem(int index) {
+            return countdownList.get(index);
         }
 
         @Override
@@ -67,20 +95,19 @@ public class CountdownListWidgetService extends RemoteViewsService {
         }
 
         @Override
-        public void onChildChanged(ChangeEventListener.EventType type, DataSnapshot snapshot,
-                int index, int oldIndex) {
-            switch (type) {
-                case ADDED:
-                    break;
-                case CHANGED:
-                    break;
-                case REMOVED:
-                    break;
-                case MOVED:
-                    break;
-                default:
-                    throw new IllegalStateException("Incomplete case statement");
-            }
+        public int getViewTypeCount() {
+            return 0;
         }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
     }
 }
