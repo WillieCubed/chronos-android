@@ -3,13 +3,13 @@ package com.craft.apps.countdowns.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.craft.apps.countdowns.CountdownCreationActivity;
-import com.craft.apps.countdowns.CountdownListFragment;
 import com.craft.apps.countdowns.R;
 import com.craft.apps.countdowns.adapter.CountdownRecyclerAdapter.CountdownSelectionListener;
 import com.craft.apps.countdowns.util.Users;
@@ -45,10 +45,10 @@ public class SingleCountdownWidgetConfigureActivity extends AppCompatActivity im
             Toast.makeText(this, R.string.sign_in, Toast.LENGTH_SHORT).show();
             return;
         }
-        Fragment fragment = CountdownListFragment.newInstance(user.getUid());
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_countdown_list, fragment, "CountdownListFragment")
-                .commit();
+//        Fragment fragment = CountdownListFragment.newInstance(user.getUid());
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container_countdown_list, fragment, "CountdownListFragment")
+//                .commit();
 
         // Find the widget id from the intent.
         Intent intent = getIntent();

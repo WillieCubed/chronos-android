@@ -6,24 +6,27 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.PreferenceFragmentCompat;
-import android.util.Log;
-import android.widget.Toast;
+
 import com.craft.apps.countdowns.common.database.CountdownManager;
 import com.craft.apps.countdowns.common.settings.Preferences;
 import com.craft.apps.countdowns.purchase.Biller;
 import com.craft.apps.countdowns.util.Users;
 import com.google.firebase.auth.FirebaseUser;
+
 import java.util.Objects;
 
 /**
@@ -111,14 +114,14 @@ public class SettingsActivity extends AppCompatActivity implements
                                 CountdownManager.getUserCountdownsReference(user.getUid())
                                         .setValue(null);
 //                                Indexer.removeIndexes();
-                                StartActivity.start(SettingsActivity.this);
+//                                StartActivity.start(SettingsActivity.this);
                                 finish();
                             })
                             .addOnFailureListener(e -> {
                                 Log.w(TAG, "onFailure: Error resetting app", e);
                                 Toast.makeText(SettingsActivity.this,
-                                        "Please try again",
-                                        Toast.LENGTH_SHORT)
+                                                "Please try again",
+                                                Toast.LENGTH_SHORT)
                                         .show();
                             });
 
@@ -139,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity implements
                     permission.WRITE_CALENDAR)) {
 
             } else {
-                ActivityCompat.requestPermissions(this, new String[] {permission.WRITE_CALENDAR},
+                ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_CALENDAR},
                         RC_PERMISSION_WRITE_CALENDAR);
             }
         }
@@ -147,16 +150,15 @@ public class SettingsActivity extends AppCompatActivity implements
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case RC_PERMISSION_WRITE_CALENDAR:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == RC_PERMISSION_WRITE_CALENDAR) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                } else {
+            } else {
 
-                }
+            }
         }
     }
 

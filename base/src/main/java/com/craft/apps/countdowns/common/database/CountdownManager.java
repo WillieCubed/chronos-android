@@ -1,11 +1,12 @@
 package com.craft.apps.countdowns.common.database;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
 import com.craft.apps.countdowns.R;
-import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.google.android.gms.tasks.Task;
 
@@ -82,7 +83,7 @@ public class CountdownManager extends OldDatabase {
         getUserCountdownsReference(uid).child(key).setValue(true, (error, reference) -> {
             if (error == null) {
                 Log.i(TAG, "uploadCountdown: Countdown successfully uploaded to " + key);
-                CountdownAnalytics.getInstance(context).logCreation(key);
+//                CountdownAnalytics.getInstance(context).logCreation(key);
             } else {
                 Log.w(TAG, "uploadCountdown: Error when uploading countdown to " + key,
                         error.toException());
@@ -97,7 +98,7 @@ public class CountdownManager extends OldDatabase {
             if (error == null) {
                 Log.i(TAG, "deleteCountdownFromUserRef: Countdown successfully deleted from user "
                         + key);
-                CountdownAnalytics.getInstance(context).logDeletion(key);
+//                CountdownAnalytics.getInstance(context).logDeletion(key);
             } else {
                 Log.w(TAG, "deleteCountdownFromUserRef: Error when deleting countdown from user "
                         + key, error.toException());

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.craft.apps.countdowns.core.ui
+package com.craft.apps.countdowns.core.ui.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.plus
 
 /**
- * Content for a sheet or dialog that alows for a new countdown to be created.
+ * Content for a sheet or dialog that allows for a new countdown to be created.
  */
 @Composable
 fun CountdownCreationSheet(onTriggerCreation: (label: String, timestamp: Instant) -> Unit) {

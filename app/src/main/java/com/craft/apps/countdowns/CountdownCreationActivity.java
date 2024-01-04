@@ -5,9 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,6 +14,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.craft.apps.countdowns.common.CountdownCreator;
 import com.craft.apps.countdowns.common.database.CountdownManager;
 import com.craft.apps.countdowns.common.format.SimpleDateFormatter;
@@ -25,6 +26,7 @@ import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.common.util.DateUtility;
 import com.craft.apps.countdowns.util.Users;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 
 // TODO: 7/1/17 Delegate to a fragment
@@ -75,7 +77,7 @@ public class CountdownCreationActivity extends AppCompatActivity implements
         mUser = Users.getCurentUser();
         if (mUser == null) {
             // TODO: 6/30/17 Find more thorough solution
-            StartActivity.start(this);
+//            StartActivity.start(this);
             finish();
             return;
         }
@@ -192,7 +194,7 @@ public class CountdownCreationActivity extends AppCompatActivity implements
         // TODO: 7/2/17 use updateChildren in Countdown Manager
         String countdownId = CountdownManager.getNewCountdownId();
         Tasks.whenAll(CountdownManager.uploadCountdown(countdown, countdownId),
-                CountdownManager.addCountdownToUser(countdownId, mUser.getUid()))
+                        CountdownManager.addCountdownToUser(countdownId, mUser.getUid()))
                 .addOnSuccessListener(this, void1 -> {
                     Log.d(TAG, "uploadCountdown: Countdown successfully uploaded");
 //                    Indexer.indexCountdown(countdown, countdownId, mUser);

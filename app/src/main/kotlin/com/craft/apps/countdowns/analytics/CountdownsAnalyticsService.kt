@@ -1,10 +1,12 @@
-package com.craft.apps.countdowns.common.analytics;
+package com.craft.apps.countdowns.analytics
 
-import android.content.Context;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.craft.apps.countdowns.common.model.Countdown;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import android.content.Context
+import android.os.Bundle
+import com.craft.apps.countdowns.analytics.CountdownsAnalyticsService.Event
+import com.craft.apps.countdowns.analytics.CountdownsAnalyticsService.Param
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
+import javax.inject.Inject
 
 /**
  * A utility class that sends customized analytics events to the app backend.
@@ -14,83 +16,76 @@ import com.google.firebase.analytics.FirebaseAnalytics;
  * @author willie
  * @version 1.0.0
  * @see Event
+ *
  * @see Param
+ *
  * @since v1.0.0 (5/29/17)
  */
-public class CountdownAnalytics {
-
-    private FirebaseAnalytics mAnalytics;
-
-    private CountdownAnalytics(Context context) {
-        mAnalytics = FirebaseAnalytics.getInstance(context);
-    }
+class CountdownsAnalyticsService @Inject constructor(context: Context) : AnalyticsService {
+    private val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     /**
-     * Provides a semantically friendly way to get an instance of this class
+     * Sends a [Event.COUNTDOWN_CREATED] event to analytics
      *
-     * @param context A context used for analytics
-     * @return A new CountdownAnalytics instance
+     * @param countdownId The database id for the [Countdown] to log
      */
-    @NonNull
-    public static CountdownAnalytics getInstance(Context context) {
-        return new CountdownAnalytics(context);
+    override fun logCreation(countdownId: String) {
+        val args = Bundle()
+        args.putString(FirebaseAnalytics.Param.ITEM_ID, countdownId)
+        firebaseAnalytics.logEvent(Event.COUNTDOWN_CREATED, args)
     }
 
     /**
-     * Sends a {@link Event#COUNTDOWN_CREATED} event to analytics
+     * Sends a [Event.COUNTDOWN_SELECTED] event to analytics
      *
-     * @param countdownId The database id for the {@link Countdown} to log
+     * @param countdownId The database id for the [Countdown] to log
      */
-    public void logCreation(String countdownId) {
-        Bundle args = new Bundle();
-        args.putString(FirebaseAnalytics.Param.ITEM_ID, countdownId);
-        mAnalytics.logEvent(Event.COUNTDOWN_CREATED, args);
+    override fun logSelection(countdownId: String) {
+        val args = Bundle()
+        args.putString(FirebaseAnalytics.Param.ITEM_ID, countdownId)
+        args.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "main_list_item")
+        firebaseAnalytics.logEvent(Event.COUNTDOWN_SELECTED, args)
     }
 
     /**
-     * Sends a {@link Event#COUNTDOWN_SELECTED} event to analytics
+     * Sends a [Event.COUNTDOWN_DELETED] event to analytics
      *
-     * @param countdownId The database id for the {@link Countdown} to log
+     * @param countdownId The database id for the [Countdown] to log
      */
-    public void logSelection(String countdownId) {
-        Bundle args = new Bundle();
-        args.putString(FirebaseAnalytics.Param.ITEM_ID, countdownId);
-        args.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "main_list_item");
-        mAnalytics.logEvent(Event.COUNTDOWN_SELECTED, args);
+    override fun logDeletion(countdownId: String) {
+        val args = Bundle()
+        args.putString(FirebaseAnalytics.Param.ITEM_ID, countdownId)
+        firebaseAnalytics.logEvent(Event.COUNTDOWN_DELETED, args)
     }
 
     /**
-     * Sends a {@link Event#COUNTDOWN_DELETED} event to analytics
-     *
-     * @param countdownId The database id for the {@link Countdown} to log
+     * Sends a [Event.WIDGET_SINGLE_ADDED] event to analytics
      */
-    public void logDeletion(String countdownId) {
-        Bundle args = new Bundle();
-        args.putString(FirebaseAnalytics.Param.ITEM_ID, countdownId);
-        mAnalytics.logEvent(Event.COUNTDOWN_DELETED, args);
-    }
-
-    /**
-     * Sends a {@link Event#WIDGET_SINGLE_ADDED} event to analytics
-     */
-    public void logSingleWidgetAddition() {
+    override fun logSingleWidgetAddition() {
         // TODO: 6/24/17 Add more useful analytics for widgets
-        mAnalytics.logEvent(Event.WIDGET_SINGLE_ADDED, new Bundle());
+        firebaseAnalytics.logEvent(Event.WIDGET_SINGLE_ADDED, Bundle())
     }
 
     /**
-     * Sends a {@link Event#WIDGET_SINGLE_REMOVED} event to analytics
+     * Sends a [Event.WIDGET_SINGLE_REMOVED] event to analytics
      */
-    public void logSingleWidgetRemoval() {
+    override fun logSingleWidgetRemoval() {
         // TODO: 6/24/17 Add more useful analytics for widgets
-        mAnalytics.logEvent(Event.WIDGET_SINGLE_REMOVED, new Bundle());
+        firebaseAnalytics.logEvent(Event.WIDGET_SINGLE_REMOVED, Bundle())
     }
 
     /**
-     * Sends a {@link Event#WIDGET_SINGLE_SELECTED} event to analytics
+     * Sends a [Event.WIDGET_SINGLE_SELECTED] event to analytics
      */
-    public void logSingleWidgetEngagement() {
-        mAnalytics.logEvent(Event.WIDGET_SINGLE_SELECTED, new Bundle());
+    override fun logSingleWidgetEngagement() {
+        firebaseAnalytics.logEvent(Event.WIDGET_SINGLE_SELECTED, Bundle())
+    }
+
+    override fun logScreenVisit(screenId: AnalyticsService.ScreenId, activityName: String) {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, screenId.screenName)
+            param(FirebaseAnalytics.Param.SCREEN_CLASS, activityName)
+        }
     }
 
     /**
@@ -98,39 +93,33 @@ public class CountdownAnalytics {
      *
      * @see Param
      */
-    static final class Event {
+    internal object Event {
+        /**
+         * Indicates that a [Countdown] has been created and put to the database
+         */
+        const val COUNTDOWN_CREATED = "engagement_countdown_creation"
 
         /**
-         * Indicates that a {@link Countdown} has been created and put to the database
+         * Indicates that a [Countdown] has been deleted from the database
          */
-        static final String COUNTDOWN_CREATED = "engagement_countdown_creation";
+        const val COUNTDOWN_DELETED = "countdown_deletion"
 
         /**
-         * Indicates that a {@link Countdown} has been deleted from the database
+         * Indicates that a [Countdown] has been selected in a list
          */
-        static final String COUNTDOWN_DELETED = "countdown_deletion";
-
-        /**
-         * Indicates that a {@link Countdown} has been selected in a list
-         */
-        static final String COUNTDOWN_SELECTED = "engagement_countdown_selection";
+        const val COUNTDOWN_SELECTED = "engagement_countdown_selection"
 
         /**
          * Indicates that a SingleCountdownWidget has been added to the home screen
          */
-        static final String WIDGET_SINGLE_ADDED = "widget_single_added";
+        const val WIDGET_SINGLE_ADDED = "widget_single_added"
 
         /**
          * Indicates that a SingleCountdownWidget has been removed from the home screen
          */
-        static final String WIDGET_SINGLE_REMOVED = "widget_single_removed";
-
-        static final String WIDGET_SINGLE_SELECTED = "engagement_widget_single_select";
-
-        static final String ENGAGEMENT_DEEP_LINK_WEB = "engagement_deep_link_web";
-
-        private Event() {
-        }
+        const val WIDGET_SINGLE_REMOVED = "widget_single_removed"
+        const val WIDGET_SINGLE_SELECTED = "engagement_widget_single_select"
+        const val ENGAGEMENT_DEEP_LINK_WEB = "engagement_deep_link_web"
     }
 
     /**
@@ -138,9 +127,16 @@ public class CountdownAnalytics {
      *
      * @see Event
      */
-    static final class Param {
-
-        private Param() {
+    internal class Param private constructor()
+    companion object {
+        /**
+         * Provides a semantically friendly way to get an instance of this class
+         *
+         * @param context A context used for analytics
+         * @return A new CountdownAnalytics instance
+         */
+        fun getInstance(context: Context): CountdownsAnalyticsService {
+            return CountdownsAnalyticsService(context)
         }
     }
 }

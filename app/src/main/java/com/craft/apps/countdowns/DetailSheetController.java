@@ -1,26 +1,28 @@
 package com.craft.apps.countdowns;
 
 import android.content.Context;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.appcompat.app.AlertDialog.Builder;
-import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.craft.apps.countdowns.common.analytics.CountdownAnalytics;
+
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
+
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.craft.apps.countdowns.common.format.UnitsFormatter;
 import com.craft.apps.countdowns.common.model.Countdown;
 import com.craft.apps.countdowns.util.Users;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.Locale;
 
 /**
@@ -34,12 +36,12 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
         OnMenuItemClickListener {
 
     private static final String TAG = DetailSheetController.class.getSimpleName();
-    private CountdownDetailDisplay mDisplay;
+    private final CountdownDetailDisplay mDisplay;
 
     /**
      * Really only used to fetch strings
      */
-    private Context mContext;
+    private final Context mContext;
 
     private DatabaseReference mSelectedCountdownReference = null;
 
@@ -61,7 +63,7 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
 
     /**
      * Creates a new controller
-     *
+     * <p>
      * DetailSheetControllers created with this are not initialized with a countdown ID to load
      * data. You must use {@link #updateCountdown(String)} before {@link #startObserving()} is
      * called.
@@ -76,7 +78,7 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
      * @param countdownId A valid {@linkplain Countdown} database ID
      */
     public DetailSheetController(Context context, CountdownDetailDisplay display,
-            String countdownId) {
+                                 String countdownId) {
         mContext = context;
         mDisplay = display;
         if (countdownId != null) {
@@ -168,7 +170,6 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
     }
 
     /**
-     *
      * @param view
      */
     public void init(View view) {
@@ -224,8 +225,8 @@ public class DetailSheetController implements ValueEventListener, OnClickListene
                             (databaseError, databaseReference) -> {
                                 if (databaseError != null) {
                                     Log.d(TAG, "onComplete: Countdown " + countdownId + " deleted");
-                                    CountdownAnalytics.getInstance(context)
-                                            .logDeletion(countdownId);
+//                                    CountdownAnalytics.getInstance(context)
+//                                            .logDeletion(countdownId);
 //                                    Indexer.removeCountdownIndex(countdownId);
 
                                     mDisplay.collapseDisplay();

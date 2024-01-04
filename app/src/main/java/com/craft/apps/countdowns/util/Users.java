@@ -2,15 +2,16 @@ package com.craft.apps.countdowns.util;
 
 import android.app.Activity;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AlertDialog.Builder;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog.Builder;
+import androidx.fragment.app.FragmentActivity;
+
 import com.craft.apps.countdowns.BuildConfig;
 import com.craft.apps.countdowns.R;
-import com.craft.apps.countdowns.StartActivity;
 import com.craft.apps.countdowns.common.database.OldDatabase;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.AuthUI.IdpConfig;
@@ -19,13 +20,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -46,13 +47,13 @@ public class Users {
 
     /**
      * Launches a FirebaseUI sign in flow
-     *
+     * <p>
      * Must be handled like so:
      * {@code
      * protected void onActivityResult(int requestCode, int resultCode, Intent data) {
      * if (requestCode == Users.RC_SIGN_IN) {
      * if (resultCode == RESULT_OK) {
-     *
+     * <p>
      * }
      * }
      * }
@@ -91,7 +92,7 @@ public class Users {
                     dialog2.dismiss();
                     signOut(activity).addOnCompleteListener(task -> {
                         Log.i("Users", "Sign out complete");
-                        StartActivity.start(activity);
+//                        StartActivity.start(activity);
                     });
                 })
                 .create();
@@ -113,7 +114,7 @@ public class Users {
                             .addOnSuccessListener(activity, aVoid -> {
                                 Log.i(TAG, "Sign out successful");
 //                                FirebaseAppIndex.getInstance().removeAll();
-                                StartActivity.start(activity);
+//                                StartActivity.start(activity);
                                 activity.finish();
                             });
                 })

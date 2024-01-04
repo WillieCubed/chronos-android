@@ -1,11 +1,12 @@
-package com.craft.apps.countdowns.core.ui
+package com.craft.apps.countdowns.core.ui.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.craft.apps.countdowns.search.CountdownsAppSearchManager
+import com.craft.apps.countdowns.analytics.AnalyticsService
 import com.craft.apps.countdowns.core.data.repository.Countdown
 import com.craft.apps.countdowns.core.data.repository.CountdownRepository
+import com.craft.apps.countdowns.search.CountdownsAppSearchManager
 import com.craft.apps.countdowns.search.toSearchModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,10 +15,18 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import javax.inject.Inject
 
+/**
+ * A view model for the [HomeScreen].
+ *
+ * Data is loaded from a [CountdownRepository] immediately upon creation.
+ *
+ * Note that this logs countdown creations and deletions.
+ */
 @HiltViewModel
 class HomeViewModel @Inject internal constructor(
     private val countdownRepository: CountdownRepository,
     private val countdownsAppSearchManager: CountdownsAppSearchManager,
+    private val analyticsService: AnalyticsService,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<LatestHomeUiState>(LatestHomeUiState.Loading)
@@ -32,31 +41,45 @@ class HomeViewModel @Inject internal constructor(
         }
     }
 
+    /**
+     * Creates a new countdown.
+     */
     fun addCountdown(countdown: Countdown) {
-        // Creating countdown
-        Log.d("HomeViewModel", countdown.toString())
         viewModelScope.launch {
-            countdownRepository.addCountdown(countdown)
-            val result = countdownsAppSearchManager.addCountdown(countdown.toSearchModel())
-            if (!result.isSuccess) {
-                Log.e("HomeViewModel", "Could not add countdown to search index")
+            val createdId = countdownRepository.addCountdown(countdown)
+            with(createdId) {
+                analyticsService.logCreation(this.toString())
+                val result = countdownsAppSearchManager.addCountdown(
+                    countdown.copy(id = createdId).toSearchModel()
+                )
+                if (!result.isSuccess) {
+                    Log.e("HomeViewModel", "Could not add countdown to search index")
+                }
             }
         }
     }
 
-    fun removeCountdown(countdown: Countdown) {
+    /**
+     * Removes a countdown from the view.
+     *
+     * @param countdownId The ID of the countdown to remove
+     */
+    fun removeCountdown(countdownId: Int) {
         viewModelScope.launch {
-            countdownRepository.deleteCountdownById(countdown.id)
-            val result = countdownsAppSearchManager.removeCountdown(countdown.id)
-            if (!result.isSuccess) {
-                Log.e("HomeViewModel", "Could not remove countdown from search index")
+            with(countdownId) {
+                countdownRepository.deleteCountdownById(this)
+                analyticsService.logDeletion(this.toString())
+                val result = countdownsAppSearchManager.removeCountdown(this)
+                if (!result.isSuccess) {
+                    Log.e("HomeViewModel", "Could not remove countdown from search index")
+                }
             }
         }
-
     }
 }
 
 sealed class LatestHomeUiState {
+
     data class Success(
         val countdowns: List<Countdown> = listOf(),
     ) : LatestHomeUiState()
