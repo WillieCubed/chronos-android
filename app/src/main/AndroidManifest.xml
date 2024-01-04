@@ -12,6 +12,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
+        android:name=".CountdownsApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_descriptor"
@@ -20,9 +21,52 @@
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:replace="android:theme"
+        android:theme="@style/Theme.Countdowns.Splash"
         tools:targetApi="s">
+
+        <activity
+            android:name=".core.MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="craft-countdown.firebaseapp.com" />
+                <data android:host="countdowns.williecubed.dev" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"
+                android:searchSuggestAuthority="com.example.MySuggestionProvider"
+                android:searchSuggestSelection=" ?" />
+        </activity>
+        
+        <provider
+            android:name=".search.CountdownsSuggestionsProvider"
+            android:authorities="com.craft.apps.countdowns.search.CountdownsSuggestionsProvider"
+            android:exported="false" />
+
+        <activity
+            android:name=".widget.ui.ConfigureWidgetActivity"
+            android:exported="false"
+            android:label="@string/title_activity_configure_widget"
+            android:theme="@style/Theme.Countdowns" />
 
         <!-- For FCM -->
         <meta-data
@@ -41,7 +85,7 @@
         <activity
             android:name=".OnboardingActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.Countdowns.NoActionBar">
             <intent-filter>
                 <action android:name="com.craft.apps.countdowns.action.ONBOARD" />
             </intent-filter>
@@ -65,7 +109,7 @@
             android:exported="true"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.Countdowns.NoActionBar">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -87,7 +131,7 @@
             android:exported="true"
             android:label="@string/title_activity_countdown_creation"
             android:parentActivityName=".CountdownListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.Countdowns.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.craft.apps.countdowns.CountdownListActivity" />
@@ -205,7 +249,7 @@
         <!-- </intent-filter> -->
         <!-- </service> -->
         <service
-            android:name=".notification.CountdownNotificationService"
+            android:name=".messaging.CountdownNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Splash" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.Splash" parent="Theme.Countdowns.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splash</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>

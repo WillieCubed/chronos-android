@@ -1,115 +1,114 @@
-package com.craft.apps.countdowns.notification;
+package com.craft.apps.countdowns.messaging
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import android.util.Log;
-import com.craft.apps.countdowns.R;
-import com.craft.apps.countdowns.common.database.OldDatabase;
-import com.craft.apps.countdowns.common.util.IntentUtils;
-import com.craft.apps.countdowns.util.Users;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
-import java.util.Map;
-
-// TODO: 7/2/17 Refactor and kill
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.craft.apps.countdowns.R
+import com.craft.apps.countdowns.common.database.OldDatabase
+import com.craft.apps.countdowns.common.util.IntentUtils
+import com.craft.apps.countdowns.util.Users
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 
 /**
  * @author willie
  * @version 1.0.0
  * @since 5/29/17
  */
-public class CountdownNotificationService extends FirebaseMessagingService {
-    @Override
-    public void onNewToken(@NonNull String refreshedToken) {
-        super.onNewToken(refreshedToken);
-        Log.d(TAG, "onTokenRefresh: Attempting to persist new token " + refreshedToken
-                + " to database");
-        sendRegistrationToServer(refreshedToken);
+class CountdownNotificationService : FirebaseMessagingService() {
+    override fun onNewToken(refreshedToken: String) {
+        Log.d(
+            TAG, "onTokenRefresh: Attempting to persist new token " + refreshedToken
+                    + " to database"
+        )
+        sendRegistrationToServer(refreshedToken)
     }
 
-    private static final String TAG = CountdownNotificationService.class.getSimpleName();
-
-    private static final int RC_SHOW_COUNTDOWN_DETAILS = 6;
-
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-//        super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "onMessageReceived: Message from " + remoteMessage.getFrom());
-
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "onMessageReceived: Notification body:" + remoteMessage.getNotification()
-                    .getBody());
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d(TAG, "onMessageReceived: Message from " + remoteMessage.from)
+        if (remoteMessage.notification != null) {
+            Log.d(
+                TAG, "onMessageReceived: Notification body:" + remoteMessage.notification!!
+                    .body
+            )
         }
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+        if (remoteMessage.data.isNotEmpty()) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.data)
         } else {
-            Log.w(TAG, "onMessageReceived: Countdown payload doesn't exist!");
+            Log.w(TAG, "onMessageReceived: Countdown payload doesn't exist!")
         }
-        sendReminderNotification(remoteMessage);
+        sendReminderNotification(remoteMessage)
     }
 
-    private void sendNotification() {
+    private fun sendNotification() {}
 
-    }
-
-    private void sendReminderNotification(RemoteMessage message) {
-        Map<String, String> data = message.getData();
-        Intent intent = new Intent(IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent countdownIntent = PendingIntent.getActivity(this,
-                RC_SHOW_COUNTDOWN_DETAILS, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.channel_countdown_updates_id));
+    private fun sendReminderNotification(message: RemoteMessage) {
+        val data = message.data
+        val intent = Intent(IntentUtils.ACTION_VIEW_COUNTDOWN_DETAILS)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val countdownIntent = PendingIntent.getActivity(
+            this,
+            RC_SHOW_COUNTDOWN_DETAILS,
+            intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val builder =
+            NotificationCompat.Builder(this, getString(R.string.channel_countdown_updates_id))
         builder.setContentIntent(countdownIntent)
-                .setSmallIcon(R.drawable.app_icon_large);
-        if (data.size() > 0) {
-            String name = data.get("countdownName");
-            String description = data.get("countdownDescription");
-            String daysUntil = data.get("countdownDaysUntil");
-            builder.setContentTitle(daysUntil + " days until " + name);
-            builder.setContentText(description);
+            .setSmallIcon(R.drawable.app_icon_large)
+        if (data.isNotEmpty()) {
+            val name = data["countdownName"]
+            val description = data["countdownDescription"]
+            val daysUntil = data["countdownDaysUntil"]
+            builder.setContentTitle("$daysUntil days until $name")
+            builder.setContentText(description)
         } else {
             builder.setContentTitle("Something days until")
-                    .setContentText("Remember to do something.");
+                .setContentText("Remember to do something.")
         }
-
-        NotificationManager manager = (NotificationManager)
-                getSystemService(Context.NOTIFICATION_SERVICE);
-
-        String defaultChannelId = getString(R.string.channel_countdown_updates_id);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel defaultChannel = new NotificationChannel(defaultChannelId,
-                getString(R.string.channel_countdown_updates_name), importance);
-        manager.createNotificationChannel(defaultChannel);
-        builder.setChannelId(defaultChannelId);
-        int notifyId = 1;
-        manager.notify(notifyId, builder.build());
-
+        val manager = getSystemService(NotificationManager::class.java)
+        val defaultChannelId = getString(R.string.channel_countdown_updates_id)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val defaultChannel = NotificationChannel(
+            defaultChannelId,
+            getString(R.string.channel_countdown_updates_name), importance
+        )
+        manager.createNotificationChannel(defaultChannel)
+        builder.setChannelId(defaultChannelId)
+        val notifyId = 1
+        manager.notify(notifyId, builder.build())
     }
 
-    /**
-     * Persists an updated instance ID token to the signed in user's Firebase OldDatabase reference
-     *
-     * @param token A new token to persist
-     */
-    private static void sendRegistrationToServer(String token) {
-        FirebaseUser user = Users.getCurentUser();
-        if (user != null) {
-            OldDatabase.getUserReference(user.getUid()).child(OldDatabase.PATH_FCM_TOKENS)
-                    .child(token).setValue(true, (databaseError, databaseReference) -> {
+    companion object {
+        private val TAG = CountdownNotificationService::class.java.simpleName
+        private const val RC_SHOW_COUNTDOWN_DETAILS = 6
+
+        /**
+         * Persists an updated instance ID token to the signed in user's Firebase OldDatabase reference
+         *
+         * @param token A new token to persist
+         */
+        private fun sendRegistrationToServer(token: String) {
+            val user = Users.getCurentUser()
+            if (user != null) {
+                OldDatabase.getUserReference(user.uid).child(OldDatabase.PATH_FCM_TOKENS)
+                    .child(token)
+                    .setValue(true) { databaseError: DatabaseError?, _: DatabaseReference? ->
                         if (databaseError != null) {
-                            Log.e(TAG, "onComplete: Couldn't update user FCM token; " +
-                                    databaseError.getDetails(), databaseError.toException());
+                            Log.e(
+                                TAG, "onComplete: Couldn't update user FCM token; " +
+                                        databaseError.details, databaseError.toException()
+                            )
                         } else {
-                            Log.i(TAG, "onComplete: Successfully updated user FCM token.");
+                            Log.i(TAG, "onComplete: Successfully updated user FCM token.")
                         }
-                    });
+                    }
+            }
         }
     }
 }

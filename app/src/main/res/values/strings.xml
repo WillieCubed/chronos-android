@@ -184,5 +184,7 @@
 
     <string name="query_reset_app_details">This will delete all preferences you\'ve set and sign you out of the app.</string>
     <string name="sign_in">Please sign in the app.</string>
+    <string name="title_activity_configure_widget">ConfigureWidgetActivity</string>
+    <string name="search_hint">Search countdowns</string>
 
 </resources>

@@ -14,5 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "LogDate"
-//project(":craft-essentials").projectDir = new File(settingsDir, "craft-essentials/library")
-include(":app", ":base") /*":instantapp",*/ /*":things",*/ /*":craft-essentials"*/
+include(":app", ":base")

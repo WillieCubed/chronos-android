@@ -58,7 +58,7 @@ public class SortOptionDialog extends AppCompatDialogFragment implements
 //    }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         if (context instanceof SelectionListener) {
             mListener = (SelectionListener) context;
@@ -70,8 +70,8 @@ public class SortOptionDialog extends AppCompatDialogFragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments().containsKey(ARG_INITIAL_SELECTION)) {
-            mSortOption = getArguments().getInt(ARG_INITIAL_SELECTION);
+        if (requireArguments().containsKey(ARG_INITIAL_SELECTION)) {
+            mSortOption = requireArguments().getInt(ARG_INITIAL_SELECTION);
 
         } else {
             throw new IllegalArgumentException("Dialog's arguments must contain an "
@@ -82,7 +82,7 @@ public class SortOptionDialog extends AppCompatDialogFragment implements
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Builder(getContext())
+        return new Builder(requireContext())
                 .setTitle(R.string.title_dialog_sort_countdowns)
                 .setSingleChoiceItems(R.array.label_sort_by, mSortOption, this)
                 .setPositiveButton(android.R.string.ok, this)
@@ -103,7 +103,7 @@ public class SortOptionDialog extends AppCompatDialogFragment implements
         }
         // We don't have to worry about neutral button.
         // TODO: 5/27/17 Find less troublesome way to do this
-        String[] options = getContext().getResources()
+        String[] options = requireContext().getResources()
                 .getStringArray(R.array.label_sort_by);
         if (Objects.equals(options[0], options[which])) {
             mSortOption = SortOptions.DATE_CREATED;
