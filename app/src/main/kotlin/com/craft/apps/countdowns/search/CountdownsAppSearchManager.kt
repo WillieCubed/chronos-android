@@ -140,7 +140,7 @@ fun Countdown.toSearchModel(namespace: String = "default"): CountdownSearchModel
         namespace = namespace,
         id = this.id.toString(),
         label = this.label,
-        timestamp = this.timestamp.toEpochMilliseconds(),
+        timestamp = min(this.timestamp.toEpochMilliseconds(), 0),
         score = this.importance,
     )
 }
