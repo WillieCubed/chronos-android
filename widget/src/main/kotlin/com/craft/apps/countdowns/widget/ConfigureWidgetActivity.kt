@@ -20,7 +20,7 @@ class ConfigureWidgetActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         val manager = GlanceAppWidgetManager(this)
         val glanceId = manager.getGlanceIdBy(intent)
         if (glanceId == null) {
@@ -70,7 +70,7 @@ class ConfigureWidgetActivity : ComponentActivity() {
 
         setContent {
             CountdownsTheme {
-                ConfigureWidgetScreen(viewModel)
+                ConfigureWidgetScreen()
             }
         }
     }
