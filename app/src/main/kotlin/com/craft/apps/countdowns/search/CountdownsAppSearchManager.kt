@@ -1,7 +1,5 @@
 package com.craft.apps.countdowns.search
 
-import androidx.appsearch.localstorage.LocalStorage
-import androidx.appsearch.platformstorage.PlatformStorage
 import android.content.Context
 import android.os.Build
 import androidx.appsearch.annotation.Document
@@ -11,6 +9,8 @@ import androidx.appsearch.app.AppSearchSession
 import androidx.appsearch.app.PutDocumentsRequest
 import androidx.appsearch.app.RemoveByDocumentIdRequest
 import androidx.appsearch.app.SetSchemaRequest
+import androidx.appsearch.localstorage.LocalStorage
+import androidx.appsearch.platformstorage.PlatformStorage
 import com.craft.apps.countdowns.core.data.repository.Countdown
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.min
 
 @Singleton
 class CountdownsAppSearchManager @Inject constructor(
