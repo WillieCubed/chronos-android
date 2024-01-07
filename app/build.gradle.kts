@@ -53,16 +53,10 @@ android {
     }
 }
 
-hilt {
-    enableAggregatingTask = true
-}
-
 dependencies {
     // Module with base functionality
     implementation(project(":base"))
-
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+    implementation(project(":widget"))
 
     // AndroidX Core
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -74,46 +68,23 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.core:core-splashscreen:1.0.1")
 
+    // Navigation
+    val navVersion = "2.7.6"
+
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+
     // AppSearch
-    val appsearch_version = "1.1.0-alpha03"
+    val appSearchVersion = "1.1.0-alpha03"
 
-    implementation("androidx.appsearch:appsearch:$appsearch_version")
-    implementation("androidx.appsearch:appsearch-local-storage:$appsearch_version")
-    implementation("androidx.appsearch:appsearch-platform-storage:$appsearch_version")
+    implementation("androidx.appsearch:appsearch:$appSearchVersion")
+    implementation("androidx.appsearch:appsearch-local-storage:$appSearchVersion")
+    implementation("androidx.appsearch:appsearch-platform-storage:$appSearchVersion")
     // AppSearch 1.1.0-alpha03 doesn't play well with KSP yet for some reason
-    kapt("androidx.appsearch:appsearch-compiler:$appsearch_version")
-
-    // Room
-
-    val room_version = "2.6.1"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-
-    // Jetpack Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.08.00")
-
-    implementation(composeBom)
-    implementation("androidx.compose.material:material")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material3:material3-window-size-class")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.50")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    implementation("androidx.hilt:hilt-work:1.1.0")
-    ksp("com.google.dagger:hilt-android-compiler:2.50")
-    ksp("androidx.hilt:hilt-compiler:1.1.0")
+    kapt("androidx.appsearch:appsearch-compiler:$appSearchVersion")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-perf")
     implementation("com.firebaseui:firebase-ui-auth:8.0.2")
@@ -124,13 +95,41 @@ dependencies {
     implementation("com.google.android.gms:play-services-instantapps:18.0.1")
     implementation("com.android.billingclient:billing:6.1.0")
 
+    implementation("com.google.dagger:hilt-android:2.50")
+    ksp("com.google.dagger:hilt-android-compiler:2.50")
+    ksp("androidx.hilt:hilt-compiler:1.1.0")
+
     // Others
     implementation("pub.devrel:easypermissions:3.0.0")
     implementation("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
     implementation("com.github.paolorotolo:appintro:4.1.0")
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation(composeBom)
+
+    // Core library
+    androidTestImplementation("androidx.test:core-ktx:1.5.0")
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+
+    // Assertions
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.15")
+    androidTestImplementation("androidx.test.ext:truth:1.5.0")
+
+    // Espresso dependencies
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-accessibility:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-web:3.5.1")
+    androidTestImplementation("androidx.test.espresso.idling:idling-concurrent:3.5.1")
+
+    // The following Espresso dependency can be either "implementation",
+    // or "androidTestImplementation", depending on whether you want the
+    // dependency to appear on your APK"s compile classpath or the test APK
+    // classpath.
+    androidTestImplementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
