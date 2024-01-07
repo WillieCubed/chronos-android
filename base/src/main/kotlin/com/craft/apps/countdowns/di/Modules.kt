@@ -1,6 +1,8 @@
 package com.craft.apps.countdowns.di
 
 import android.content.Context
+import com.craft.apps.countdowns.analytics.AnalyticsService
+import com.craft.apps.countdowns.analytics.CountdownsAnalyticsService
 import com.craft.apps.countdowns.core.data.AppDatabase
 import dagger.Module
 import dagger.Provides
@@ -12,7 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -48,6 +49,14 @@ object CoroutinesModule {
     @MainImmediateDispatcher
     @Provides
     fun provideMainImmediateDispatcher(): CoroutineDispatcher = Dispatchers.Main.immediate
+}
+
+@InstallIn(SingletonComponent::class)
+@Module
+object AnalyticsModule {
+    @Provides
+    fun provideAnalyticsService(@ApplicationContext context: Context): AnalyticsService =
+        CountdownsAnalyticsService(context)
 }
 
 
