@@ -10,10 +10,10 @@
 
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.craft.apps.countdowns.CountdownCreationActivity"
+            android:targetClass="com.craft.apps.countdowns.core.MainActivity"
             android:targetPackage="com.craft.apps.countdowns">
             <extra
-                android:name="from_launcher"
+                android:name="create_countdown"
                 android:value="true" />
 
         </intent>

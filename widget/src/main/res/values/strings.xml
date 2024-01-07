@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Widget</string>
+    <string name="widget_countdown_list_description">See a list of upcoming countdowns</string>
+</resources>
