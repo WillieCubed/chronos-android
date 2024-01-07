@@ -12,8 +12,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.craft.apps.countdowns.core.data.repository.formatted
-import com.craft.apps.countdowns.core.theme.AppTypographyStyles
 import com.craft.apps.countdowns.core.ui.home.testCountdowns
+import com.craft.apps.countdowns.theme.AppTypographyStyles
 
 @Composable
 fun DetailScreen(

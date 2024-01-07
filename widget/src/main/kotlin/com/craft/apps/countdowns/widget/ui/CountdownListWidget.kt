@@ -47,7 +47,7 @@ class CountdownListWidget(
             val collected by widgetCountdownRepository.currentCountdowns.collectAsState(
                 CountdownsInfo.Loading
             )
-            GlanceTheme {
+            CountdownsWidgetTheme {
                 when (collected) {
                     CountdownsInfo.Loading -> {
 

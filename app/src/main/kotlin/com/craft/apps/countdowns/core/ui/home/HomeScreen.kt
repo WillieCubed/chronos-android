@@ -36,16 +36,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.craft.apps.countdowns.core.data.repository.Countdown
-import com.craft.apps.countdowns.core.theme.LogDateTheme
 import com.craft.apps.countdowns.core.ui.common.CountdownCreationSheet
 import com.craft.apps.countdowns.core.ui.common.CountdownList
+import com.craft.apps.countdowns.theme.CountdownsTheme
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 
 @Composable
 fun HomeScreen(
     onCountdownSelected: (countdownId: Int) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    onPinCountdown: (countdownId: Int) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -79,6 +80,10 @@ fun HomeScreen(
 
     fun handleCountdownDeletion(countdownId: Int) {
         viewModel.removeCountdown(countdownId)
+    }
+
+    fun handlePinToLauncher(countdownId: Int) {
+        onPinCountdown(countdownId)
     }
 
     ModalBottomSheetLayout(
@@ -125,6 +130,7 @@ fun HomeScreen(
                                 countdowns = countdowns,
                                 onCountdownSelected = onCountdownSelected,
                                 onCountdownDeletion = ::handleCountdownDeletion,
+                                onPinToLauncher = ::handlePinToLauncher,
                             )
                         }
                     }
@@ -145,7 +151,7 @@ fun HomeScreen(
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
-    LogDateTheme {
-        HomeScreen(onCountdownSelected = {})
+    CountdownsTheme {
+        HomeScreen(onCountdownSelected = {}, onPinCountdown = {})
     }
 }

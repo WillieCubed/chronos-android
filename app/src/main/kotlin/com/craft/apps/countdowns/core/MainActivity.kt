@@ -1,15 +1,23 @@
 package com.craft.apps.countdowns.core
 
+import android.app.PendingIntent
 import android.app.SearchManager
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.craft.apps.countdowns.core.ui.CountdownsApp
 import com.craft.apps.countdowns.search.CountdownsSuggestionsProvider
+import com.craft.apps.countdowns.widget.ConfigureWidgetActivity
+import com.craft.apps.countdowns.widget.WidgetExtras
+import com.craft.apps.countdowns.widget.WidgetType
+import com.craft.apps.countdowns.widget.ui.SingleCountdownWidgetReceiver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            CountdownsApp()
+            CountdownsApp(onPinCountdown = ::pinToLauncher)
         }
 
         if (Intent.ACTION_SEARCH == intent.action) {
@@ -32,6 +40,32 @@ class MainActivity : ComponentActivity() {
                 ).saveRecentQuery(query, null)
             }
         }
+    }
+
+    private fun pinToLauncher(countdownId: Int) {
+        val appWidgetProvider = AppWidgetManager.getInstance(this)
+        if (!appWidgetProvider.isRequestPinAppWidgetSupported) {
+            Log.d(this.javaClass.name, "App pinning not supported, skipping request")
+            return
+        }
+        val countdownDetailWidgetProvider =
+            ComponentName(this, SingleCountdownWidgetReceiver::class.java)
+        val successCallback = PendingIntent.getBroadcast(
+            this,
+            0,
+            Intent(this, ConfigureWidgetActivity::class.java).apply {
+                putExtra(WidgetExtras.WIDGET_TYPE, WidgetType.DETAIL)
+                putExtra(WidgetExtras.COUNTDOWN_ID, countdownId)
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        // Note that this doesn't notify on failure, so we just set a pending intent to trigger
+        // If this resolves.
+        appWidgetProvider.requestPinAppWidget(
+            countdownDetailWidgetProvider,
+            null,
+            successCallback,
+        )
     }
 
     // TODO: Expose to user in settings

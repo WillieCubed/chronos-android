@@ -25,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.craft.apps.countdowns.core.data.repository.formatted
-import com.craft.apps.countdowns.core.theme.AppTypographyStyles
+import com.craft.apps.countdowns.theme.AppTypographyStyles
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.plus

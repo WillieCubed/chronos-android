@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.craft.apps.countdowns.core.theme.AppTypographyStyles
+import com.craft.apps.countdowns.theme.AppTypographyStyles
 
 @Composable
 fun HomeEmptyView(
