@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LogDate"
+rootProject.name = "Countdowns"
 include(":app", ":base")
