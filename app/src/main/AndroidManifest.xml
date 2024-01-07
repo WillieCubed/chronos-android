@@ -55,8 +55,23 @@
 
                 <data android:scheme="https" />
                 <data android:host="craft-countdown.firebaseapp.com" />
+                <data android:pathPrefix="/countdown" />
                 <data android:host="countdowns.williecubed.dev" />
             </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="chronos"
+                    android:mimeType="text/plain"
+                    android:pathPattern="/*"
+                    android:scheme="countdowns" />
+            </intent-filter>
+
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -68,7 +83,7 @@
                 android:searchSuggestAuthority="com.example.MySuggestionProvider"
                 android:searchSuggestSelection=" ?" />
         </activity>
-        
+
         <provider
             android:name=".search.CountdownsSuggestionsProvider"
             android:authorities="com.craft.apps.countdowns.search.CountdownsSuggestionsProvider"
@@ -98,10 +113,10 @@
             android:name=".SettingsActivity"
             android:exported="true"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".CountdownListActivity">
+            android:parentActivityName=".core.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.craft.apps.countdowns.CountdownListActivity" />
+                android:value="com.craft.apps.countdowns.core.MainActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -114,19 +129,6 @@
                 <action android:name="com.craft.apps.countdowns.action.ACTION_RESET_APP" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CountdownDeepLinkActivity"
-            android:exported="true"
-            android:label="@string/title_activity_countdown_deep_link"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme.Translucent">
-            <intent-filter
-                android:autoVerify="true"
-                android:order="100">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
 
         <service
