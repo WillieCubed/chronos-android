@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="list_label_starred_countdowns">Starred</string>
+    <string name="content_description_starred_countdowns">Starred countdowns</string>
+    <string name="list_label_expired_countdowns">Expired countdowns</string>
+    <string name="content_description_expired_countdowns">Expired countdowns</string>
+</resources>

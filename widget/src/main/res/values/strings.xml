@@ -1,6 +1,0 @@
-<resources>
-    <string name="widget_countdown_single_label">Single countdown</string>
-    <string name="widget_countdown_single_description">Display a single countdown</string>
-    <string name="widget_countdown_list_label">Upcoming countdowns</string>
-    <string name="widget_countdown_list_description">Display a list of upcoming countdowns</string>
-</resources>

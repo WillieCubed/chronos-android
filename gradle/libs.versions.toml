@@ -1,0 +1,130 @@
+[versions]
+kotlin = "1.9.22"
+androidGradlePlugin = "8.2.1"
+ksp = "1.9.22-1.0.16"
+playServicesGradlePlugin = "4.4.0"
+androidxActivity = "1.8.2"
+androidxComposeBom = "2023.10.01"
+androidxComposeCompiler = "1.5.8"
+androidxCore = "1.12.0"
+androidxHilt = "1.1.0"
+androidxLifecycle = "2.7.0"
+androidxNavigation = "2.7.6"
+androidxRoom = "2.6.1"
+androidxSplashScreen = "1.0.1"
+androidxTestCore = "1.5.0"
+androidxTestExt = "1.1.5"
+androidxTestRunner = "1.5.2"
+compose = "1.2.1"
+coroutines = "1.7.3"
+hiltCompiler = "2.50"
+junit = "4.13.2"
+androidxAppSearch = "1.1.0-alpha03"
+kotlinxDatetime = "0.5.0"
+play-services-wearable = "18.1.0"
+watchfaceComplicationsDataSourceKtx = "1.2.0"
+horologist = "0.4.8"
+androidxProtoLayout = "1.1.0-beta01"
+firebaseBom = "32.7.1"
+uiToolingPreviewAndroid = "1.5.4"
+navigationRuntimeKtx = "2.7.6"
+glanceAppwidget = "1.0.0"
+activityKtx = "1.8.2"
+workRuntimeKtx = "2.9.0"
+hiltCommon = "1.1.0"
+androidxGlance = "1.0.0"
+hiltWork = "1.1.0"
+uiTooling = "1.5.4"
+
+[libraries]
+# Gradle plugins for build conventions
+android-tools-build-gradleplugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
+ksp-gradleplugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+hilt-gradleplugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltCompiler" }
+kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidxComposeCompiler" }
+androidx-compose-material = { group = "androidx.compose.material", name = "material" }
+androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3-windowsizeclass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-appsearch = { group = "androidx.appsearch", name = "appsearch", version.ref = "androidxAppSearch" }
+androidx-appsearch-localstorage = { group = "androidx.appsearch", name = "appsearch-local-storage", version.ref = "androidxAppSearch" }
+androidx-appsearch-platformstorage = { group = "androidx.appsearch", name = "appsearch-platform-storage", version.ref = "androidxAppSearch" }
+androidx-appsearch-compiler = { group = "androidx.appsearch", name = "appsearch-compiler", version.ref = "androidxAppSearch" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHilt" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+## Room dependencies
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
+androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "androidxRoom" }
+
+## Glance
+androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "androidxGlance" }
+androidx-glance-material = { group = "androidx.glance", name = "glance-material", version.ref = "androidxGlance"}
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "androidxGlance"}
+
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTestCore" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExt" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
+androidx-wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "compose" }
+androidx-wear-protolayout = { group = "androidx.wear.protolayout", name = "protolayout", version.ref = "androidxProtoLayout" }
+androidx-wear-protolayout-expression = { group = "androidx.wear.protolayout", name = "protolayout-expression", version.ref = "androidxProtoLayout" }
+androidx-wear-protolayout-material = { group = "androidx.wear.protolayout", name = "protolayout-material", version.ref = "androidxProtoLayout" }
+androidx-wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "compose" }
+androidx-wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version = "1.2.1" }
+androidx-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchfaceComplicationsDataSourceKtx" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxSplashScreen" }
+google-play-feature-delivery = { module = "com.google.android.play:feature-delivery", version = "2.1.0" }
+play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "play-services-wearable" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+
+#  Used in AndroidLibraryConventionPlugin
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltCompiler" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltCompiler" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltCompiler" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+
+horologist-compose-tools = { group = "com.google.android.horologist", name = "horologist-compose-tools", version.ref = "horologist" }
+horologist-tiles = { group = "com.google.android.horologist", name = "horologist-tiles", version.ref = "horologist" }
+androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+
+[plugins]
+#android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+#android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+#android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+playservices-gradleplugin = { id = "com.google.gms.google-services", version.ref = "playServicesGradlePlugin" }
+hilt-gradleplugin = { id = "com.google.dagger.hilt.android", version.ref = "hiltCompiler" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+# Custom build logic convention plugins
+countdowns-android-application = { id = "countdowns.android.application", version = "unspecified" }
+countdowns-android-library = { id = "countdowns.android.library", version = "unspecified" }
+countdowns-android-test = { id = "countdowns.android.test", version = "unspecified" }
+countdowns-compose = { id = "countdowns.compose", version = "unspecified" }
+countdowns-dynamic = { id = "countdowns.dynamic", version = "unspecified" }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="list_label_active_countdowns">Active countdowns</string>
+    <string name="content_description_active_countdowns">Active countdowns</string>
+    <string name="minutes_until_now_long">%d until now</string>
+    <string name="minutes_until_now_short">%d minutes</string>
+</resources>
