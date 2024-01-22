@@ -37,3 +37,6 @@ local.properties
 
 # Gradle cache
 .gradle
+
+# Google Play services config
+google-services.json
