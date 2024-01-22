@@ -1,4 +1,4 @@
-package com.craft.apps.countdowns.data
+package com.craft.apps.countdowns.core.data
 
 import com.craft.apps.countdowns.core.data.GenericCountdownRepository
 import com.craft.apps.countdowns.core.model.Countdown

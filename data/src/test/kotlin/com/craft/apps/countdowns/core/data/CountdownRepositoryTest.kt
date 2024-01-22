@@ -1,6 +1,5 @@
-package com.craft.apps.countdowns.data
+package com.craft.apps.countdowns.core.data
 
-import com.craft.apps.countdowns.core.data.GenericCountdownRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -9,7 +8,7 @@ import org.junit.Test
 
 class CountdownRepositoryTest {
 
-    lateinit var repository: GenericCountdownRepository
+    private lateinit var repository: GenericCountdownRepository
 
     @Before
     fun createRepository() {

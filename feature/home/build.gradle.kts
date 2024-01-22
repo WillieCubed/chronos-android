@@ -21,4 +21,9 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.ui.tooling.preview.android)
+
+    // Unit testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
