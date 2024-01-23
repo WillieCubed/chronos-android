@@ -3,6 +3,7 @@ kotlin = "1.9.22"
 androidGradlePlugin = "8.2.1"
 ksp = "1.9.22-1.0.16"
 playServicesGradlePlugin = "4.4.0"
+androidxAppSearch = "1.1.0-alpha03"
 androidxActivity = "1.8.2"
 androidxComposeBom = "2023.10.01"
 androidxComposeCompiler = "1.5.8"
@@ -10,16 +11,17 @@ androidxCore = "1.12.0"
 androidxHilt = "1.1.0"
 androidxLifecycle = "2.7.0"
 androidxNavigation = "2.7.6"
+androidxGlance = "1.0.0"
 androidxRoom = "2.6.1"
 androidxSplashScreen = "1.0.1"
 androidxTestCore = "1.5.0"
 androidxTestExt = "1.1.5"
 androidxTestRunner = "1.5.2"
 compose = "1.2.1"
+androidxComposeMaterial = "1.2.0-beta02" # TODO: Remove once material3 supports surfaceContainer
 coroutines = "1.7.3"
 hiltCompiler = "2.50"
 junit = "4.13.2"
-androidxAppSearch = "1.1.0-alpha03"
 kotlinxDatetime = "0.5.0"
 play-services-wearable = "18.1.0"
 watchfaceComplicationsDataSourceKtx = "1.2.0"
@@ -28,11 +30,9 @@ androidxProtoLayout = "1.1.0-beta01"
 firebaseBom = "32.7.1"
 uiToolingPreviewAndroid = "1.5.4"
 navigationRuntimeKtx = "2.7.6"
-glanceAppwidget = "1.0.0"
 activityKtx = "1.8.2"
 workRuntimeKtx = "2.9.0"
 hiltCommon = "1.1.0"
-androidxGlance = "1.0.0"
 hiltWork = "1.1.0"
 uiTooling = "1.5.4"
 
@@ -48,7 +48,7 @@ androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", versi
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidxComposeCompiler" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidxComposeMaterial" }
 androidx-compose-material3-windowsizeclass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
