@@ -4,8 +4,8 @@ import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.glance.GlanceTheme
 import androidx.glance.material3.ColorProviders
-import com.craft.apps.countdowns.ui.theme.DarkColorScheme
-import com.craft.apps.countdowns.ui.theme.LightColorScheme
+import com.craft.apps.countdowns.ui.theme.ChronosDarkColorScheme
+import com.craft.apps.countdowns.ui.theme.ChronosLightColorScheme
 
 /**
  * A custom color configuration object for Jetpack Glance.
@@ -13,15 +13,15 @@ import com.craft.apps.countdowns.ui.theme.LightColorScheme
 object CountdownsGlanceColorScheme {
 
     val colors = ColorProviders(
-        light = LightColorScheme,
-        dark = DarkColorScheme,
+        light = ChronosLightColorScheme,
+        dark = ChronosDarkColorScheme,
     )
 }
 
 /**
  * A theme for Countdowns app widgets that is compatible with Jetpack Glance.
  *
- * @see [com.craft.apps.countdowns.theme.CountdownsTheme] for the normal, non-widget theme
+ * @see [com.craft.apps.countdowns.ui.theme.ChronosTheme] for the normal, non-widget theme
  */
 @Composable
 fun CountdownsWidgetTheme(

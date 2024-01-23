@@ -67,7 +67,8 @@ fun CountdownCreationSheet(onTriggerCreation: (label: String, expiration: Instan
     fun reset() {
         // TODO: Figure out how to reset dialog state
         labelText = "New countdown"
-        datePickerState.setSelection(0)
+//        datePickerState.setSelection(0)
+        datePickerState.selectedDateMillis = 0
     }
 
     fun triggerCountdownCreation() {

@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.craft.apps.countdowns.feature.details.ui.DetailsRoute
+import com.craft.apps.countdowns.feature.details.DetailsRoute
 import com.craft.apps.countdowns.feature.home.HomeRoute
 
 @Composable

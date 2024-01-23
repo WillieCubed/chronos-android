@@ -4,4 +4,5 @@
     <string name="content_description_starred_countdowns">Starred countdowns</string>
     <string name="list_label_expired_countdowns">Expired countdowns</string>
     <string name="content_description_expired_countdowns">Expired countdowns</string>
+    <string name="action_label_new_countdown">New countdown</string>
 </resources>

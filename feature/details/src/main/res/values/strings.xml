@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="countdown_label_text">until %s</string>
+    <string name="label_countdown_details_ends_on">Ends on</string>
+    <string name="label_countdown_details_created_on">Started on</string>
+    <string name="icon_content_description_edit_note">Edit note</string>
+    <string name="error_loading_countdown_details">Whoops, couldn\'t load this countdown.</string>
+    <string name="loading_countdown_details">Currently loading....</string>
+    <string name="state_empty_notes_card">No notes yet.</string>
 </resources>

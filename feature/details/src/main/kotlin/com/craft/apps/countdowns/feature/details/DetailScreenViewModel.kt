@@ -1,11 +1,10 @@
-package com.craft.apps.countdowns.feature.details.ui
+package com.craft.apps.countdowns.feature.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.craft.apps.countdowns.core.analytics.AnalyticsService
 import com.craft.apps.countdowns.core.data.repository.CountdownRepository
-import com.craft.apps.countdowns.core.model.Countdown
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +16,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+/**
+ * A view model for interacting with a countdown's detailed information display.
+ */
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class DetailScreenViewModel @Inject constructor(
@@ -40,12 +42,3 @@ class DetailScreenViewModel @Inject constructor(
     }
 }
 
-sealed class DetailScreenUiState {
-
-    data class Success(
-        val countdown: Countdown,
-    ) : DetailScreenUiState()
-
-    data object Loading : DetailScreenUiState()
-    data class Error(val exception: Throwable) : DetailScreenUiState()
-}

@@ -6,6 +6,7 @@
 package com.craft.apps.countdowns.feature.home.ui
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -34,9 +35,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.craft.apps.countdowns.core.model.Countdown
+import com.craft.apps.countdowns.feature.home.R
 import com.craft.apps.countdowns.ui.CountdownCreationSheet
 import com.craft.apps.countdowns.ui.HomeEmptyView
 import com.craft.apps.countdowns.ui.theme.ChronosTheme
@@ -92,14 +95,18 @@ fun HomeScreen(
         Scaffold(
             modifier = modifier,
             floatingActionButton = {
-                ExtendedFloatingActionButton(text = { Text("New countdown") },
+                ExtendedFloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    text = { Text(stringResource(R.string.action_label_new_countdown)) },
                     icon = { Icon(Icons.Filled.Add, contentDescription = "") },
                     onClick = {
                         openSheet()
-                    })
+                    },
+                )
             },
             topBar = {
                 CenterAlignedTopAppBar(
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
                     title = { Text("Countdowns") },
                     actions = {
                         IconButton(onClick = {
@@ -119,6 +126,7 @@ fun HomeScreen(
             Surface(
                 modifier = Modifier
                     .padding(contentPadding)
+                    .background(MaterialTheme.colorScheme.background)
                     .fillMaxSize(),
             ) {
                 when (state) {
@@ -130,15 +138,15 @@ fun HomeScreen(
                             })
                         } else {
                             val featuredCountdowns = countdowns.filter { it.featured }
-                            val activeCountdowns = countdowns.filter {
-                                it.expiration.minus(Clock.System.now()).isPositive()
+                            val otherActiveCountdowns = countdowns.filter {
+                                it.expiration.minus(Clock.System.now())
+                                    .isPositive() and !it.featured
                             }
                             val expiredCountdowns = countdowns.filter {
                                 !it.expiration.minus(Clock.System.now()).isPositive()
                             }
                             Column(
                                 Modifier
-//                                    .consumeWindowInsets(contentPadding)
                             ) {
                                 if (featuredCountdowns.isNotEmpty()) {
                                     // TODO: Consider displaying normal countdowns as featured countdowns or provide some other CTA
@@ -147,9 +155,9 @@ fun HomeScreen(
                                         onCountdownSelected = onCountdownSelected,
                                     )
                                 }
-                                if (activeCountdowns.isNotEmpty()) {
+                                if (otherActiveCountdowns.isNotEmpty()) {
                                     ActiveCountdownsList(
-                                        countdowns = activeCountdowns,
+                                        countdowns = otherActiveCountdowns,
                                         onCountdownSelected = onCountdownSelected,
                                         onDeleteCountdown = onDeleteCountdown,
                                         onPinCountdown = onPinCountdown,

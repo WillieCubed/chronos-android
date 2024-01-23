@@ -28,7 +28,22 @@ val ChronosTypography = Typography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight(500),
         letterSpacing = 0.02.sp,
+    ),
+    labelLarge = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight(600),
+        letterSpacing = 0.01.sp,
+    ),
+    bodyMedium = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight(500),
+        letterSpacing = 0.04.sp,
     )
+
     /* Other default text styles to override
     labelSmall = TextStyle(
         fontFamily = FontFamily.Default,
