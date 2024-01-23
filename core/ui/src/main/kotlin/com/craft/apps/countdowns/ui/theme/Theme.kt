@@ -46,13 +46,13 @@ val ChronosLightColorScheme = lightColorScheme(
     inverseSurface = inverseSurfaceLight,
     inverseOnSurface = inverseOnSurfaceLight,
     inversePrimary = inversePrimaryLight,
-//    surfaceDim = surfaceDimLight,
-//    surfaceBright = surfaceBrightLight,
-//    surfaceContainerLowest = surfaceContainerLowestLight,
-//    surfaceContainerLow = surfaceContainerLowLight,
-//    surfaceContainer = surfaceContainerLight,
-//    surfaceContainerHigh = surfaceContainerHighLight,
-//    surfaceContainerHighest = surfaceContainerHighestLight,
+    surfaceDim = surfaceDimLight,
+    surfaceBright = surfaceBrightLight,
+    surfaceContainerLowest = surfaceContainerLowestLight,
+    surfaceContainerLow = surfaceContainerLowLight,
+    surfaceContainer = surfaceContainerLight,
+    surfaceContainerHigh = surfaceContainerHighLight,
+    surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
 val ChronosDarkColorScheme = darkColorScheme(
