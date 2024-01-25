@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         val splitInstallManager = SplitInstallManagerFactory.create(this)
         splitInstallManager.installedModules.forEach { module ->
-            Log.e("MainActivity", "Installed dynamic module $module")
+            Log.i("MainActivity", "Installed dynamic module $module")
         }
 
         enableEdgeToEdge()
