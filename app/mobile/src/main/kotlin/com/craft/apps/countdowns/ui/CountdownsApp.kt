@@ -10,12 +10,17 @@ import com.craft.apps.countdowns.ui.theme.ChronosTheme
  */
 @Composable
 fun CountdownsApp(
+    startingDestination: String = "home",
     onPinCountdown: (countdownId: Int) -> Unit,
 ) {
     val navController = rememberNavController()
 
     ChronosTheme {
-        MainNavigation(onPinCountdown, navController = navController)
+        MainNavigation(
+            onPinCountdown,
+            startingDestination = startingDestination,
+            navController = navController,
+        )
     }
 }
 

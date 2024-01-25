@@ -5,6 +5,7 @@ import android.app.SearchManager
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.craft.apps.countdowns.IntentActions
 import com.craft.apps.countdowns.feature.search.CountdownsSuggestionsProvider
 import com.craft.apps.countdowns.feature.widgets.ConfigureWidgetActivity
 import com.craft.apps.countdowns.feature.widgets.ui.SingleCountdownWidgetReceiver
@@ -33,17 +35,54 @@ class MainActivity : ComponentActivity() {
         }
 
         enableEdgeToEdge()
-        setContent {
-            CountdownsApp(onPinCountdown = ::pinToLauncher)
-        }
 
-        if (Intent.ACTION_SEARCH == intent.action) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                SearchRecentSuggestions(
-                    this,
-                    CountdownsSuggestionsProvider.AUTHORITY,
-                    CountdownsSuggestionsProvider.MODE
-                ).saveRecentQuery(query, null)
+        Log.d("MainActivity", "Starting activity with ${intent.action}")
+        when (intent.action) {
+            Intent.ACTION_VIEW -> run {
+                val appLinkData: Uri? = intent.data
+                if (appLinkData == null) {
+                    Log.e(
+                        "MainActivity",
+                        "Received ACTION_VIEW intent but app link data was null"
+                    )
+                    return@run
+                }
+                // TODO; Verify app link
+                val countdownId = ""
+                val startUri = "home" // TODO: Change this once above issue is finished
+                setContent {
+                    CountdownsApp(
+                        onPinCountdown = ::pinToLauncher,
+                        startingDestination = startUri,
+                    )
+                }
+            }
+
+            Intent.ACTION_SEARCH -> {
+                intent.getStringExtra(SearchManager.QUERY)?.also { query ->
+                    SearchRecentSuggestions(
+                        this,
+                        CountdownsSuggestionsProvider.AUTHORITY,
+                        CountdownsSuggestionsProvider.MODE
+                    ).saveRecentQuery(query, null)
+                }
+            }
+
+            IntentActions.ACTION_CREATE_COUNTDOWN -> {
+                val start = "home?${NavArgs.CREATE_NEW}=true"
+                Log.d("MainActivity", "Triggering new countdown flow")
+                setContent {
+                    CountdownsApp(
+                        onPinCountdown = ::pinToLauncher,
+                        startingDestination = start,
+                    )
+                }
+            }
+
+            else -> {
+                setContent {
+                    CountdownsApp(onPinCountdown = ::pinToLauncher)
+                }
             }
         }
     }

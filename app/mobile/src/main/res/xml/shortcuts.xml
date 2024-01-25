@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <capability android:name="actions.intent.CREATE_THING">
+        <intent
+            android:targetClass="com.craft.apps.countdowns.ui.MainActivity"
+            android:targetPackage="com.craft.apps.countdowns">
+            <parameter
+                android:name="thing.name"
+                android:key="countdownName" />
+            <parameter
+                android:name="thing.description"
+                android:key="notes" />
+        </intent>
+    </capability>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_countdown_new"
+        android:shortcutDisabledMessage="@string/shortcut_label_disabled_countdown_new"
+        android:shortcutId="create_countdown"
+        android:shortcutLongLabel="@string/shortcut_label_long_countdown_new"
+        android:shortcutShortLabel="@string/shortcut_label_short_countdown_new">
+        <intent
+            android:action="com.craft.apps.countdowns.actions.CREATE_COUNTDOWN"
+            android:targetClass="com.craft.apps.countdowns.ui.MainActivity"
+            android:targetPackage="com.craft.apps.countdowns" />
+        <capability-binding android:key="actions.intent.CREATE_THING">
+            <parameter-binding
+                android:key="thing.name"
+                android:value="countdownName" />
+        </capability-binding>
+    </shortcut>
+</shortcuts>
