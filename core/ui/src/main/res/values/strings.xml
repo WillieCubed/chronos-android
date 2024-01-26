@@ -2,6 +2,20 @@
 <resources>
     <string name="list_label_active_countdowns">Active countdowns</string>
     <string name="content_description_active_countdowns">Active countdowns</string>
+
+    <string name="label_countdown_creation_title">What\'s this for?</string>
+    <string name="label_countdown_creation_expiration">When does this end?</string>
+    <string name="label_countdown_linked_to_event">Linked to calendar event</string>
+    <string name="label_countdown_date">Date</string>
+    <string name="label_countdown_time">Time</string>
+    <string name="button_countdown_unlink_event">Unlink event</string>
+    <string name="button_countdown_link_to_event">Link to calendar event</string>
+    <string name="button_countdown_creation_next">Next</string>
+    <string name="button_countdown_creation_previous">Back</string>
+    <string name="button_countdown_creation_finish">Finish</string>
+
+    <!-- String templates -->
     <string name="minutes_until_now_long">%d until now</string>
     <string name="minutes_until_now_short">%d minutes</string>
+    <string name="formatted_date_time">%1$s · %2$s</string>
 </resources>
