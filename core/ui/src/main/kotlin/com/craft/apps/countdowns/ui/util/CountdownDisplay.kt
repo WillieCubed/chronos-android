@@ -5,8 +5,16 @@ import com.craft.apps.countdowns.core.model.Countdown
 import com.craft.apps.countdowns.core.ui.R
 import com.craft.apps.countdowns.util.daysUntilNow
 import com.craft.apps.countdowns.util.hoursUntilNow
+import com.craft.apps.countdowns.util.isAfterNow
 import com.craft.apps.countdowns.util.minutesUntilNow
 import com.craft.apps.countdowns.util.secondsUntilNow
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 enum class CountdownDisplayStyle {
     /**
@@ -54,3 +62,27 @@ fun Countdown.getFormattedTimeLeft(
     val secondsLeft = instant.secondsUntilNow()
     return ""
 }
+
+fun Instant.toJavaLocal() = toLocalDateTime(TimeZone.currentSystemDefault()).toJavaLocalDateTime()
+
+fun Instant.formattedLongDate(): String =
+    this.toJavaLocal().toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+
+fun Instant.formattedShortDate(): String =
+    this.toJavaLocal().toLocalDate().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))
+
+fun Instant.formattedShortTime(): String =
+    this.toJavaLocal().toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+
+fun LocalDateTime.formattedShortTime(): String =
+    this.toJavaLocalDateTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+
+// TODO: Remove year if the countdown is in the current year
+val Countdown.formattedExpirationDate: String
+    get() = expiration.formattedLongDate()
+
+val Countdown.formattedExpirationTime: String
+    get() = expiration.formattedShortTime()
+
+val Countdown.isExpired: Boolean
+    get() = expiration.isAfterNow()

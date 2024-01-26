@@ -4,6 +4,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
 
+fun Instant.isAfterNow(): Boolean = durationFromNow().isPositive()
+
 /**
  * If the current time is after this instant, the result will be negative.
  */

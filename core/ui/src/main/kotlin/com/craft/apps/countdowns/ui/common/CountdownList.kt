@@ -29,11 +29,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import com.craft.apps.countdowns.core.model.Countdown
-import com.craft.apps.countdowns.core.model.formatted
+import com.craft.apps.countdowns.core.ui.R
 import com.craft.apps.countdowns.ui.theme.ChronosTypography
+import com.craft.apps.countdowns.ui.util.formattedLongDate
+import com.craft.apps.countdowns.ui.util.formattedShortTime
 import com.craft.apps.countdowns.ui.util.testCountdowns
 import kotlin.math.abs
 
@@ -108,8 +111,12 @@ private fun CountdownListItem(
             headlineContent = { Text(countdown.label, style = ChronosTypography.titleLarge) },
             supportingContent = {
                 Text(
-                    countdown.expiration.formatted(),
-                    style = ChronosTypography.titleMedium
+                    stringResource(
+                        R.string.formatted_date_time,
+                        countdown.expiration.formattedLongDate(),
+                        countdown.expiration.formattedShortTime(),
+                    ),
+                    style = ChronosTypography.titleMedium,
                 )
             },
             trailingContent = {
