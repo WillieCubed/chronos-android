@@ -8,6 +8,12 @@ import androidx.compose.ui.unit.sp
 
 // TODO: Add proper font colors
 val ChronosTypography = Typography(
+    displaySmall = TextStyle(
+        fontSize = 36.sp,
+        lineHeight = 44.sp,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight(700),
+    ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
