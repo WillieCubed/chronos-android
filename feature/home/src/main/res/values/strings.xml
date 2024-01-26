@@ -5,4 +5,6 @@
     <string name="list_label_expired_countdowns">Expired countdowns</string>
     <string name="content_description_expired_countdowns">Expired countdowns</string>
     <string name="action_label_new_countdown">New countdown</string>
+    <string name="screen_home_title">Your countdowns</string>
+    <string name="content_description_more_options">More options</string>
 </resources>

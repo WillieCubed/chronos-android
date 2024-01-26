@@ -1,12 +1,7 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class,
-    ExperimentalMaterialApi::class,
-)
-
 package com.craft.apps.countdowns.feature.home.ui
 
 import android.util.Log
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,17 +9,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -48,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     state: HomeUiState,
@@ -57,11 +52,20 @@ fun HomeScreen(
     onPinCountdown: (countdownId: Int) -> Unit,
     onFeatureCountdown: (countdownId: Int) -> Unit,
     modifier: Modifier = Modifier,
+    shouldCreateNewCountdown: Boolean = false,
 ) {
+    val initialSheetState = if (shouldCreateNewCountdown) {
+        ModalBottomSheetValue.Expanded
+    } else {
+        ModalBottomSheetValue.Hidden
+    }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(initialSheetState)
+    var showBottomSheet by remember { mutableStateOf(shouldCreateNewCountdown) }
+    var shouldChangeAppBarColor by remember {
+        mutableStateOf(false)
+    }
 
     fun openSheet() {
         Log.d("HomeScreen", "Opening sheet")
@@ -84,6 +88,13 @@ fun HomeScreen(
         hideSheet()
     }
 
+    val appBarContainerColor = if (shouldChangeAppBarColor) {
+        MaterialTheme.colorScheme.primaryContainer
+    } else {
+        MaterialTheme.colorScheme.background
+    }
+
+    // TODO: Maybe just screw the bottom sheet for now
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -98,23 +109,23 @@ fun HomeScreen(
                 ExtendedFloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primary,
                     text = { Text(stringResource(R.string.action_label_new_countdown)) },
-                    icon = { Icon(Icons.Filled.Add, contentDescription = "") },
+                    icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                     onClick = {
                         openSheet()
                     },
                 )
             },
             topBar = {
-                CenterAlignedTopAppBar(
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-                    title = { Text("Countdowns") },
+                MediumTopAppBar(
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(appBarContainerColor),
+                    title = { Text(stringResource(id = R.string.screen_home_title)) },
                     actions = {
                         IconButton(onClick = {
                             /* TODO: Open options menu with settings */
                         }) {
                             Icon(
                                 imageVector = Icons.Default.MoreVert,
-                                contentDescription = "More",
+                                contentDescription = stringResource(R.string.content_description_more_options),
                                 tint = MaterialTheme.colorScheme.onSurface,
                             )
                         }
@@ -122,11 +133,11 @@ fun HomeScreen(
                     scrollBehavior = scrollBehavior,
                 )
             },
+            containerColor = MaterialTheme.colorScheme.background,
         ) { contentPadding ->
-            Surface(
+            Box(
                 modifier = Modifier
                     .padding(contentPadding)
-                    .background(MaterialTheme.colorScheme.background)
                     .fillMaxSize(),
             ) {
                 when (state) {

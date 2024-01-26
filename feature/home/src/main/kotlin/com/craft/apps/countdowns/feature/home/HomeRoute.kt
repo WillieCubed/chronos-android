@@ -12,6 +12,7 @@ fun HomeRoute(
     onCountdownSelected: (countdownId: Int) -> Unit,
     onPinCountdown: (countdownId: Int) -> Unit,
     modifier: Modifier = Modifier,
+    shouldCreateNewCountdown: Boolean = false,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -23,6 +24,7 @@ fun HomeRoute(
         onPinCountdown = onPinCountdown,
         onFeatureCountdown = viewModel::featureCountdown,
         modifier = modifier,
+        shouldCreateNewCountdown = shouldCreateNewCountdown,
     )
 }
 
